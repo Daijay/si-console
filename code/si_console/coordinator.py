@@ -21,11 +21,13 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 
 from si_console import config, models
 from si_console.context import build_context
 from si_console.errors import GuardError, ModelError, ToolError
 from si_console.guard import GuardState, check_tool
+from si_console.state_store import StateStore
 from si_console.tools import (
     FIXED_MENU,
     TOOLS,
@@ -55,6 +57,10 @@ SYSTEM_PROMPT = (
     "rank sectors. The rules engine computes the numbers. You route "
     "work: signal, then risk, then execution, then back to signal."
 )
+
+# The coordinator reads kill state from state.json, which the bridge
+# writes. Module level so tests can swap it, same pattern as bridge.
+state_store = StateStore()
 
 
 @dataclass
@@ -247,7 +253,7 @@ def _escalate(task: TaskNote, rounds: int, reason: str, log_lines: list) -> Loop
         ),
     )
     try:
-        create_task(note)
+        create_task(note, initial_status="blocked")
     except Exception:
         # The escalation note is helpful, not required. If it cannot
         # be created, the blocked task is still the truth.
@@ -262,6 +268,19 @@ def serve_forever() -> None:
     unit runs. The loop never calls DeepSeek for a blocked task."""
     state = GuardState()
     while True:
+        # The bridge owns kill state and writes it to state.json.
+        # Refresh every iteration so a kill reaches this loop. The
+        # vault and state.json are the source of truth, not a copy
+        # held here since startup.
+        try:
+            state.kill_active = bool(state_store.read().get("kill_active", False))
+        except Exception:
+            # If state.json is unreadable, fail closed: treat it as
+            # killed until the next scan can read it.
+            state.kill_active = True
+        if state.kill_active:
+            time.sleep(1)
+            continue
         task = pick_next_task()
         if task is None:
             time.sleep(1)
@@ -269,10 +288,6 @@ def serve_forever() -> None:
         update_status(task.id, "working")
         run_task(task.id, state)
         time.sleep(1)
-
-
-if __name__ == "__main__":
-    serve_forever()
 
 
 def pick_next_task() -> TaskNote | None:
@@ -289,8 +304,6 @@ def stuck_watchdog(guard_state: GuardState) -> list[str]:
     Runs every 30 seconds. Needs no LLM call. A task in working for
     more than 300 seconds becomes blocked with reason STUCK.
     """
-    from datetime import datetime
-
     blocked: list[str] = []
     now = datetime.now(timezone.utc)
     for task in list_tasks(status="working"):
@@ -304,3 +317,7 @@ def stuck_watchdog(guard_state: GuardState) -> list[str]:
             update_status(task.id, "blocked", "STUCK")
             blocked.append(task.id)
     return blocked
+
+
+if __name__ == "__main__":
+    serve_forever()

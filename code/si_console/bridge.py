@@ -230,7 +230,7 @@ def on_kill(active: bool) -> dict:
                 continue
         state_store.update(kill_active=True, approval_pending=False)
         return {"status": "killed"}
-    state_store.update(kill_active=True)
+    state_store.update(kill_active=False)
     return {"status": "kill released, press green to resume"}
 
 

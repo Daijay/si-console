@@ -12,6 +12,13 @@ Dated log of decisions and revisions. Newest first.
 - Fan: 31 mm opening replaced by a grid of 3 mm holes across the 37 mm fan area, 5 mm clear of the screw holes.
 - CAD rebuilt: all checks pass. Finals now in `blueprints/R4.1/` with `_R4.1` file names; `blueprints/R4/` removed.
 
+## 2026-11-23, R3 bug fixes (code review)
+- Coordinator: `__main__` block moved to end of file (the service crash-looped with `NameError` on `pick_next_task`); `timezone` imported at module level (the stuck watchdog crashed on first run).
+- Coordinator: `serve_forever` refreshes kill state from `state.json` each iteration and fails closed when it cannot be read, so a kill reaches the loop.
+- Bridge: `on_kill(False)` now writes `kill_active=False` (the screens showed KILL ACTIVE forever after release).
+- Vault: `create_task` takes an `initial_status` (default `queued`, validated against `STATUSES`); escalation notes are created `blocked`, so the queue no longer re-runs them and burns API credit.
+- Tests: 79 → 89 passed. New `code/tests/test_regression_r3.py` covers all five fixes.
+
 ## 2026-11-23, R4 (parametric CAD)
 - New `cad/`: CadQuery model driven by one `params.py` (each value tagged VERIFIED, ASSUMED or DESIGN). `python build.py` regenerates everything.
 - Outputs in `cad/output/` and copied to `blueprints/R4/`: 26 STEP files plus `si_console_assembly_R4.step`, STL for printed parts, DXF per panel with kerf applied, nested layout on 4 sheets of 12 x 16 inch, dimensioned drawings (SVG and PDF), 6 labelled renders, `CHECKS.md`, `ASSUMED.md`.

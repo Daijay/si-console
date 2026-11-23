@@ -315,8 +315,20 @@ def read_note(task_id: str) -> TaskNote:
     return parse_note(text, task_id)
 
 
-def create_task(note: TaskNote) -> dict:
-    """Create a new task note with status queued. Refuses duplicates."""
+def create_task(note: TaskNote, initial_status: str = "queued") -> dict:
+    """Create a new task note. Refuses duplicates.
+
+    Defaults to queued, which is what the coordinator wants for a
+    normal proposal. Escalation notes pass initial_status="blocked"
+    so the queue never picks them up and re-runs them. The status is
+    validated against the same set the frontmatter parser uses.
+    """
+    if initial_status not in STATUSES:
+        raise VaultError(
+            "bad_status",
+            f"Invalid initial status: {initial_status!r}.",
+            remedy=f"Use one of: {sorted(STATUSES)}.",
+        )
     if not TASK_ID_RE.fullmatch(note.id):
         raise VaultError("not_found", f"Invalid task id: {note.id!r}.")
     root = _vault_root()
@@ -338,7 +350,7 @@ def create_task(note: TaskNote) -> dict:
     now = utcnow_iso()
     note.created = now
     note.updated = now
-    note.status = "queued"
+    note.status = initial_status
     return write_note(note)
 
 

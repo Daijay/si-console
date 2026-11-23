@@ -33,4 +33,4 @@ SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 in
 - Never commit API keys, tokens, `.env`, addresses, phone numbers or order details. Binary files (PNG, STL, STEP) go through Git LFS (`.gitattributes`).
 
 ## Tests
-From `code/`: create a venv, `pip install -r requirements.txt`, then `python -m pytest tests/ -v`. Expected: 79 passed (last run 2026-11-23). Tests use mocked DeepSeek and mocked GPIO and need no Pi and no keys. Never put real keys in `code/`; `.env.example` has names only. Do not hard-code a DeepSeek model name (pin it in `.env`).
+From `code/`: create a venv, `pip install -r requirements.txt`, then `python -m pytest tests/ -v`. Expected: 89 passed (last run 2026-11-23; was 79 before the R3 bug fixes, see `CHANGELOG.md`). Tests use mocked DeepSeek and mocked GPIO and need no Pi and no keys. Never put real keys in `code/`; `.env.example` has names only. Do not hard-code a DeepSeek model name (pin it in `.env`).
