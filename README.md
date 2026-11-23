@@ -12,14 +12,20 @@ SI Console is a physical desk console for controlling a team of AI agents, built
 | Hasan | CAD and enclosure |
 | Christopher | Software architecture |
 
-To add Hasan and Christopher: GitHub, repo `Daijay/si-console`, Settings, Collaborators, Add people (direct link: https://github.com/Daijay/si-console/settings/access). Or from a terminal, once you have their usernames:
+Collaborators (private repo, write access):
+
+| Person | GitHub | Status |
+| --- | --- | --- |
+| Christopher | CascV8 | Invited 2026-11-23, pending acceptance |
+| Hasan | not yet added | Pending: waiting for GitHub username |
+
+To add Hasan: GitHub, repo `Daijay/si-console`, Settings, Collaborators, Add people (https://github.com/Daijay/si-console/settings/access). Or from a terminal:
 
 ```
 gh api -X PUT repos/Daijay/si-console/collaborators/<HASAN_USERNAME> -f permission=push
-gh api -X PUT repos/Daijay/si-console/collaborators/<CHRISTOPHER_USERNAME> -f permission=push
 ```
 
-Nobody has been invited yet. Because the repo uses Git LFS, collaborators need `git lfs install` before cloning.
+Because the repo uses Git LFS, collaborators need `git lfs install` before cloning.
 
 ## Current status (2026-11-23)
 
