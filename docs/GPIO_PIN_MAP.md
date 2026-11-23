@@ -44,3 +44,13 @@ Button LEDs, EG STARTS style, 5V LED with built in resistor, LIKELY, or a plain 
 Total LED current: 4 status LEDs at about 10 mA each, plus 2 button LEDs at about 10 to 20 mA each, total about 60 to 80 mA, ASSUMED. The ULN2003 can sink 500 mA per channel, and about 2.5A total emitter current, LIKELY from the datasheet. That fits. The Pi 5V rail can supply it, but the LEDs must not be powered from a GPIO pin. They are powered from the 5V rail, through the ULN2003 to ground.
 Heat: the ULN2003 at 80 mA total dissipates about 0.8V times 0.08A, equals about 0.064W, ASSUMED. That is cool. No heatsink is needed.
 Common mistake to avoid: do not connect the LED anode to a GPIO pin and the cathode to the ULN2003. Do not connect the ULN2003 output to 5V. Do not connect COM to ground. Do not leave the ULN2003 GND unconnected. All four are wrong and will cause dim LEDs, a hot chip, or no light at all.
+
+## Rev R4.1 update (2026-11-23), added after the verbatim extract above
+
+The text above is unchanged. This section records the changes decided in R4.1.
+
+- AGENT 1 LED is WHITE (was red in R2 and R3). Red is for reject and kill only.
+- White LED resistor = 100 ohm (decided by Jayden). Same GPIO and channel as before: GPIO6, physical pin 31, ULN2003 IN2 pin 2, OUT2 pin 15.
+- Check with the section 9 formula, Vf about 3.2 V (white LEDs are similar to blue) and Vce_sat 0.8 V, both ASSUMED: R = (5 - 3.2 - 0.8) / 0.010 = 100 ohm, current about 10 mA. If the real white LED has a Vf of 3.0 V the current is about 12 mA, still fine. Measure Vf on the bench as for the other colours.
+- Final status LED map in the CAD: COORD green (GPIO5), AGENT 1 white (GPIO6, 100 ohm), AGENT 2 blue (GPIO13, 100 ohm), GUARD yellow (GPIO19). The other resistor values and the green Vf disagreement above are unchanged and still open.
+

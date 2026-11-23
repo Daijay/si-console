@@ -29,11 +29,11 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 
 ## Current status (2026-11-23)
 
-- **Rev R4 CAD is built**: parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, STL, laser DXF (4 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R4/`. All six automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF.
+- **Rev R4.1 CAD is built**: parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, STL, laser DXF (4 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R4.1/`. All six automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF.
 - BOM Rev R2.1 with both cuts: 791.33 CAD fundable before tax, under the 800 CAD team limit. See `bom/BOM_NOTES.md`.
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
-- A candidate laser cut file now exists from R4 (`blueprints/R4/dxf/`), pending Hasan's review and the caliper measurements.
+- A candidate laser cut file now exists from R4 (`blueprints/R4.1/dxf/`), pending Hasan's review and the caliper measurements.
 - Code tests: run once on 2026-11-23, **79 passed** (mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
@@ -48,7 +48,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 1. Mini screen cutout: R4 cuts the window to the visible area and mounts the module under the panel (bezel is a switch). Measure the real visible area.
 2. Soundbar cut: R4 has no soundbar and no grille. Done in CAD.
 3. Pi 5 port side: R4 rotates the Pi 180 degrees so power and HDMI face the back. Dry fit the cables.
-4. AGENT 1 LED is white in R4. The resistor table in `GPIO_PIN_MAP.md` still needs the white LED Vf (Jayden).
+4. AGENT 1 LED is white with a 100 ohm resistor (closed in R4.1; bench-measure the white Vf).
 5. Laser cut file: R4 supplies a candidate DXF. Hasan reviews it before anything is cut.
 
 ## Where to find things
@@ -58,7 +58,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 | Decisions and open items | `docs/decisions.md` |
 | GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
 | BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
-| R4 CAD (parametric), outputs and checks | `cad/`, `blueprints/R4/` |
+| R4 CAD (parametric), outputs and checks | `cad/`, `blueprints/R4.1/` |
 | 2D drawings (SVG sources and PNG, R3) | `blueprints/2d/` |
 | 3D: STEP per part and assembly, STL, renders | `blueprints/3d/` |
 | Onshape / Fusion import steps | `docs/ONSHAPE_IMPORT.md` |

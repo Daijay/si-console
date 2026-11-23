@@ -186,7 +186,6 @@ def check_cables():
     top = pt.pi_pcb_top_z()
     zport = top + P.PI_PORT_Z
     ports = [("micro-HDMI 0", P.PI_HDMI0_BX, P.HDMI0_CUT_X, P.HDMI_PLUG_LEN),
-             ("micro-HDMI 1", P.PI_HDMI1_BX, P.HDMI1_CUT_X, P.HDMI_PLUG_LEN),
              ("USB-C power", P.PI_USBC_BX, P.USBC_CUT_X, P.USBC_PLUG_LEN)]
     for nm, bx, cx, plug in ports:
         px, py = pt.pi_world(bx, 0)
@@ -211,6 +210,13 @@ def check_cables():
         r.fail(f"mic USB: only {clear:.1f} mm between the Pi and the left wall, plug needs {P.USB_PLUG_CLEAR:g} mm")
     if path * 1.15 > P.MIC_CABLE_LEN:
         r.fail(f"mic USB: cable path {path * 1.15:.0f} mm exceeds {P.MIC_CABLE_LEN:g} mm")
+    # mini screen USB power cable: from outside through its back hole to the screen's power input
+    sx0, sy0, sz0 = P.SCREEN_PWR_CUT_X, D - T, P.CUT_Z
+    tx, ty, tz = P.SCREEN_CX - P.SCREEN_MODULE_W / 2, P.SCREEN_CY, pt.screen_z_top() - P.SCREEN_MODULE_H / 2
+    plen = (abs(tx - sx0) + abs(ty - sy0) + abs(tz - sz0)) * 1.15
+    r.note(f"mini screen USB power: hole to the screen edge about {plen:.0f} mm of cable inside the case, {P.SCREEN_PWR_CABLE_LEN:g} mm available (the screen HDMI cable stays inside)")
+    if plen > P.SCREEN_PWR_CABLE_LEN:
+        r.fail(f"mini screen power cable needs about {plen:.0f} mm, only {P.SCREEN_PWR_CABLE_LEN:g} mm available")
     # cutouts must be in line (same Z band) and big enough for plug body: informational
     # GPIO ribbon from the Pi header to the breakout board
     hx, hy = pt.pi_world(P.PI_GPIO_BX, P.PI_GPIO_BY)
@@ -232,8 +238,8 @@ def check_sanity(panel_dict):
             r.fail("visible area is not smaller than the module, the module would fall through the window")
         else:
             r.note(f"window {P.SCREEN_VIS_W:g} x {P.SCREEN_VIS_D:g} is smaller than module {P.SCREEN_MODULE_W:g} x {P.SCREEN_MODULE_D:g}: module cannot fall through")
-    if P.ENABLE_FAN and P.FAN_OPENING_D > P.FAN_SIZE - 3:
-        r.fail("fan opening larger than the fan frame opening")
+    if P.ENABLE_FAN and P.FAN_AREA_D > P.FAN_SIZE - 3:
+        r.fail("fan grid area larger than the fan frame opening")
     if P.T * 2 >= min(W, D, H):
         r.fail("panel thickness too large")
     r.note(f"mini screen top face {pt.screen_z_top():.1f} mm, panel underside {H - T:g} mm, gap {P.SCREEN_GAP:g} mm")

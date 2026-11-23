@@ -1,8 +1,8 @@
-"""Build everything for SI Console Rev R4 from params.py.
+"""Build everything for SI Console Rev R4.1 from params.py.
 
-    python build.py                 build, check, write outputs, copy finals to ../blueprints/R4
+    python build.py                 build, check, write outputs, copy finals to ../blueprints/R4.1
     python build.py --no-render     skip the PNG renders (fast)
-    python build.py --no-copy       do not copy finals into ../blueprints/R4
+    python build.py --no-copy       do not copy finals into ../blueprints/R4.1
 
 Exit status is 1 if any check fails (CHECKS.md says which).
 """
@@ -103,14 +103,14 @@ def write_checks(results, sheets, extra_files):
 
 
 def copy_finals():
-    dst = os.path.join(REPO, "blueprints", "R4")
+    dst = os.path.join(REPO, "blueprints", P.REV)
     if os.path.isdir(dst):
         shutil.rmtree(dst)
     for sub in ("step", "stl", "dxf", "drawings", "renders"):
         s = os.path.join(OUT, sub)
         if os.path.isdir(s):
             shutil.copytree(s, os.path.join(dst, sub))
-    shutil.copy(os.path.join(OUT, "si_console_assembly_R4.step"), os.path.join(dst, "si_console_assembly_R4.step"))
+    shutil.copy(os.path.join(OUT, f"si_console_assembly_{P.REV}.step"), os.path.join(dst, f"si_console_assembly_{P.REV}.step"))
     shutil.copy(os.path.join(OUT, "CHECKS.md"), os.path.join(dst, "CHECKS.md"))
     shutil.copy(os.path.join(OUT, "ASSUMED.md"), os.path.join(dst, "ASSUMED.md"))
     return dst

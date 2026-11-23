@@ -2,6 +2,12 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-23, R4.1
+- Back panel: second micro-HDMI cutout removed; new 16 x 10 mm (ASSUMED) cable hole for the mini screen USB power cable from an outside charger. Screen HDMI stays inside the case.
+- AGENT 1 white LED resistor set to 100 ohm. `docs/GPIO_PIN_MAP.md` (dated R4.1 section) and the schematic and wiring SVG updated. Closes OPEN 4.
+- Fan: 31 mm opening replaced by a grid of 3 mm holes across the 37 mm fan area, 5 mm clear of the screw holes.
+- CAD rebuilt: all checks pass. Finals now in `blueprints/R4.1/` with `_R4.1` file names; `blueprints/R4/` removed.
+
 ## 2026-11-23, R4 (parametric CAD)
 - New `cad/`: CadQuery model driven by one `params.py` (each value tagged VERIFIED, ASSUMED or DESIGN). `python build.py` regenerates everything.
 - Outputs in `cad/output/` and copied to `blueprints/R4/`: 26 STEP files plus `si_console_assembly_R4.step`, STL for printed parts, DXF per panel with kerf applied, nested layout on 4 sheets of 12 x 16 inch, dimensioned drawings (SVG and PDF), 6 labelled renders, `CHECKS.md`, `ASSUMED.md`.

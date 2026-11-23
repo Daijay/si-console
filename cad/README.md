@@ -1,4 +1,4 @@
-# SI Console CAD, Rev R4
+# SI Console CAD, Rev R4.1
 
 Parametric CadQuery model of the whole console. Change one number in `params.py`, run `build.py`, and every part, laser file, drawing, render and check is regenerated.
 
@@ -55,17 +55,17 @@ If a change breaks a rule (a hole too close to an edge, two parts colliding, a c
 | `render.py` | Labelled PNG renders (VTK, offscreen) |
 | `requirements.txt` | Pinned versions |
 
-## Outputs (all in `output/`, finals also copied to `../blueprints/R4/`)
+## Outputs (all in `output/`, finals also copied to `../blueprints/R4.1/`)
 
 | Folder or file | Contents |
 | --- | --- |
-| `step/` | One STEP per part, 26 files |
-| `si_console_assembly_R4.step` | Whole assembly with names and colours |
-| `stl/` | 3D printed parts: `screen_spacer_R4.stl` (4 spacers). With `SCREEN_MODE = "bezel"` it is `screen_bezel_R4.stl` instead |
-| `dxf/panel_*_R4.dxf` | Each panel as clean cut lines on layer `CUT`, kerf applied |
-| `dxf/nested_sheet_N_R4.dxf` | Nested sheets for 12 x 16 in (305 x 406 mm) stock. Part names are on layer `LABEL_NOCUT`, which a laser should not cut |
-| `dxf/nested_layout_R4.png` | Picture of the nested sheets |
-| `drawings/panel_*_R4.svg`, `panels_R4.pdf` | Dimensioned drawing of every panel with every hole position and size |
+| `step/` | One STEP per part |
+| `si_console_assembly_R4.1.step` | Whole assembly with names and colours |
+| `stl/` | 3D printed parts: `screen_spacer_R4.1.stl` (4 spacers). With `SCREEN_MODE = "bezel"` it is `screen_bezel_R4.1.stl` instead |
+| `dxf/panel_*_R4.1.dxf` | Each panel as clean cut lines on layer `CUT`, kerf applied |
+| `dxf/nested_sheet_N_R4.1.dxf` | Nested sheets for 12 x 16 in (305 x 406 mm) stock. Part names are on layer `LABEL_NOCUT`, which a laser should not cut |
+| `dxf/nested_layout_R4.1.png` | Picture of the nested sheets |
+| `drawings/panel_*_R4.1.svg`, `panels_R4.1.pdf` | Dimensioned drawing of every panel with every hole position and size |
 | `renders/` | hero, front, top, back, exploded, see-through, all labelled |
 | `CHECKS.md` | Check results |
 | `ASSUMED.md` | The ASSUMED list |
@@ -102,7 +102,7 @@ The official Raspberry Pi 5 STEP model was downloaded from `datasheets.raspberry
 - Perfboard (70 x 90) with the ULN2003 in the centre on four 10 mm M3 standoffs. GPIO ribbon breakout between the Pi header and the perfboard.
 - Mini screen module (Waveshare 5 inch HDMI LCD (H), 121 x 89.48 mm) hangs under the top panel on 3 mm printed spacers. The top panel window is only the visible area, so the module cannot fall through. `SCREEN_MODE = "bezel"` gives the alternative: full cutout plus a printed bezel with screw bosses.
 - Front panel: green 30 mm, red 30 mm, kill switch 22 mm, push-to-talk 12 mm, EN/ZH toggle 12 mm, and four 5 mm LEDs in a row above (COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow). Clear space: 50 mm behind the arcade buttons, 75 mm behind the kill switch.
-- Back panel: 2 micro-HDMI cable cutouts, Pi USB-C power, 1 USB cable out for the mic, and a 40 mm fan mount (32 mm hole spacing) high on the back for exhaust. The fan opening is 31 mm so that it keeps the required 5 mm from the screw holes.
+- Back panel: 1 micro-HDMI cable cutout (main monitor), Pi USB-C power, 1 USB cable out for the mic, a small hole for the mini screen USB power cable (it comes from an outside charger; the screen HDMI stays inside), and a 40 mm fan mount (32 mm hole spacing) high on the back for exhaust. The fan opening is a grid of 3 mm holes across the 37 mm area, each at least 5 mm from the screw holes and from each other.
 - Sides: intake slots low down. Bottom: Pi standoff holes, perfboard standoff holes, 4 rubber-foot holes, no vents.
 - No speaker, soundbar or grille. Sound comes from the monitor over HDMI.
 - MSI PRO MP165 E6 (356.5 x 210.35 x 13.85 mm) is in the assembly only, standing behind the case on a tilted kickstand with a 45 mm air gap. It is never a cut part.
@@ -168,9 +168,11 @@ Everything below is tagged `ASSUMED` in `params.py`. Measure the real part, chan
 | `FOOT_D` | `15.0` | Rubber foot diameter. |
 | `FOOT_H` | `6.0` | Rubber foot height. |
 | `FOOT_HOLE_D` | `4.2` | Foot screw hole (M4). |
-| `HDMI_CUT` | `(24.0, 12.0)` | micro-HDMI to HDMI adapter cable, plug passes through. Width, height. |
+| `HDMI_CUT` | `(24.0, 12.0)` | micro-HDMI to HDMI adapter cable to the main monitor, plug passes through. Width, height. |
 | `USBC_CUT` | `(18.0, 10.0)` | Pi USB-C power plug passes through. |
 | `MIC_CUT` | `(16.0, 10.0)` | USB-A plug of the mic cable passes through. |
+| `SCREEN_PWR_CUT` | `(16.0, 10.0)` | Cable hole for the mini screen USB power cable (from an outside charger); a USB-A plug passes through. Width, height. |
+| `SCREEN_PWR_CABLE_LEN` | `450.0` | Length of the screen power cable available inside the case. |
 | `FAN_T` | `10.0` | Fan thickness. |
 | `HDMI_PLUG_LEN` | `25.0` | Straight, stiff length of a micro-HDMI plug plus strain relief. |
 | `USBC_PLUG_LEN` | `22.0` | Same for the USB-C power plug. |

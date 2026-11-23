@@ -26,18 +26,18 @@ def export_step_stl(parts):
     files = []
     for p in parts:
         wp = cq.Workplane(obj=p["solid"])
-        f = os.path.join(d_step, p["name"] + "_R4.step")
+        f = os.path.join(d_step, p["name"] + f"_{P.REV}.step")
         cq.exporters.export(wp, f)
         files.append(f)
         if p["category"] == "print":
-            g = os.path.join(d_stl, p["name"] + "_R4.stl")
+            g = os.path.join(d_stl, p["name"] + f"_{P.REV}.stl")
             cq.exporters.export(wp, g, tolerance=0.05, angularTolerance=0.1)
             files.append(g)
-    asm = cq.Assembly(name="si_console_R4")
+    asm = cq.Assembly(name=f"si_console_{P.REV}")
     for p in parts:
         r, g, b = p["colour"]
         asm.add(p["solid"], name=p["name"], color=cq.Color(r, g, b, p["alpha"]))
-    f = os.path.join(OUT, "si_console_assembly_R4.step")
+    f = os.path.join(OUT, f"si_console_assembly_{P.REV}.step")
     asm.save(f)
     files.append(f)
     return files
@@ -109,7 +109,7 @@ def export_dxf(panel_dict):
         cuts[name] = c
         doc = _new_doc()
         c.write(doc.modelspace())
-        f = os.path.join(d, f"panel_{name}_R4.dxf")
+        f = os.path.join(d, f"panel_{name}_{P.REV}.dxf")
         doc.saveas(f)
         files.append(f)
     return files, cuts
@@ -178,7 +178,7 @@ def export_nested(cuts, sheets):
             ox, oy = P.SHEET_MARGIN + x, P.SHEET_MARGIN + y
             c.write(msp, ox, oy)
             msp.add_text(n.upper(), dxfattribs={"layer": "LABEL_NOCUT", "height": 6}).set_placement((ox + 8, oy + h / 2))
-        f = os.path.join(d, f"nested_sheet_{i}_R4.dxf")
+        f = os.path.join(d, f"nested_sheet_{i}_{P.REV}.dxf")
         doc.saveas(f)
         files.append(f)
     return files
@@ -216,7 +216,7 @@ def nest_preview(cuts, sheets):
         ax.set_title(f"Sheet {i} of {n} ({P.SHEET_W:g} x {P.SHEET_L:g} mm)", fontsize=9)
         ax.tick_params(labelsize=6)
     fig.tight_layout()
-    f = os.path.join(outdir("dxf"), "nested_layout_R4.png")
+    f = os.path.join(outdir("dxf"), f"nested_layout_{P.REV}.png")
     fig.savefig(f, dpi=110)
     plt.close(fig)
     return f
@@ -232,11 +232,11 @@ def export_drawings(panel_dict, assumed_names):
     matplotlib.rcParams["pdf.fonttype"] = 42
     d = outdir("drawings")
     files = []
-    pdf_path = os.path.join(d, "panels_R4.pdf")
+    pdf_path = os.path.join(d, f"panels_{P.REV}.pdf")
     with PdfPages(pdf_path) as pdf:
         for name, p in panel_dict.items():
             fig = draw_panel(plt, p, assumed_names)
-            f = os.path.join(d, f"panel_{name}_R4.svg")
+            f = os.path.join(d, f"panel_{name}_{P.REV}.svg")
             fig.savefig(f)
             pdf.savefig(fig)
             plt.close(fig)

@@ -48,7 +48,7 @@
 <text x="20" y="799" font-family="monospace" font-size="11">PTT  White  GPIO23 P16 to PTT switch  30 cm ASSUMED  Twist with GND</text>
 <text x="20" y="817" font-family="monospace" font-size="11">LANG  Orange  GPIO24 P18 to toggle  30 cm ASSUMED  Twist with GND</text>
 <text x="20" y="835" font-family="monospace" font-size="11">COORD  Green  GPIO5 P29 to ULN IN1  15 cm ASSUMED  On perfboard / short Dupont</text>
-<text x="20" y="853" font-family="monospace" font-size="11">AGENT 1  Red  GPIO6 P31 to ULN IN2  15 cm ASSUMED  On perfboard</text>
+<text x="20" y="853" font-family="monospace" font-size="11">AGENT 1  White  GPIO6 P31 to ULN IN2  15 cm ASSUMED  On perfboard</text>
 <text x="20" y="871" font-family="monospace" font-size="11">AGENT 2  Blue  GPIO13 P33 to ULN IN3  15 cm ASSUMED  On perfboard</text>
 <text x="20" y="889" font-family="monospace" font-size="11">GUARD  Yellow  GPIO19 P35 to ULN IN4  15 cm ASSUMED  On perfboard</text>
 <text x="20" y="907" font-family="monospace" font-size="11">GRN LED  Green  GPIO20 P38 to ULN IN5  15 cm ASSUMED  On perfboard</text>

@@ -4,6 +4,7 @@ Every panel is described in its own "view" coordinates (u, v), the way you
 would look at it from outside. The same 2D model feeds the 3D STEP solids,
 the DXF laser files and the dimensioned drawings, so they cannot disagree.
 """
+import math
 from dataclasses import dataclass, field
 
 import cadquery as cq
@@ -223,17 +224,19 @@ def build_holes():
     # ---- back panel (u = W - x, v = z)
     bk = h["back"]
     z = P.CUT_Z
-    bk.append(rect(W - P.HDMI0_CUT_X, z, *P.HDMI_CUT, "micro-HDMI 0 cable", assumed=True))
-    bk.append(rect(W - P.HDMI1_CUT_X, z, *P.HDMI_CUT, "micro-HDMI 1 cable", assumed=True))
+    bk.append(rect(W - P.HDMI0_CUT_X, z, *P.HDMI_CUT, "micro-HDMI 0 cable (main monitor)", assumed=True))
+    bk.append(rect(W - P.SCREEN_PWR_CUT_X, z, *P.SCREEN_PWR_CUT, "mini screen USB power cable", assumed=True))
     bk.append(rect(W - P.USBC_CUT_X, z, *P.USBC_CUT, "Pi USB-C power", assumed=True))
     bk.append(rect(W - P.MIC_CUT_X, z, *P.MIC_CUT, "mic USB cable", assumed=True))
     if P.ENABLE_FAN:
         u = W - P.FAN_CX
-        bk.append(circle(u, P.FAN_CZ, P.FAN_OPENING_D, "fan opening"))
+        screws = []
         for sx in (-1, 1):
             for sz in (-1, 1):
-                bk.append(circle(u + sx * P.FAN_HOLE_SPACING / 2, P.FAN_CZ + sz * P.FAN_HOLE_SPACING / 2,
-                                 P.FAN_SCREW_D, "fan screw"))
+                screws.append(circle(u + sx * P.FAN_HOLE_SPACING / 2, P.FAN_CZ + sz * P.FAN_HOLE_SPACING / 2,
+                                     P.FAN_SCREW_D, "fan screw"))
+        bk.extend(screws)
+        bk.extend(fan_grid(u, P.FAN_CZ, screws))
 
     # ---- side panels: intake slots low down
     if P.ENABLE_SIDE_VENTS:
@@ -260,6 +263,25 @@ def build_holes():
         for i in range(4):
             bt.append(rect(P.PI_X0 + 42.5, P.BOTTOM_VENT_Y + i * 10, 60, 4, "bottom vent"))
     return h
+
+
+def fan_grid(cx, cz, screws):
+    """Grid of small holes across the fan area, dropping any hole that would sit
+    closer than MIN_HOLE_GAP to a screw hole or leave the circular fan area."""
+    from shapely.geometry import Point
+    r = P.FAN_GRID_HOLE_D / 2
+    n = int(P.FAN_AREA_D // P.FAN_GRID_PITCH) + 1
+    out = []
+    for i in range(-n, n + 1):
+        for j in range(-n, n + 1):
+            x, z = cx + i * P.FAN_GRID_PITCH, cz + j * P.FAN_GRID_PITCH
+            if math.hypot(x - cx, z - cz) + r > P.FAN_AREA_D / 2 + 1e-9:
+                continue
+            h = circle(x, z, P.FAN_GRID_HOLE_D, "fan grid")
+            if any(h.shape().distance(s.shape()) < P.MIN_HOLE_GAP + 1e-6 for s in screws):
+                continue
+            out.append(h)
+    return out
 
 
 def pi_y0():

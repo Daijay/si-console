@@ -75,7 +75,7 @@ VIEW_NAMES = {
             "case_fan", "monitor", "uln2003"},
     "back": {"case_back_panel", "case_fan", "monitor", "pi5", "rubber_feet"},
 }
-EXTRA = {"back": [("Cable cutouts: 2x micro-HDMI, USB-C, mic USB", (82, D, P.CUT_Z))]}
+EXTRA = {"back": [("Cable cutouts: HDMI, USB-C, mic USB, screen power", (82, D, P.CUT_Z))]}
 
 
 class Scene:
@@ -273,10 +273,10 @@ def _draw_labels(im, proj, anchors, label_set, title, view):
 def render_all(parts):
     sc = Scene(parts)
     files = []
-    files.append(sc.render("render_hero_R4.png", "iso", panel_alpha=0.28, title="SI Console, hero view"))
-    files.append(sc.render("render_front_R4.png", "front", panel_alpha=0.25, title="Front view", hide=()))
-    files.append(sc.render("render_top_R4.png", "top", panel_alpha=0.22, title="Top view (through the clear lid)"))
-    files.append(sc.render("render_back_R4.png", "back", panel_alpha=0.25, title="Back view"))
-    files.append(sc.render("render_exploded_R4.png", "iso", panel_alpha=0.45, explode=True, title="Exploded view"))
-    files.append(sc.render("render_see_through_R4.png", "iso", panel_alpha=0.12, title="See-through view"))
+    files.append(sc.render(f"render_hero_{P.REV}.png", "iso", panel_alpha=0.28, title="SI Console, hero view"))
+    files.append(sc.render(f"render_front_{P.REV}.png", "front", panel_alpha=0.25, title="Front view", hide=()))
+    files.append(sc.render(f"render_top_{P.REV}.png", "top", panel_alpha=0.22, title="Top view (through the clear lid)"))
+    files.append(sc.render(f"render_back_{P.REV}.png", "back", panel_alpha=0.25, title="Back view (monitor hidden)", hide=("monitor",)))
+    files.append(sc.render(f"render_exploded_{P.REV}.png", "iso", panel_alpha=0.45, explode=True, title="Exploded view"))
+    files.append(sc.render(f"render_see_through_{P.REV}.png", "iso", panel_alpha=0.12, title="See-through view"))
     return files

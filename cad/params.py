@@ -1,4 +1,4 @@
-"""SI Console, Rev R4: every dimension and every switch lives in this file.
+"""SI Console, Rev R4.1: every dimension and every switch lives in this file.
 
 Change a number here, run `python build.py`, and every part, drawing, laser
 file, render and check is regenerated.
@@ -18,7 +18,7 @@ All lengths are millimetres. Coordinates in the assembly: X is left to right
 face of the back panel), Z is up (0 = underside of the bottom panel).
 """
 
-REV = "R4"
+REV = "R4.1"
 
 # --------------------------------------------------------------------------
 # SWITCHES (each current design decision can be flipped here)
@@ -208,11 +208,13 @@ BOTTOM_VENT_Y = 60.0  # DESIGN. Only used when ENABLE_BOTTOM_VENTS.
 # they line up with what is in front of them)
 # --------------------------------------------------------------------------
 CUT_Z = 24.0           # DESIGN. Centre height of the cable cutouts.
-HDMI_CUT = (24.0, 12.0)   # ASSUMED. micro-HDMI to HDMI adapter cable, plug passes through. Width, height.
+HDMI_CUT = (24.0, 12.0)   # ASSUMED. micro-HDMI to HDMI adapter cable to the main monitor, plug passes through. Width, height.
 USBC_CUT = (18.0, 10.0)   # ASSUMED. Pi USB-C power plug passes through.
 MIC_CUT = (16.0, 10.0)    # ASSUMED. USB-A plug of the mic cable passes through.
 HDMI0_CUT_X = 98.0     # DESIGN. Cutout for the cable from micro-HDMI 0.
-HDMI1_CUT_X = 68.0     # DESIGN. Cutout for the cable from micro-HDMI 1.
+SCREEN_PWR_CUT = (16.0, 10.0)  # ASSUMED. Cable hole for the mini screen USB power cable (from an outside charger); a USB-A plug passes through. Width, height.
+SCREEN_PWR_CUT_X = 68.0   # DESIGN. World X of that hole (the old second HDMI cutout position).
+SCREEN_PWR_CABLE_LEN = 450.0  # ASSUMED. Length of the screen power cable available inside the case.
 USBC_CUT_X = 127.0     # DESIGN.
 MIC_CUT_X = 38.0       # DESIGN.
 
@@ -220,7 +222,9 @@ FAN_SIZE = 40.0           # VERIFIED (brief). 40 mm fan.
 FAN_T = 10.0              # ASSUMED. Fan thickness.
 FAN_HOLE_SPACING = 32.0   # VERIFIED (brief). Screw hole spacing.
 FAN_SCREW_D = 3.4         # DESIGN. M3 clearance.
-FAN_OPENING_D = 31.0      # DESIGN. Airflow opening. Limited to 31 so it keeps 5 mm to the screw holes; raise it and the hole-gap check fails.
+FAN_AREA_D = 37.0         # DESIGN. Airflow area covered by the hole grid (fan frame opening).
+FAN_GRID_HOLE_D = 3.0     # DESIGN. Diameter of each small grid hole.
+FAN_GRID_PITCH = 8.5      # DESIGN. Grid pitch. Holes are kept at least MIN_HOLE_GAP apart, and from the screw holes.
 FAN_CX = 90.0             # DESIGN. World X of the fan centre.
 FAN_CZ = 110.0            # DESIGN. High on the back.
 

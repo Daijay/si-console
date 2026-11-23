@@ -1,6 +1,6 @@
 # SI Console
 
-> Private project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). All content is DRAFT; the R3 drawings are reference only; Rev R4 CAD is in `cad/` and `blueprints/R4/`.
+> Private project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). All content is DRAFT; the R3 drawings are reference only; Rev R4.1 CAD is in `cad/` and `blueprints/R4.1/`.
 
 ## Start here
 - [README.md](README.md): human front page, team, status, open decisions
@@ -19,13 +19,13 @@
 - [bom/BOM.csv](bom/BOM.csv): the only current BOM, Rev R2.1 with both cuts, 791.33 CAD fundable
 - [bom/BOM_NOTES.md](bom/BOM_NOTES.md): totals and the cuts applied
 
-## CAD, Rev R4 (parametric, current)
+## CAD, Rev R4.1 (parametric, current)
 - [cad/README.md](cad/README.md): how to run, how to change a dimension, Pi orientation, list of ASSUMED dimensions to measure
 - [cad/params.py](cad/params.py): every dimension and switch, each tagged VERIFIED, ASSUMED or DESIGN
 - [cad/build.py](cad/build.py): regenerates STEP, STL, DXF, drawings, renders and checks
 - [cad/output/CHECKS.md](cad/output/CHECKS.md): check results
 - [cad/output/ASSUMED.md](cad/output/ASSUMED.md): measure with calipers before cutting
-- [blueprints/R4/](blueprints/R4/): finals. `si_console_assembly_R4.step`, `step/`, `stl/`, `dxf/` (laser, 4 sheets), `drawings/` (SVG, PDF), `renders/`
+- [blueprints/R4.1/](blueprints/R4.1/): finals. `si_console_assembly_R4.1.step`, `step/`, `stl/`, `dxf/` (laser, 4 sheets), `drawings/` (SVG, PDF), `renders/`
 
 ## Blueprints (R3, reference only)
 - [blueprints/2d/case-panels-R3.png](blueprints/2d/case-panels-R3.png): case panel drawings

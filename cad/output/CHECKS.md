@@ -1,4 +1,4 @@
-# CHECKS, SI Console Rev R4
+# CHECKS, SI Console Rev R4.1
 
 Run 2026-11-23 by `cad/build.py`. Overall: **ALL CHECKS PASSED**.
 
@@ -23,7 +23,7 @@ Screen mode: `window_under`. Laser sheets used: **4** (305 x 406 mm).
 - top: 5 holes, closest to an edge 54.4 mm, closest pair 7.3 mm
 - bottom: 12 holes, closest to an edge 24.9 mm, closest pair 26.7 mm
 - front: 9 holes, closest to an edge 34.4 mm, closest pair 21.9 mm
-- back: 9 holes, closest to an edge 9.3 mm, closest pair 5.4 mm
+- back: 21 holes, closest to an edge 9.3 mm, closest pair 5.5 mm
 - left: 8 holes, closest to an edge 12.0 mm, closest pair 8.0 mm
 - right: 8 holes, closest to an edge 12.0 mm, closest pair 8.0 mm
 
@@ -71,9 +71,9 @@ Screen mode: `window_under`. Laser sheets used: **4** (305 x 406 mm).
 ## PASS: The Pi cables reach their back panel cutouts
 
 - micro-HDMI 0: port x=97.2, cutout x=98, sideways 0.8 mm, straight run after plug 38.4 mm, S-bend needs 8.0 mm (bend radius 20), margin 30.4 mm
-- micro-HDMI 1: port x=83.8, cutout x=68, sideways 15.8 mm, straight run after plug 38.4 mm, S-bend needs 32.4 mm (bend radius 20), margin 6.0 mm
 - USB-C power: port x=111.8, cutout x=127, sideways 15.2 mm, straight run after plug 41.4 mm, S-bend needs 31.8 mm (bend radius 20), margin 9.6 mm
 - mic USB: plug needs 30 mm left of the Pi, 32.0 mm available; cable path about 181 mm of 500 mm
+- mini screen USB power: hole to the screen edge about 336 mm of cable inside the case, 450 mm available (the screen HDMI cable stays inside)
 - GPIO ribbon: header to breakout about 34 mm of 150 mm
 
 ## PASS: Parameter sanity (screen window, fan opening, finger counts)

@@ -8,8 +8,8 @@ SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 in
 ## Folder map
 - `docs/`: decisions, GPIO map, Overview, Detailed, ONSHAPE_IMPORT.
 - `bom/`: `BOM.csv` (Rev R2.1, both cuts), `BOM_NOTES.md`.
-- `cad/`: Rev R4 parametric CadQuery model (`params.py`, `build.py`, `README.md`). Regenerate with `python build.py`; do not hand-edit `cad/output/` or `blueprints/R4/`.
-- `blueprints/R4/`: R4 finals (STEP, STL, DXF, drawings, renders) copied from `cad/output/`.
+- `cad/`: Rev R4.1 parametric CadQuery model (`params.py`, `build.py`, `README.md`). Regenerate with `python build.py`; do not hand-edit `cad/output/` or `blueprints/R4.1/`.
+- `blueprints/R4.1/`: R4 finals (STEP, STL, DXF, drawings, renders) copied from `cad/output/`.
 - `blueprints/2d/`: R3 SVG sources and PNGs, reference only.
 - `blueprints/3d/`: STEP (one per part plus `si_console_assembly.step`), STL, renders. Generated from a parametric CadQuery model; reference only.
 - `code/`: DRAFT REFERENCE scratch code (`si_console/`, `tests/`, `systemd/`, `dashboard/`).
