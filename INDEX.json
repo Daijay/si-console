@@ -40,6 +40,14 @@
     "owner": "Jayden, Christopher"
   },
   {
+    "path": "docs/ARCHITECTURE_DIAGRAMS.md",
+    "type": "doc",
+    "description": "9 Mermaid visualizations of the merged v1 architecture with per-part implementation status",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden, Christopher"
+  },
+  {
     "path": "docs/decisions.md",
     "type": "doc",
     "description": "Decisions, R3 review items (OPEN 1 to 5) and the R4 outcomes",

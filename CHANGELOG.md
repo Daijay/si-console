@@ -2,6 +2,9 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-23, Architecture visualizations
+- `docs/ARCHITECTURE_DIAGRAMS.md`: 9 Mermaid diagrams covering the whole merged v1 architecture (big picture, state machine, end-to-end flow, safety stack, memory/state, providers, offline fallback, external agents, ownership). Each has a per-part DONE/PARTIAL/GAP legend. Indexed in README, llms.txt, INDEX.json. Spec remains authoritative.
+
 ## 2026-11-23, Agent architecture v1 (Jayden + Christopher)
 - `docs/ARCHITECTURE.md`: authoritative merged v1 agent runtime spec (state machine, flow, safety, memory, providers, offline, external agents, ownership) plus a DRAFT implementation-gap table reconciling it with `code/`. Indexed in `README.md`, `llms.txt`, `INDEX.json`. No runtime code changed by this entry.
 
