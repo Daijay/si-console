@@ -1,0 +1,22 @@
+# secrets
+.env
+.env.*
+*.pem
+*.key
+secrets*
+credentials*
+*token*.txt
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+# local scratch
+*.log
+*.tmp

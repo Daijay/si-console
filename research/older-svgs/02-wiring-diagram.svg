@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1360" viewBox="0 0 1200 1360">
+<rect x="0" y="0" width="1200" height="1360" fill="#fff"/>
+<rect x="0" y="0" width="1200" height="70" fill="#111" />
+<text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
+<text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">02 WIRING DIAGRAM</text>
+<text x="700" y="28" font-family="monospace" font-size="13" fill="#fff">REV R1  |  DATE 2026-11-20</text>
+<text x="700" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT, NOT FOR SUBMISSION</text>
+<text x="20" y="88" font-family="monospace" font-size="13" fill="#000">Physical layout, wire colours, labels, lengths. Breakout to each part.</text>
+<text x="20" y="120" font-family="monospace" font-size="14" font-weight="bold">WIRING LAYOUT, TOP VIEW, INSIDE CASE 360 x 240 mm, LOOKING DOWN</text>
+<rect x="80" y="140" width="1040" height="520" fill="none" stroke="#000" stroke-width="3"/>
+<text x="90" y="160" font-family="monospace" font-size="11">CASE OUTLINE 360 W x 240 D mm, 3 mm ACRYLIC, ASSUMED SIZE, SEE 04</text>
+<rect x="120" y="180" width="220" height="150" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="130" y="205" font-family="monospace" font-size="12" font-weight="bold">PI 5 8GB, REAR LEFT</text>
+<text x="130" y="225" font-family="monospace" font-size="11">85 x 56 mm VERIFIED. USB / ETH to rear wall.</text>
+<text x="130" y="245" font-family="monospace" font-size="11">GPIO header top edge. M2.5 standoffs 10 mm.</text>
+<text x="130" y="265" font-family="monospace" font-size="11">Active cooler on top. Leave 25 mm clear above.</text>
+<rect x="420" y="180" width="280" height="150" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="430" y="205" font-family="monospace" font-size="12" font-weight="bold">BREAKOUT / PERFBOARD, CENTRE</text>
+<text x="430" y="225" font-family="monospace" font-size="11">Pi-EzConnect HAT or ribbon breakout ASSUMED.</text>
+<text x="430" y="245" font-family="monospace" font-size="11">ULN2003 DIP-16 here. 5V rail, GND rail.</text>
+<text x="430" y="265" font-family="monospace" font-size="11">6 resistors in a row. See 01 for values.</text>
+<text x="430" y="285" font-family="monospace" font-size="11">Check HAT clearance vs Active Cooler first.</text>
+<rect x="780" y="180" width="220" height="150" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="790" y="205" font-family="monospace" font-size="12" font-weight="bold">USB SPEAKER, FRONT RIGHT</text>
+<text x="790" y="225" font-family="monospace" font-size="11">USB only. Keep 20 mm gap from Pi.</text>
+<text x="790" y="245" font-family="monospace" font-size="11">Grille holes in front panel ASSUMED.</text>
+<rect x="120" y="420" width="880" height="120" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="130" y="445" font-family="monospace" font-size="12" font-weight="bold">FRONT PANEL, INSIDE VIEW, 360 x 140 mm</text>
+<text x="130" y="465" font-family="monospace" font-size="11">G GREEN 30 mm  |  R RED 30 mm  |  K KILL 22 mm  |  PTT 12 mm  |  LANG 12 mm  |  LEDs 5 mm x4</text>
+<text x="130" y="485" font-family="monospace" font-size="11">Buttons face forward. Wires run from breakout to front panel.</text>
+<rect x="120" y="560" width="880" height="70" fill="none" stroke="#000" stroke-width="2"/>
+<text x="130" y="585" font-family="monospace" font-size="11">TOP PANEL: MINI SCREEN 121 x 89.48 mm, bezel cutout 122 x 90.5 mm ASSUMED. HDMI + USB power, not GPIO.</text>
+<text x="130" y="605" font-family="monospace" font-size="11">MAIN MONITOR outside case, behind, on own stand. Micro HDMI to Pi HDMI0. Mini screen to Pi HDMI1.</text>
+<text x="20" y="700" font-family="monospace" font-size="14" font-weight="bold">WIRE TABLE, COLOUR, LABEL, LENGTH, ROUTE</text>
+<text x="20" y="725" font-family="monospace" font-size="11">LABEL  COLOUR  FROM - TO  LENGTH  NOTE</text>
+<text x="20" y="745" font-family="monospace" font-size="11">G  Green  GPIO17 P11 to green switch  25 cm ASSUMED  Twist with GND, Dupont / 22 AWG</text>
+<text x="20" y="763" font-family="monospace" font-size="11">R  Red  GPIO27 P13 to red switch  25 cm ASSUMED  Twist with GND</text>
+<text x="20" y="781" font-family="monospace" font-size="11">K  Yellow  GPIO22 P15 to kill NC  30 cm ASSUMED  Twist with GND, keep clear of Pi</text>
+<text x="20" y="799" font-family="monospace" font-size="11">PTT  White  GPIO23 P16 to PTT switch  30 cm ASSUMED  Twist with GND</text>
+<text x="20" y="817" font-family="monospace" font-size="11">LANG  Orange  GPIO24 P18 to toggle  30 cm ASSUMED  Twist with GND</text>
+<text x="20" y="835" font-family="monospace" font-size="11">COORD  Green  GPIO5 P29 to ULN IN1  15 cm ASSUMED  On perfboard / short Dupont</text>
+<text x="20" y="853" font-family="monospace" font-size="11">AGENT 1  Red  GPIO6 P31 to ULN IN2  15 cm ASSUMED  On perfboard</text>
+<text x="20" y="871" font-family="monospace" font-size="11">AGENT 2  Blue  GPIO13 P33 to ULN IN3  15 cm ASSUMED  On perfboard</text>
+<text x="20" y="889" font-family="monospace" font-size="11">GUARD  Yellow  GPIO19 P35 to ULN IN4  15 cm ASSUMED  On perfboard</text>
+<text x="20" y="907" font-family="monospace" font-size="11">GRN LED  Green  GPIO20 P38 to ULN IN5  15 cm ASSUMED  On perfboard</text>
+<text x="20" y="925" font-family="monospace" font-size="11">RED LED  Red  GPIO21 P40 to ULN IN6  15 cm ASSUMED  On perfboard</text>
+<text x="20" y="943" font-family="monospace" font-size="11">SPARE  Grey  GPIO26 P37 to ULN IN7  15 cm ASSUMED  Tie IN7 to GND if unused</text>
+<text x="20" y="961" font-family="monospace" font-size="11">5V  Red  Pi 5V P2/P4 to LED rail  15 cm ASSUMED  Do not power LEDs from GPIO</text>
+<text x="20" y="979" font-family="monospace" font-size="11">GND  Black  Pi GND P6/P30 to GND rail  15-30 cm ASSUMED  Common GND bus on perfboard</text>
+<text x="20" y="997" font-family="monospace" font-size="11">USB MIC  Black USB  Pi USB-A to FIFINE AM8  1.0 m cable  Outside case, desk left</text>
+<text x="20" y="1015" font-family="monospace" font-size="11">USB SPKR  Black USB  Pi USB-A to speaker  0.5 m ASSUMED  Inside case, front right</text>
+<text x="20" y="1033" font-family="monospace" font-size="11">HDMI MAIN  Black  Pi micro HDMI0 to MSI monitor  1.0 m ASSUMED  Through rear cable cutout</text>
+<text x="20" y="1051" font-family="monospace" font-size="11">HDMI MINI  Black  Pi micro HDMI1 to mini screen  0.5 m ASSUMED  Short, inside / top</text>
+<text x="20" y="1070" font-family="monospace" font-size="11">Rule: button wires under 30 cm, LED wires under 20 cm, twist GPIO and GND together per button.</text>
+<text x="20" y="1090" font-family="monospace" font-size="11">Label every wire at both ends: G, R, K, PTT, LANG, COORD, AGENT 1, AGENT 2, GUARD, GND.</text>
+<text x="20" y="1110" font-family="monospace" font-size="11">Spade connectors: female 4.8 mm for switch contacts. 6.3 mm only if a button LED is wired later.</text>
+<text x="20" y="1165" font-family="monospace" font-size="15" font-weight="bold" fill="#c00">ASSUMPTIONS</text><text x="20" y="1187" font-family="monospace" font-size="11" fill="#c00">* All wire lengths ASSUMED estimates, not measured. Measure on the real case and cut to fit, keep under the max in the table.</text><text x="20" y="1204" font-family="monospace" font-size="11" fill="#c00">* Case size 360 x 240 x 140 mm ASSUMED proposal from W3. Confirm in CAD before cutting.</text><text x="20" y="1221" font-family="monospace" font-size="11" fill="#c00">* Breakout choice ASSUMED: Pi-EzConnect HAT, fallback ribbon breakout. HAT clearance vs cooler is untested.</text><text x="20" y="1238" font-family="monospace" font-size="11" fill="#c00">* Speaker grille size and position ASSUMED. Measure the real speaker first.</text><text x="20" y="1255" font-family="monospace" font-size="11" fill="#c00">* GND pin sharing in the table is ASSUMED. Any Pi GND pin works. Use pins 6, 9, 14, 20, 25, 30, 34, 39.</text>
+<rect x="20" y="1290" width="1160" height="54" fill="none" stroke="#000" stroke-width="2"/>
+<text x="30" y="1310" font-family="monospace" font-size="12">Project: SI Console | Drawing: 02 WIRING DIAGRAM | Rev: R1 | Date: 2026-11-20</text>
+<text x="30" y="1330" font-family="monospace" font-size="12" font-weight="bold">DRAFT, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
+</svg>

@@ -1,0 +1,170 @@
+[
+  {
+    "path": "README.md",
+    "type": "doc",
+    "description": "Human front page",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "doc",
+    "description": "Rules for AI agents",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "llms.txt",
+    "type": "index",
+    "description": "Short file index",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "doc",
+    "description": "Dated revision log",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/decisions.md",
+    "type": "doc",
+    "description": "Decisions and 5 open R3 review items",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/GPIO_PIN_MAP.md",
+    "type": "doc",
+    "description": "Only GPIO map, Rev R2, ULN2003 math",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "bom/BOM.csv",
+    "type": "data",
+    "description": "Only current BOM, Rev R2.1, both cuts, 791.33 CAD",
+    "status": "LIKELY",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "bom/BOM_NOTES.md",
+    "type": "doc",
+    "description": "BOM totals and cuts",
+    "status": "VERIFIED",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/case-panels-R3.png",
+    "type": "drawing",
+    "description": "Case panel drawings R3, reference only, known errors",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/2d/electrical-schematic-R3.png",
+    "type": "drawing",
+    "description": "Electrical schematic R3",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/wiring-diagram-R3.png",
+    "type": "drawing",
+    "description": "Wiring diagram R3",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/power-diagram-R3.png",
+    "type": "drawing",
+    "description": "Power diagram R3",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/connection-diagram-R3.png",
+    "type": "drawing",
+    "description": "System connection diagram",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/3d/render-hero-R3.png",
+    "type": "render",
+    "description": "Hero render",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/3d/render-exploded-R3.png",
+    "type": "render",
+    "description": "Exploded view",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/3d/render-front-R3.png",
+    "type": "render",
+    "description": "Front view",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/3d/render-top-R3.png",
+    "type": "render",
+    "description": "Top view",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "code/README.md",
+    "type": "doc",
+    "description": "Placeholder, code not uploaded yet",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Christopher"
+  },
+  {
+    "path": "research/",
+    "type": "folder",
+    "description": "Superseded material, never current",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "research/overnight-notes/MORNING_SUMMARY_2026-11-23.md",
+    "type": "doc",
+    "description": "Overnight summary, source of budget and decision figures",
+    "status": "LIKELY",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "research/ui-design-system/",
+    "type": "folder",
+    "description": "Dashboard UI tokens and HTML previews",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Christopher"
+  }
+]

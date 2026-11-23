@@ -1,0 +1,55 @@
+{
+  "manifestVersion": 3,
+  "name": "SI Console",
+  "namespace": "SI",
+  "files": [
+    "Hardware.md",
+    "components/BoothScene/README.md",
+    "components/ConsoleViews/README.md",
+    "components/Dashboard/README.md",
+    "components/Exploded/README.md",
+    "components/Hero/README.md",
+    "components/LightStates/README.md",
+    "components/MiniScreen/README.md",
+    "tokens.css"
+  ],
+  "libraries": [],
+  "components": [
+    {
+      "name": "BoothScene",
+      "group": "Scenes",
+      "summary": "Maker Faire booth: a visitor presses the green APPROVE button while the monitor shows the Needs approval card."
+    },
+    {
+      "name": "ConsoleViews",
+      "group": "Console",
+      "summary": "Front, top and rear views of the console with labeled parts and millimetre dimensions."
+    },
+    {
+      "name": "Dashboard",
+      "group": "Screens",
+      "summary": "Main monitor dashboard in English and Chinese, approval-needed state."
+    },
+    {
+      "name": "Exploded",
+      "group": "Console",
+      "summary": "See-through exploded view: Pi 5 with cooler, perfboard, speaker, wiring, vents, lid and front panel pulled away."
+    },
+    {
+      "name": "Hero",
+      "group": "Scenes",
+      "summary": "Whole setup on a desk in the working state."
+    },
+    {
+      "name": "LightStates",
+      "group": "States",
+      "summary": "Idle, working, approval needed and kill active shown on LEDs, buttons and both screens."
+    },
+    {
+      "name": "MiniScreen",
+      "group": "Screens",
+      "summary": "5 inch status screen: one row per agent, huge text, no interaction."
+    }
+  ],
+  "assetGroups": []
+}

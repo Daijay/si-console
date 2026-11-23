@@ -1,0 +1,37 @@
+# SI Console
+
+> Private project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). All content is DRAFT; the R3 drawings are reference only.
+
+## Start here
+- [README.md](README.md): human front page, team, status, open decisions
+- [AGENTS.md](AGENTS.md): rules for AI agents, source of truth, what not to edit
+- [INDEX.json](INDEX.json): machine-readable manifest with status and owner
+- [CHANGELOG.md](CHANGELOG.md): dated revision log
+
+## Docs
+- [docs/decisions.md](docs/decisions.md): case, mini screen, model router decisions and the 5 open R3 review items
+- [docs/GPIO_PIN_MAP.md](docs/GPIO_PIN_MAP.md): the only GPIO map plus ULN2003 wiring and resistor math (Rev R2)
+
+## Bill of materials
+- [bom/BOM.csv](bom/BOM.csv): the only current BOM, Rev R2.1 with both cuts, 791.33 CAD fundable
+- [bom/BOM_NOTES.md](bom/BOM_NOTES.md): totals and the cuts applied
+
+## Blueprints (R3, reference only)
+- [blueprints/2d/case-panels-R3.png](blueprints/2d/case-panels-R3.png): case panel drawings
+- [blueprints/2d/electrical-schematic-R3.png](blueprints/2d/electrical-schematic-R3.png): electrical schematic
+- [blueprints/2d/wiring-diagram-R3.png](blueprints/2d/wiring-diagram-R3.png): wiring diagram
+- [blueprints/2d/power-diagram-R3.png](blueprints/2d/power-diagram-R3.png): power diagram
+- [blueprints/2d/connection-diagram-R3.png](blueprints/2d/connection-diagram-R3.png): system connection diagram
+- [blueprints/3d/render-hero-R3.png](blueprints/3d/render-hero-R3.png): hero render
+- [blueprints/3d/render-exploded-R3.png](blueprints/3d/render-exploded-R3.png): exploded view
+- [blueprints/3d/render-front-R3.png](blueprints/3d/render-front-R3.png): front view
+- [blueprints/3d/render-top-R3.png](blueprints/3d/render-top-R3.png): top view
+
+## Code
+- [code/README.md](code/README.md): placeholder, code not yet uploaded
+
+## Optional (older, superseded)
+- [research/README.md](research/README.md): index of older material
+- [research/overnight-notes/MORNING_SUMMARY_2026-11-23.md](research/overnight-notes/MORNING_SUMMARY_2026-11-23.md): overnight summary
+- [research/BLUEPRINT-round1-2026-11-20.md](research/BLUEPRINT-round1-2026-11-20.md): round 1 blueprint
+- [research/ui-design-system/README.md](research/ui-design-system/README.md): dashboard UI design tokens and previews

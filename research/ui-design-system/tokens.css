@@ -1,0 +1,97 @@
+/* SI Console — generated from tokens.json */
+:root, [data-theme="ember"] {
+  --ground: #14110e; /* Screen and page background. Text on it: ink, ink-muted, ember, amber, approve, reject. */
+  --surface: #1e1915; /* Panels and cards on ground. Text on it: ink, ink-muted. */
+  --surface-raised: #2a231d; /* Cards inside panels, chips, command bar. Text on it: ink, ink-muted. */
+  --line: #3d3229; /* Decorative dividers and gridlines only. Under 3:1, never carries meaning. */
+  --line-strong: #85705c; /* Borders that carry meaning (queued chip, dashed empty card). 3:1 or better on surface and ground. */
+  --ink: #f5ede3; /* Primary text and white indicator light on ground, surface, surface-raised, kill. */
+  --ink-muted: #b8a898; /* Secondary text and labels on ground, surface, surface-raised. */
+  --ember: #ff6a1a; /* Brand accent: blocked state, active tab, wordmark. Text on ground uses it directly; text on it uses ground. */
+  --amber: #ffb938; /* Working state and agent LEDs. Text on it uses ground. */
+  --approve: #36d97b; /* Safe, done and APPROVE only. Never decoration. Text on it uses on-approve. */
+  --on-approve: #052512; /* Text and icons on approve fills. */
+  --reject: #ff5c5c; /* REJECT only. Never used for generic errors or warnings. */
+  --kill: #c4162b; /* KILL switch cap and the KILL ACTIVE banner only. Text on it uses ink. */
+  --collar: #ffd21f; /* Yellow collar around the kill switch. Hardware only. */
+  --acrylic: #8fd0e6; /* Edge tint and highlights of clear 3 mm acrylic. Use at 10 to 35 percent fill, solid for edges. */
+  --plywood: #d2a066; /* Warm 3 mm plywood front panel variant. Text on it uses ply-ink. */
+  --ply-ink: #2b1b0c; /* Engraved or printed labels on plywood. 7:1 on plywood. */
+  --ply-grain: #9c6b38; /* Grain lines and edge shading on plywood. */
+  --steel: #9aa0a6; /* Metal parts: PTT button, screws, toggle, standoffs. */
+  --steel-dark: #4a4f55; /* Shadow side of metal parts and button bezels. */
+  --bezel: #232120; /* 3D-printed screen bezel and microphone body. */
+  --board: #2f5655; /* Raspberry Pi board. Deliberately not green so green keeps its meaning. */
+  --perf: #b9985c; /* Perfboard. */
+  --desk: #3a2e24; /* Desk or table surface in scenes. */
+}
+:root {
+  --space-1: 4px; /* Gap between a dot and its label. */
+  --space-2: 8px; /* Gap inside chips and between stacked labels. */
+  --space-3: 12px; /* Card padding on screens. */
+  --space-4: 16px; /* Screen margin and panel gap. */
+  --space-6: 24px; /* Perfboard dot pitch on the cover; large gaps. */
+  --space-8: 32px; /* Section gap in documentation pages. */
+  --radius-sm: 2px; /* Acrylic and plywood panel corners in drawings, cover blocks. */
+  --radius-md: 6px; /* Cards, tool cards, command bar on screens. */
+  --radius-lg: 10px; /* Panels on screens. */
+  --radius-pill: 999px; /* Chips and the mode switch. */
+  --font-sans: "IBM Plex Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Noto Sans Mono", Menlo, monospace;
+  --text-dash-title: 700 20px/28px var(--font-sans); /* Approval card headline. */
+  --text-dash-body: 400 14px/20px var(--font-sans); /* Chat messages and task titles. */
+  --text-dash-label: 600 11px/16px var(--font-sans); /* Panel headers, uppercase in English only. Never letter-space Chinese. */
+  --text-dash-mono: 400 13px/18px var(--font-mono); /* Task ids, tool calls, shell commands. */
+  --text-mini-name: 700 44px/56px var(--font-mono); /* Agent name and state on the 5 inch screen. */
+  --text-mini-detail: 400 28px/36px var(--font-mono); /* One short detail line under each agent row. */
+  --text-panel-label: 700 12px/16px var(--font-sans); /* Printed or engraved labels, English above Chinese. */
+}
+.dash-title {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.dash-body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.dash-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+.dash-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.mini-name {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  line-height: 56px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.mini-detail {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.panel-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
