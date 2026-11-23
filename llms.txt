@@ -9,6 +9,7 @@
 - [CHANGELOG.md](CHANGELOG.md): dated revision log
 
 ## Docs
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): authoritative merged v1 agent runtime spec (Jayden + Christopher) plus implementation gaps
 - [docs/decisions.md](docs/decisions.md): case, mini screen, model router decisions and the 5 open R3 review items
 - [docs/SI_Console_Overview.md](docs/SI_Console_Overview.md): 2 page overview, connection diagram, parts table, 3 decisions
 - [docs/SI_Console_Detailed.md](docs/SI_Console_Detailed.md): full 13 section compiled document

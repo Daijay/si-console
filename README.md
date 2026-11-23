@@ -34,7 +34,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - A candidate laser cut file now exists from R4 (`blueprints/R4.2/dxf/`), pending Hasan's review and the caliper measurements.
-- Code tests: run once on 2026-11-23, **79 passed** (mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
+- Code tests: run once on 2026-11-23, **89 passed** (79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
 
@@ -56,6 +56,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 | Thing | Location |
 | --- | --- |
 | Decisions and open items | `docs/decisions.md` |
+| Agent runtime spec (authoritative v1) and gaps | `docs/ARCHITECTURE.md` |
 | GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
 | BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
 | R4 CAD (parametric), outputs and checks | `cad/`, `blueprints/R4.2/` |

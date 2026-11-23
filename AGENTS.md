@@ -6,7 +6,7 @@ For AI agents (Claude Code, Muse, Hermes). Status: DRAFT.
 SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 inch HDMI mini screen, 4 agent LEDs (COORD, AGENT 1, AGENT 2, GUARD) driven by a ULN2003, green approve, red reject, latching kill switch, push to talk, EN/ZH toggle. Laser-cut acrylic case. Design rule: voice proposes, a physical button executes, fail closed. Budget: team limit about 800 CAD, hard max 900 CAD.
 
 ## Folder map
-- `docs/`: decisions, GPIO map, Overview, Detailed, ONSHAPE_IMPORT.
+- `docs/`: ARCHITECTURE (authoritative agent runtime spec), decisions, GPIO map, Overview, Detailed, ONSHAPE_IMPORT.
 - `bom/`: `BOM.csv` (Rev R2.1, both cuts), `BOM_NOTES.md`.
 - `cad/`: Rev R4.2 parametric CadQuery model (`params.py`, `build.py`, `README.md`). Regenerate with `python build.py`; do not hand-edit `cad/output/` or `blueprints/R4.2/`.
 - `blueprints/R4.2/`: R4 finals (STEP, STL, DXF, drawings, renders) copied from `cad/output/`.
@@ -17,7 +17,7 @@ SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 in
 - Index files: `README.md` (humans), `llms.txt`, `INDEX.json`, `CHANGELOG.md`.
 
 ## Source of truth
-- BOM: `bom/BOM.csv` only. GPIO: `docs/GPIO_PIN_MAP.md` only. Drawings: `blueprints/` only. Decisions: `docs/decisions.md`.
+- BOM: `bom/BOM.csv` only. GPIO: `docs/GPIO_PIN_MAP.md` only. Drawings: `blueprints/` only. Decisions: `docs/decisions.md`. Agent runtime architecture: `docs/ARCHITECTURE.md` only.
 - Anything in `research/` is old. When something is replaced, move the old copy to `research/` and log it in `CHANGELOG.md`.
 - Laser cut geometry: R3 drawings are not cut files. The R4 DXFs from `cad/build.py` are candidates, to be reviewed by Hasan and cut only after the ASSUMED dimensions (`cad/output/ASSUMED.md`) are measured.
 - Status labels: VERIFIED (source page or test seen), LIKELY, ASSUMED, DRAFT. Do not upgrade a label without evidence.

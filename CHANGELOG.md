@@ -2,6 +2,9 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-23, Agent architecture v1 (Jayden + Christopher)
+- `docs/ARCHITECTURE.md`: authoritative merged v1 agent runtime spec (state machine, flow, safety, memory, providers, offline, external agents, ownership) plus a DRAFT implementation-gap table reconciling it with `code/`. Indexed in `README.md`, `llms.txt`, `INDEX.json`. No runtime code changed by this entry.
+
 ## 2026-11-23, R4.2
 - Fan grille rule: vent holes are exempt from the 5 mm hole to hole spacing (they still keep 5 mm from the fan screw holes and from panel edges). Tried 4 mm holes with 1.5 mm webs in a staggered pattern across the 37 mm area: 30 holes, 377 mm2, which is 50% of the plain 31 mm opening (755 mm2), under the 60% threshold. Reverted to the single 31 mm opening. The grille is kept as code in `cad/panels.py` and switches in automatically if it reaches 60%.
 - All checks pass. Finals now in `blueprints/R4.2/` with `_R4.2` file names; `blueprints/R4.1/` removed.
