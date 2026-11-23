@@ -34,7 +34,7 @@
   {
     "path": "docs/decisions.md",
     "type": "doc",
-    "description": "Decisions and 5 open R3 review items",
+    "description": "Decisions, R3 review items (OPEN 1 to 5) and the R4 outcomes",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -278,5 +278,101 @@
     "status": "LIKELY",
     "last_updated": "2026-11-23",
     "owner": "Christopher"
+  },
+  {
+    "path": "cad/README.md",
+    "type": "doc",
+    "description": "How to run and change the R4 parametric CAD, Pi orientation, ASSUMED list",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/params.py",
+    "type": "code",
+    "description": "Every R4 dimension and switch, tagged VERIFIED, ASSUMED or DESIGN",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/build.py",
+    "type": "code",
+    "description": "Builds all R4 outputs and runs the checks",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/requirements.txt",
+    "type": "data",
+    "description": "Pinned CAD dependencies (Python 3.11)",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/output/CHECKS.md",
+    "type": "doc",
+    "description": "R4 check results (collisions, holes, sheet fit, fingers, clearances, cables)",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/output/ASSUMED.md",
+    "type": "doc",
+    "description": "ASSUMED dimensions to measure with calipers before cutting",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R4/si_console_assembly_R4.step",
+    "type": "data",
+    "description": "R4 full assembly STEP",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R4/step/",
+    "type": "data",
+    "description": "R4 STEP, one per part (26)",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R4/stl/",
+    "type": "data",
+    "description": "R4 STL for 3D printed parts (screen spacers, or bezel)",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R4/dxf/",
+    "type": "data",
+    "description": "R4 laser DXF per panel (kerf applied) and nested sheets, 4 sheets of 12 x 16 in; needs review before cutting",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R4/drawings/",
+    "type": "data",
+    "description": "R4 dimensioned panel drawings, SVG per panel and one PDF",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R4/renders/",
+    "type": "data",
+    "description": "R4 labelled renders: hero, front, top, back, exploded, see-through",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
   }
 ]

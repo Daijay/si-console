@@ -1,6 +1,6 @@
 # blueprints/3d/
 
-DRAFT, REFERENCE ONLY. Generated from the parametric CadQuery model, R3, 2026-11-23. Tracked with Git LFS.
+DRAFT, REFERENCE ONLY. Superseded by Rev R4 in `blueprints/R4/` (built from `cad/`). Generated from the parametric CadQuery model, R3, 2026-11-23. Tracked with Git LFS.
 
 - `si_console_assembly.step`: full assembly.
 - `case_*.step` and `case_*.stl`: bottom, front, back, left, right, top panels. `case_fan.step`.
