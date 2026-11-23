@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1265" viewBox="0 0 1200 1265">
+<rect x="0" y="0" width="1200" height="1265" fill="#fff"/>
+<rect x="0" y="0" width="1200" height="70" fill="#111" />
+<text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
+<text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">04 CASE DRAWINGS</text>
+<text x="700" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
+<text x="700" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
+<text x="20" y="88" font-family="monospace" font-size="13" fill="#000">Laser-cut acrylic panels, front/top/exploded views. Dimensions in mm.</text>
+<text x="20" y="120" font-family="monospace" font-size="14" font-weight="bold">CASE: CLEAR 3 mm LASER-CUT ACRYLIC, FINGER JOINTS, OUTER 360 W x 240 D x 140 H mm ASSUMED, FRONT/BACK 360 x 134</text>
+<text x="20" y="140" font-family="monospace" font-size="11">Scale: drawings below are not to scale. Dimensions in mm are the authority. Kerf 0.2 mm ASSUMED. Test joints on scrap first.</text>
+<rect x="20" y="160" width="360" height="170" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="28" y="178" font-family="monospace" font-size="12" font-weight="bold">FRONT 360 x 134</text>
+<text x="28" y="196" font-family="monospace" font-size="10">Holes, centres from top-left of panel:</text>
+<text x="28" y="211" font-family="monospace" font-size="10">LEDs 5.2 mm: X 70,100,130,160 Y 22 ASSUMED</text>
+<text x="28" y="226" font-family="monospace" font-size="10">GREEN 30.2 mm: X 70 Y 75. RED 30.2 mm: X 150 Y 75</text>
+<text x="28" y="241" font-family="monospace" font-size="10">KILL 22.3 mm: X 235 Y 75. PTT 12.2 mm: X 295 Y 75</text>
+<text x="28" y="256" font-family="monospace" font-size="10">TOGGLE 12.2 mm: X 330 Y 75 ASSUMED</text>
+<text x="28" y="271" font-family="monospace" font-size="10">Grille: 20 holes 3 mm, 40x40, X300 Y100 ASSUMED</text>
+<text x="28" y="286" font-family="monospace" font-size="10">Finger teeth 15 mm wide, 3 mm deep, all edges</text>
+<rect x="400" y="160" width="360" height="170" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="408" y="178" font-family="monospace" font-size="12" font-weight="bold">BACK 360 x 134</text>
+<text x="408" y="196" font-family="monospace" font-size="10">Cable cutouts, rear wall:</text>
+<text x="408" y="211" font-family="monospace" font-size="10">micro HDMI main plus mini, one shared slot 29x5 mm, X 61 to 90, Z centred 14</text>
+<text x="408" y="226" font-family="monospace" font-size="10">Two separate 15 mm slots would overlap, ports are 13 mm apart at centres.</text>
+<text x="408" y="241" font-family="monospace" font-size="10">USB-C power in 10x5 mm ASSUMED, X 46 to 56, Z centred 14. R3 fix: R2 put the</text>
+<text x="408" y="256" font-family="monospace" font-size="10">cutouts at Y 20 from the top, Z about 112 to 117, wrong for a bottom-mounted Pi.</text>
+<text x="408" y="271" font-family="monospace" font-size="10">Vent slots: 6 slots 4x20 mm, low, X 40-200 Y 100. Pi USB / ETH access: do not cut large window</text>
+<text x="408" y="286" font-family="monospace" font-size="10">Finger teeth 15 mm wide, all edges</text>
+<rect x="780" y="160" width="360" height="170" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="788" y="178" font-family="monospace" font-size="12" font-weight="bold">TOP 360 x 240</text>
+<text x="788" y="196" font-family="monospace" font-size="10">Mini screen bezel cutout:</text>
+<text x="788" y="211" font-family="monospace" font-size="10">Cutout 122 x 90.5 mm ASSUMED, X 119 Y 75</text>
+<text x="788" y="226" font-family="monospace" font-size="10">Screen module 121 x 89.48 mm VERIFIED size</text>
+<text x="788" y="241" font-family="monospace" font-size="10">Screw holes 3.2 mm ASSUMED, corners offset 5 mm</text>
+<text x="788" y="256" font-family="monospace" font-size="10">Vent slots near rear: 6 slots 4x20 mm ASSUMED</text>
+<text x="788" y="271" font-family="monospace" font-size="10">Finger teeth 15 mm wide, all edges</text>
+<rect x="20" y="350" width="360" height="170" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="28" y="368" font-family="monospace" font-size="12" font-weight="bold">BOTTOM 360 x 240</text>
+<text x="28" y="386" font-family="monospace" font-size="10">No holes except:</text>
+<text x="28" y="401" font-family="monospace" font-size="10">4x Pi standoff holes M2.5, see Pi outline</text>
+<text x="28" y="416" font-family="monospace" font-size="10">4x rubber feet holes 5 mm ASSUMED</text>
+<text x="28" y="431" font-family="monospace" font-size="10">Vent slots: none on bottom. Dust and spills.</text>
+<text x="28" y="446" font-family="monospace" font-size="10">Finger teeth 15 mm wide, all edges</text>
+<rect x="400" y="350" width="360" height="170" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="408" y="368" font-family="monospace" font-size="12" font-weight="bold">LEFT SIDE 234 x 134 ASSUMED</text>
+<text x="408" y="386" font-family="monospace" font-size="10">Panel size ASSUMED: 240 minus 2x3 mm joints</text>
+<text x="408" y="401" font-family="monospace" font-size="10">Vent slots: 6 slots 4x20 mm, high, exhaust</text>
+<text x="408" y="416" font-family="monospace" font-size="10">Finger teeth 15 mm wide, all edges</text>
+<text x="408" y="431" font-family="monospace" font-size="10">No cable holes on left side</text>
+<rect x="780" y="350" width="360" height="170" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="788" y="368" font-family="monospace" font-size="12" font-weight="bold">RIGHT SIDE 234 x 134 ASSUMED</text>
+<text x="788" y="386" font-family="monospace" font-size="10">Panel size ASSUMED: 240 minus 2x3 mm joints</text>
+<text x="788" y="401" font-family="monospace" font-size="10">Vent slots: 6 slots 4x20 mm, high, exhaust</text>
+<text x="788" y="416" font-family="monospace" font-size="10">Cable gland hole 12 mm ASSUMED, optional</text>
+<text x="788" y="431" font-family="monospace" font-size="10">Finger teeth 15 mm wide, all edges</text>
+<text x="20" y="560" font-family="monospace" font-size="14" font-weight="bold">FRONT VIEW, TOP VIEW, EXPLODED ASSEMBLY</text>
+<rect x="20" y="575" width="360" height="134" fill="none" stroke="#000" stroke-width="2"/>
+<text x="210" y="595" font-family="monospace" font-size="11">FRONT VIEW 360 x 134</text>
+<circle cx="90" cy="650" r="16" fill="none" stroke="#000"/>
+<text x="86" y="655" font-family="monospace" font-size="11">G</text>
+<circle cx="170" cy="650" r="16" fill="none" stroke="#000"/>
+<text x="166" y="655" font-family="monospace" font-size="11">R</text>
+<circle cx="255" cy="650" r="16" fill="none" stroke="#000"/>
+<text x="251" y="655" font-family="monospace" font-size="11">K</text>
+<circle cx="315" cy="650" r="16" fill="none" stroke="#000"/>
+<text x="311" y="655" font-family="monospace" font-size="11">P</text>
+<circle cx="350" cy="650" r="16" fill="none" stroke="#000"/>
+<text x="346" y="655" font-family="monospace" font-size="11">L</text>
+<circle cx="90" cy="600" r="5" fill="none" stroke="#000"/>
+<circle cx="120" cy="600" r="5" fill="none" stroke="#000"/>
+<circle cx="150" cy="600" r="5" fill="none" stroke="#000"/>
+<circle cx="180" cy="600" r="5" fill="none" stroke="#000"/>
+<text x="30" y="700" font-family="monospace" font-size="11">G green, R red, K kill, P PTT, L LANG. LEDs top row.</text>
+<rect x="400" y="575" width="360" height="140" fill="none" stroke="#000" stroke-width="2"/>
+<text x="410" y="595" font-family="monospace" font-size="11">TOP VIEW 360 x 240, NOT TO SCALE</text>
+<rect x="480" y="610" width="122" height="90.5" fill="none" stroke="#000" stroke-width="2"/>
+<text x="490" y="645" font-family="monospace" font-size="11">MINI SCREEN</text>
+<text x="490" y="662" font-family="monospace" font-size="11">121 x 89.48</text>
+<text x="410" y="732" font-family="monospace" font-size="11">Screen at front-left of top panel ASSUMED.</text>
+<text x="780" y="575" font-family="monospace" font-size="11" font-weight="bold">EXPLODED, TOP TO BOTTOM</text>
+<rect x="780" y="590" width="360" height="22" fill="#eef" stroke="#000"/>
+<text x="790" y="605" font-family="monospace" font-size="11">TOP + MINI SCREEN</text>
+<rect x="780" y="618" width="360" height="22" fill="#eef" stroke="#000"/>
+<text x="790" y="633" font-family="monospace" font-size="11">FRONT / BACK / SIDES</text>
+<rect x="780" y="646" width="360" height="22" fill="#eef" stroke="#000"/>
+<text x="790" y="661" font-family="monospace" font-size="11">PI 5 + COOLER</text>
+<rect x="780" y="674" width="360" height="22" fill="#eef" stroke="#000"/>
+<text x="790" y="689" font-family="monospace" font-size="11">PERFBOARD + ULN2003</text>
+<rect x="780" y="702" width="360" height="22" fill="#eef" stroke="#000"/>
+<text x="790" y="717" font-family="monospace" font-size="11">USB SOUNDBAR</text>
+<rect x="780" y="730" width="360" height="22" fill="#eef" stroke="#000"/>
+<text x="790" y="745" font-family="monospace" font-size="11">BOTTOM</text>
+<text x="20" y="770" font-family="monospace" font-size="11">Inside: Pi rear left, perfboard centre, soundbar front right, 20 mm gap Pi to soundbar, 50 mm clear behind buttons, 75 mm behind kill.</text>
+<text x="20" y="790" font-family="monospace" font-size="11">Cardboard mockup first. Paper template at 100 percent scale on real panels. Drill / cut test hole in scrap first.</text>
+<text x="20" y="810" font-family="monospace" font-size="11">Hole clearance: buttons 30.2 mm for 30 mm, kill 22.3 mm for 22 mm, PTT/toggle 12.2 mm for 12 mm, LEDs 5.2 mm for 5 mm.</text>
+<text x="20" y="830" font-family="monospace" font-size="11">Snap-in buttons need 1-5 mm panel. 3 mm acrylic satisfies this. VERIFIED from previous blueprint.</text>
+<text x="20" y="850" font-family="monospace" font-size="11">Optional variant: plywood front panel, 3 mm, same laser, same holes. Hides electronics. Decide in CAD phase.</text>
+<text x="20" y="870" font-family="monospace" font-size="11">Sheets: 6 total, Fovorica 4-pack plus Langaelex 2-pack, 12x16 inch cast acrylic, 52.98 CAD LIKELY. See BOM.csv.</text>
+<text x="20" y="890" font-family="monospace" font-size="11">MSI MP165 E6 356.5 x 210.35 mm, 0.78 kg VERIFIED, sits behind case. Case 360 mm wide is only 3.5 mm wider than monitor.</text>
+<text x="20" y="908" font-family="monospace" font-size="11">Option B case, black nylon factory print: about 125 to 145 CAD all in at JLCPCB, ASSUMED, not a real quote. Arrives by Dec 1 only via JLCPCB, no slack. Same panel sizes if printed flat.</text>
+<text x="20" y="925" font-family="monospace" font-size="11">Nylon finger joints differ from laser cut. Confirm wall thickness and minimum feature size with the print service before using this drawing.</text>
+<text x="20" y="942" font-family="monospace" font-size="11">Option B mini screen: no 5.5 inch Waveshare DSI exists. Real DSI option is the 5 inch DSI LCD, 121 x 76 mm, cutout about 122 x 77 mm ASSUMED. Ribbon cable, not HDMI. Do not cut the top panel for DSI yet.</text>
+<text x="20" y="968" font-family="monospace" font-size="15" font-weight="bold" fill="#c00">ASSUMPTIONS</text><text x="20" y="990" font-family="monospace" font-size="11" fill="#c00">* Case outer size 360 x 240 x 140 mm ASSUMED proposal from W3, not a CAD result. Confirm before cutting.</text><text x="20" y="1007" font-family="monospace" font-size="11" fill="#c00">* Front panel hole centres ASSUMED. Measure real buttons with calipers and test in cardboard first.</text><text x="20" y="1024" font-family="monospace" font-size="11" fill="#c00">* R2 fix: front/back 360 x 134 mm, side 234 x 134 mm, outer height 140 mm with top/bottom 3 mm each. Front/back height is 140 minus 2x3 mm. Side depth is 240 minus 2x3 mm. Check in CAD before cutting.</text><text x="20" y="1041" font-family="monospace" font-size="11" fill="#c00">* Mini screen cutout 122 x 90.5 mm ASSUMED, 0.5-1.0 mm clearance over 121 x 89.48 mm module.</text><text x="20" y="1058" font-family="monospace" font-size="11" fill="#c00">* Vent slot count, size and position ASSUMED. Speaker grille size and position ASSUMED.</text><text x="20" y="1075" font-family="monospace" font-size="11" fill="#c00">* Kerf 0.2 mm ASSUMED. Finger tooth width 15 mm ASSUMED. Screw hole 3.2 mm ASSUMED.</text><text x="20" y="1092" font-family="monospace" font-size="11" fill="#c00">* Top view and exploded view are not to scale. Dimensions in text are the authority.</text>
+<text x="20" y="1109" font-family="monospace" font-size="11" fill="#c00">* Top view mini screen rect is 122 x 90.5 mm in R2, was 122 x 70 mm in R1.</text>
+<text x="20" y="1126" font-family="monospace" font-size="11" fill="#c00">* R2 check: front view hole positions match the text list. Panel origin is x20 in this drawing.</text>
+<text x="20" y="1143" font-family="monospace" font-size="11" fill="#c00">* G cx90 is X70, R cx170 is X150, K cx255 is X235, P cx315 is X295, L cx350 is X330.</text>
+<text x="20" y="1160" font-family="monospace" font-size="11" fill="#c00">* LEDs cx90,120,150,180 are X70,100,130,160. Toggle centre X330, edge at 336.1 mm, inside the 360 mm panel.</text>
+<text x="20" y="1177" font-family="monospace" font-size="11" fill="#c00">* Front view circles are symbolic, not to scale.</text>
+<rect x="20" y="1195" width="1160" height="54" fill="none" stroke="#000" stroke-width="2"/>
+<text x="30" y="1215" font-family="monospace" font-size="12">Project: SI Console | Drawing: 04 CASE DRAWINGS | Rev: R3 | Date: 2026-11-23</text>
+<text x="30" y="1235" font-family="monospace" font-size="12" font-weight="bold">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
+</svg>

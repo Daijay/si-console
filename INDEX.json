@@ -136,14 +136,6 @@
     "owner": "Hasan"
   },
   {
-    "path": "code/README.md",
-    "type": "doc",
-    "description": "Placeholder, code not uploaded yet",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
-    "owner": "Christopher"
-  },
-  {
     "path": "research/",
     "type": "folder",
     "description": "Superseded material, never current",
@@ -164,6 +156,126 @@
     "type": "folder",
     "description": "Dashboard UI tokens and HTML previews",
     "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Christopher"
+  },
+  {
+    "path": "docs/SI_Console_Overview.md",
+    "type": "doc",
+    "description": "2 page overview",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/SI_Console_Detailed.md",
+    "type": "doc",
+    "description": "Full compiled doc, 13 sections",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/ONSHAPE_IMPORT.md",
+    "type": "doc",
+    "description": "Onshape and Fusion 360 STEP import guide",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/2d/case-drawings.svg",
+    "type": "drawing",
+    "description": "R3 SVG source: case-drawings, reference only",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/2d/connection-diagram.svg",
+    "type": "drawing",
+    "description": "R3 SVG source: connection-diagram, reference only",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/electrical-schematic.svg",
+    "type": "drawing",
+    "description": "R3 SVG source: electrical-schematic, reference only",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/power-diagram.svg",
+    "type": "drawing",
+    "description": "R3 SVG source: power-diagram, reference only",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/2d/wiring-diagram.svg",
+    "type": "drawing",
+    "description": "R3 SVG source: wiring-diagram, reference only",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/3d/si_console_assembly.step",
+    "type": "cad",
+    "description": "Full assembly STEP, R3, reference only",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/3d/",
+    "type": "folder",
+    "description": "Per-part STEP, STL and renders from CadQuery, R3",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "blueprints/3d/render_see_through.png",
+    "type": "render",
+    "description": "See-through render",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Hasan"
+  },
+  {
+    "path": "code/README.md",
+    "type": "doc",
+    "description": "DRAFT REFERENCE layout and test command",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Christopher"
+  },
+  {
+    "path": "code/si_console/",
+    "type": "code",
+    "description": "Scratch Python package (coordinator, guard, vault, bridge, router)",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Christopher"
+  },
+  {
+    "path": "code/tests/",
+    "type": "tests",
+    "description": "79 mocked tests, passed 2026-11-23",
+    "status": "VERIFIED",
+    "last_updated": "2026-11-23",
+    "owner": "Christopher"
+  },
+  {
+    "path": "code/requirements.txt",
+    "type": "config",
+    "description": "Pinned requirements, some ASSUMED",
+    "status": "LIKELY",
     "last_updated": "2026-11-23",
     "owner": "Christopher"
   }

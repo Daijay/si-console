@@ -1,0 +1,28 @@
+# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
+# SI Console skeleton requirements. Reference only. Not for Fallen submission.
+# Every version is pinned. Autumn's requirements were unpinned, and a
+# fresh install pulled anthropic 2.11.0, fastapi 0.165.0, groq 1.7.0,
+# APScheduler 3.11.3, and google-api-python-client 2.202.0. That worked
+# by luck, not by guarantee. Pinning is the fix from the audit.
+# Pins marked VERIFIED were the versions installed and tested in the
+# Autumn audit on 2026-11-20. Pins marked ASSUMED are new deps that
+# SI Console adds. They must be checked against the pip index at
+# build time. A bad pin fails loudly at install, which is safer than
+# an unpinned install that silently pulls a breaking version.
+# Dropped from Autumn: google-auth, google-api-python-client,
+# google-auth-oauthlib, anthropic, groq. No Gmail, no OAuth, no Groq,
+# no Anthropic in SI Console. DeepSeek is reached with plain httpx.
+# Voice deps (SenseVoice, faster-whisper, Piper) are NOT listed here.
+# They are installed only after the bench test picks one STT model.
+# Do not install them blindly. See TEST_PLAN.md.
+fastapi==0.165.0  # VERIFIED, Autumn audit 2026-11-20
+uvicorn==0.54.0  # VERIFIED, Autumn audit 2026-11-20
+httpx==0.28.1  # ASSUMED, DeepSeek and Bocha HTTP client
+pydantic==2.12.0  # ASSUMED, FastAPI dependency, check at install
+PyYAML==6.0.3  # VERIFIED, transitive in Autumn audit, now listed directly
+python-dotenv==1.2.4  # VERIFIED, Autumn audit 2026-11-20
+APScheduler==3.11.3  # VERIFIED, Autumn audit 2026-11-20
+watchdog==4.0.2  # ASSUMED, vault watcher with inotify on Linux
+gpiozero==2.0.1  # ASSUMED, GPIO on Pi 5, does not run on a laptop
+python-pptx==1.0.2  # ASSUMED, slide maker
+pytest==8.3.0  # ASSUMED, tests only, not needed on the Pi at the booth

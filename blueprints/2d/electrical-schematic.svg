@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1154" viewBox="0 0 1200 1154">
+<rect x="0" y="0" width="1200" height="1154" fill="#fff"/>
+<rect x="0" y="0" width="1200" height="70" fill="#111" />
+<text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
+<text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">01 ELECTRICAL SCHEMATIC</text>
+<text x="700" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
+<text x="700" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
+<text x="20" y="88" font-family="monospace" font-size="13" fill="#000">Pi 5 GPIO, ULN2003, LEDs, buttons, kill switch, toggle. All voltages labelled.</text>
+<text x="20" y="120" font-family="monospace" font-size="14" font-weight="bold">A. PI 5 GPIO HEADER (40 PIN), 3.3V ONLY</text>
+<rect x="20" y="135" width="360" height="430" fill="none" stroke="#000" stroke-width="2"/>
+<text x="30" y="155" font-family="monospace" font-size="12" font-weight="bold">PI 5 HEADER, TOP VIEW, PIN 1 TOP LEFT</text>
+<text x="30" y="175" font-family="monospace" font-size="11">P1 3.3V</text>
+<text x="30" y="194" font-family="monospace" font-size="11">P3 GPIO2 I2C DO NOT USE</text>
+<text x="30" y="213" font-family="monospace" font-size="11">P5 GPIO3 I2C DO NOT USE</text>
+<text x="30" y="232" font-family="monospace" font-size="11">P7 GPIO4</text>
+<text x="30" y="251" font-family="monospace" font-size="11">P9 GND</text>
+<text x="30" y="270" font-family="monospace" font-size="11">P11 GPIO17 GREEN BTN</text>
+<text x="30" y="289" font-family="monospace" font-size="11">P13 GPIO27 RED BTN</text>
+<text x="30" y="308" font-family="monospace" font-size="11">P15 GPIO22 KILL NC</text>
+<text x="30" y="327" font-family="monospace" font-size="11">P17 3.3V</text>
+<text x="30" y="346" font-family="monospace" font-size="11">P19 GPIO10 SPI DO NOT USE</text>
+<text x="30" y="365" font-family="monospace" font-size="11">P21 GPIO9 SPI DO NOT USE</text>
+<text x="30" y="384" font-family="monospace" font-size="11">P23 GPIO11 SPI DO NOT USE</text>
+<text x="30" y="403" font-family="monospace" font-size="11">P25 GND</text>
+<text x="30" y="422" font-family="monospace" font-size="11">P27 GPIO0 HAT DO NOT USE</text>
+<text x="30" y="441" font-family="monospace" font-size="11">P29 GPIO5 COORD LED</text>
+<text x="30" y="460" font-family="monospace" font-size="11">P31 GPIO6 AGENT1 LED</text>
+<text x="30" y="479" font-family="monospace" font-size="11">P33 GPIO13 AGENT2 LED</text>
+<text x="30" y="498" font-family="monospace" font-size="11">P35 GPIO19 GUARD LED</text>
+<text x="30" y="517" font-family="monospace" font-size="11">P37 GPIO26 FREE, NOT WIRED</text>
+<text x="30" y="536" font-family="monospace" font-size="11">P39 GND</text>
+<text x="210" y="175" font-family="monospace" font-size="11">P2 5V</text>
+<text x="210" y="194" font-family="monospace" font-size="11">P4 5V</text>
+<text x="210" y="213" font-family="monospace" font-size="11">P6 GND</text>
+<text x="210" y="232" font-family="monospace" font-size="11">P8 GPIO14 UART NO USE</text>
+<text x="210" y="251" font-family="monospace" font-size="11">P10 GPIO15 UART NO USE</text>
+<text x="210" y="270" font-family="monospace" font-size="11">P12 GPIO18</text>
+<text x="210" y="289" font-family="monospace" font-size="11">P14 GND</text>
+<text x="210" y="308" font-family="monospace" font-size="11">P16 GPIO23 PTT</text>
+<text x="210" y="327" font-family="monospace" font-size="11">P18 GPIO24 TOGGLE LANG</text>
+<text x="210" y="346" font-family="monospace" font-size="11">P20 GND</text>
+<text x="210" y="365" font-family="monospace" font-size="11">P22 GPIO25</text>
+<text x="210" y="384" font-family="monospace" font-size="11">P24 GPIO8 SPI DO NOT USE</text>
+<text x="210" y="403" font-family="monospace" font-size="11">P26 GPIO7 SPI DO NOT USE</text>
+<text x="210" y="422" font-family="monospace" font-size="11">P28 GPIO1 HAT DO NOT USE</text>
+<text x="210" y="441" font-family="monospace" font-size="11">P30 GND</text>
+<text x="210" y="460" font-family="monospace" font-size="11">P32 GPIO12</text>
+<text x="210" y="479" font-family="monospace" font-size="11">P34 GND</text>
+<text x="210" y="498" font-family="monospace" font-size="11">P36 GPIO16</text>
+<text x="210" y="517" font-family="monospace" font-size="11">P38 GPIO20 GRN BTN LED</text>
+<text x="210" y="536" font-family="monospace" font-size="11">P40 GPIO21 RED BTN LED</text>
+<text x="20" y="585" font-family="monospace" font-size="11">Used inputs: GPIO17, 27, 22, 23, 24. All active LOW, internal pull-up, gpiozero, debounce 0.05 s (kill 0.02 s).</text>
+<text x="20" y="603" font-family="monospace" font-size="11">Used outputs to ULN2003: GPIO5, 6, 13, 19, 20, 21. IN7 tied to GND. GPIO26 free, not wired.</text>
+<text x="20" y="621" font-family="monospace" font-size="11" fill="#c00">ASSUMED: GPIO20 / GPIO21 for button LEDs are lead decisions, not in the original brief. See ARCHITECTURE sec 9 gap.</text>
+<text x="430" y="120" font-family="monospace" font-size="14" font-weight="bold">B. ULN2003AN, 7 CH, SINK ONLY</text>
+<rect x="430" y="135" width="300" height="430" fill="none" stroke="#000" stroke-width="2"/>
+<text x="440" y="155" font-family="monospace" font-size="12" font-weight="bold">ULN2003, PIN 1 TOP LEFT, NOTCH UP</text>
+<text x="440" y="180" font-family="monospace" font-size="11">1 IN1 GPIO5  ---  16 OUT1 COORD</text>
+<text x="440" y="202" font-family="monospace" font-size="11">2 IN2 GPIO6  ---  15 OUT2 AGENT1</text>
+<text x="440" y="224" font-family="monospace" font-size="11">3 IN3 GPIO13  ---  14 OUT3 AGENT2</text>
+<text x="440" y="246" font-family="monospace" font-size="11">4 IN4 GPIO19  ---  13 OUT4 GUARD</text>
+<text x="440" y="268" font-family="monospace" font-size="11">5 IN5 GPIO20  ---  12 OUT5 GRN LED</text>
+<text x="440" y="290" font-family="monospace" font-size="11">6 IN6 GPIO21  ---  11 OUT6 RED LED</text>
+<text x="440" y="312" font-family="monospace" font-size="11">7 IN7 tied to GND  ---  10 OUT7 NOT USED</text>
+<text x="440" y="334" font-family="monospace" font-size="11">8 GND to GND  ---  9 COM to 5V</text>
+<text x="440" y="370" font-family="monospace" font-size="11" fill="#c00">COM pin 9 to 5V, NOT to GND. GND pin 8 to GND.</text>
+<text x="440" y="390" font-family="monospace" font-size="11">GPIO HIGH turns LED ON. Output pulls to GND.</text>
+<text x="440" y="410" font-family="monospace" font-size="11">500 mA per channel. LEDs 63-83 mA total.</text>
+<text x="440" y="430" font-family="monospace" font-size="11" fill="#c00">ULN2003AN 1.79 CAD, InStock at DigiKey,</text>
+<text x="440" y="448" font-family="monospace" font-size="11" fill="#c00">VERIFIED 2026-11-20 by R1. See BOM.csv.</text>
+<text x="440" y="480" font-family="monospace" font-size="11">All 6 LEDs stay through ULN2003, Rev R2.</text>
+<text x="440" y="498" font-family="monospace" font-size="11">No direct GPIO drive. See LOG.md.</text>
+<text x="780" y="120" font-family="monospace" font-size="14" font-weight="bold">C. LED BRANCHES, 5V RAIL</text>
+<text x="780" y="140" font-family="monospace" font-size="10">Path: 5V - resistor - LED anode - LED cathode - ULN2003 OUT - GND.</text>
+<text x="780" y="158" font-family="monospace" font-size="11">Formula: R = (5.0 - Vf - Vsat) / I. Vsat = 0.8 V ASSUMED.</text>
+<rect x="780" y="171" width="400" height="52" fill="none" stroke="#000"/>
+<text x="790" y="189" font-family="monospace" font-size="11" font-weight="bold">COORD green  GPIO5 / OUT16</text>
+<text x="790" y="205" font-family="monospace" font-size="11">150 ohm  |  Vf 2.2V ASSUMED</text>
+<text x="790" y="221" font-family="monospace" font-size="11" fill="#c00">I = (5-2.2-0.8)/150 = 13.3 mA  ASSUMED until Vf measured</text>
+<rect x="780" y="233" width="400" height="52" fill="none" stroke="#000"/>
+<text x="790" y="251" font-family="monospace" font-size="11" font-weight="bold">AGENT 1 red  GPIO6 / OUT15</text>
+<text x="790" y="267" font-family="monospace" font-size="11">220 ohm  |  Vf 2.0V ASSUMED</text>
+<text x="790" y="283" font-family="monospace" font-size="11" fill="#c00">I = (5-2.0-0.8)/220 = 10.0 mA  ASSUMED until Vf measured</text>
+<rect x="780" y="295" width="400" height="52" fill="none" stroke="#000"/>
+<text x="790" y="313" font-family="monospace" font-size="11" font-weight="bold">AGENT 2 blue  GPIO13 / OUT14</text>
+<text x="790" y="329" font-family="monospace" font-size="11">100 ohm  |  Vf 3.2V ASSUMED</text>
+<text x="790" y="345" font-family="monospace" font-size="11" fill="#c00">I = (5-3.2-0.8)/100 = 10.0 mA  ASSUMED until Vf measured</text>
+<rect x="780" y="357" width="400" height="52" fill="none" stroke="#000"/>
+<text x="790" y="375" font-family="monospace" font-size="11" font-weight="bold">GUARD yellow  GPIO19 / OUT13</text>
+<text x="790" y="391" font-family="monospace" font-size="11">220 ohm  |  Vf 2.1V ASSUMED</text>
+<text x="790" y="407" font-family="monospace" font-size="11" fill="#c00">I = (5-2.1-0.8)/220 = 9.5 mA  ASSUMED until Vf measured</text>
+<rect x="780" y="419" width="400" height="52" fill="none" stroke="#000"/>
+<text x="790" y="437" font-family="monospace" font-size="11" font-weight="bold">GREEN BTN LED  GPIO20 / OUT12</text>
+<text x="790" y="453" font-family="monospace" font-size="11">220 ohm *  |  Vf ASSUMED, see note</text>
+<text x="790" y="469" font-family="monospace" font-size="11" fill="#c00">I about 10-20 mA ASSUMED until Vf measured</text>
+<rect x="780" y="481" width="400" height="52" fill="none" stroke="#000"/>
+<text x="790" y="499" font-family="monospace" font-size="11" font-weight="bold">RED BTN LED  GPIO21 / OUT11</text>
+<text x="790" y="515" font-family="monospace" font-size="11">220 ohm *  |  Vf ASSUMED, see note</text>
+<text x="790" y="531" font-family="monospace" font-size="11" fill="#c00">I about 10-20 mA ASSUMED until Vf measured</text>
+<text x="780" y="570" font-family="monospace" font-size="11">* Button LEDs: EG STARTS 5V LED, built-in resistor</text>
+<text x="780" y="588" font-family="monospace" font-size="11" fill="#c00">ASSUMED. If plain LED, add 220 ohm. Test with meter first.</text>
+<text x="780" y="606" font-family="monospace" font-size="11">Resistor power: I squared x R about 0.02 W. 1/4 W is fine.</text>
+<text x="780" y="624" font-family="monospace" font-size="11" fill="#c00">Colour map ASSUMED: order from old blueprint</text>
+<text x="780" y="640" font-family="monospace" font-size="11" fill="#c00">green/red/blue/yellow mapped in order to</text>
+<text x="780" y="656" font-family="monospace" font-size="11" fill="#c00">COORD/AGENT1/AGENT2/GUARD. Confirm in build.</text>
+<text x="20" y="660" font-family="monospace" font-size="14" font-weight="bold">D. INPUTS, ALL TO GND, ACTIVE LOW, INTERNAL PULL-UP, 3.3V ONLY</text>
+<text x="20" y="685" font-family="monospace" font-size="11">GREEN BTN: GPIO17 P11 to switch, GND P14. Approve. On start screen only: pick 2020.</text>
+<text x="20" y="705" font-family="monospace" font-size="11">RED BTN: GPIO27 P13 to switch, GND P20. Reject. On start screen only: pick 2022.</text>
+<text x="20" y="725" font-family="monospace" font-size="11">KILL NC: GPIO22 P15 to switch, GND P25. NC closed = LOW = normal. Open = HIGH = FROZEN. Fail safe.</text>
+<text x="20" y="745" font-family="monospace" font-size="11">PTT: GPIO23 P16 to switch, GND P14 *. Momentary. Hold to talk. * GND pin ASSUMED, use any GND.</text>
+<text x="20" y="765" font-family="monospace" font-size="11">TOGGLE LANG: GPIO24 P18 to switch, GND P20 *. SPST latching. EN open / ZH closed, or reverse in code.</text>
+<text x="20" y="795" font-family="monospace" font-size="11">Never connect a button or switch to 5V. Pi GPIO is not 5V tolerant. VERIFIED.</text>
+<text x="20" y="812" font-family="monospace" font-size="11">Kill poll: every 100 ms in bridge. Do not rely on edge only.</text>
+<text x="20" y="829" font-family="monospace" font-size="11">ULN2003 input at 3.3V: test first. Datasheet does not promise full saturation at 3.3V. ASSUMED risk.</text>
+<text x="20" y="846" font-family="monospace" font-size="11">If a channel is dim or warm, use TBD62083A or logic MOSFET per LED. LIKELY alternative.</text>
+<text x="20" y="880" font-family="monospace" font-size="11">Nets: 3.3V logic = Pi header pins 1 and 17. 5V = pins 2 and 4. GND = pins 6, 9, 14, 20, 25, 30, 34, 39.</text>
+<text x="20" y="906" font-family="monospace" font-size="15" font-weight="bold" fill="#c00">ASSUMPTIONS</text><text x="20" y="928" font-family="monospace" font-size="11" fill="#c00">* All resistor values ASSUMED until LED Vf is bench measured. Rev R2 values: red/yellow 220 ohm, green 150 ohm, blue 100 ohm, button LEDs 220 ohm if plain.</text><text x="20" y="945" font-family="monospace" font-size="11" fill="#c00">* Vsat 0.8 V ASSUMED. Vf red 2.0 V, yellow 2.1 V, green 2.2 V, blue 3.2 V, all ASSUMED typical values.</text><text x="20" y="962" font-family="monospace" font-size="11" fill="#c00">* Green Vf conflict: ARCH uses 2.2 V (13.3 mA), LEAD_CHECKS uses 3.0 V (8.0 mA). Both ASSUMED. Measure Vf on the bench before soldering.</text><text x="20" y="979" font-family="monospace" font-size="11" fill="#c00">* GPIO20 pin 38 and GPIO21 pin 40 for button LEDs are lead decisions, not in the original brief.</text><text x="20" y="996" font-family="monospace" font-size="11" fill="#c00">* GPIO26 pin 37 is FREE, not wired. ULN2003 IN7 tied to GND. Do not leave IN7 floating in final build.</text><text x="20" y="1013" font-family="monospace" font-size="11" fill="#c00">* Front panel 360 x 134 mm per case drawing 04 Rev R2. Status LED positions, one location only: X 70, 100, 130, 160, Y 22, 5.2 mm holes, top row.</text><text x="20" y="1030" font-family="monospace" font-size="11" fill="#c00">* Button LED built-in resistor ASSUMED for EG STARTS parts. Verify with multimeter before wiring.</text><text x="20" y="1047" font-family="monospace" font-size="11" fill="#c00">* ULN2003AN 1.79 CAD InStock at DigiKey, VERIFIED 2026-11-20 by R1. Page body lists a 26 week lead time, confirm quantity at checkout.</text><text x="20" y="1064" font-family="monospace" font-size="11" fill="#c00">* ULN2003 at 3.3V input is test first, not guaranteed. See ARCHITECTURE sec 0 item 7.</text>
+<rect x="20" y="1086" width="1160" height="54" fill="none" stroke="#000" stroke-width="2"/>
+<text x="30" y="1106" font-family="monospace" font-size="12">Project: SI Console | Drawing: 01 ELECTRICAL SCHEMATIC | Rev: R3 | Date: 2026-11-23</text>
+<text x="30" y="1126" font-family="monospace" font-size="12" font-weight="bold">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
+</svg>

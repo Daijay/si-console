@@ -27,7 +27,7 @@ Nobody has been invited yet. Because the repo uses Git LFS, collaborators need `
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors (see open decisions).
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - No laser cut file exists yet. It must come from Hasan's Fusion model (DXF or SVG).
-- Code tests: **not run**. The overnight scratch code was not found on the machine that built this repo, so there was nothing to test. Morning notes report 79 mocked tests passing in the original workspace (not re-run, not verified here).
+- Code tests: run once on 2026-11-23, **79 passed** (mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
 
@@ -51,19 +51,18 @@ Nobody has been invited yet. Because the repo uses Git LFS, collaborators need `
 | Decisions and open items | `docs/decisions.md` |
 | GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
 | BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
-| 2D drawings (PNG, R3) | `blueprints/2d/` |
-| 3D renders (PNG, R3) | `blueprints/3d/` |
-| Scratch code | `code/` (empty, see note) |
+| 2D drawings (SVG sources and PNG, R3) | `blueprints/2d/` |
+| 3D: STEP per part and assembly, STL, renders | `blueprints/3d/` |
+| Onshape / Fusion import steps | `docs/ONSHAPE_IMPORT.md` |
+| Overview and detailed docs | `docs/SI_Console_Overview.md`, `docs/SI_Console_Detailed.md` |
+| Scratch code, tests, pinned requirements (DRAFT REFERENCE) | `code/` |
 | Older material, round 1 research, UI design system | `research/` |
 | File index for people and agents | `llms.txt`, `INDEX.json`, `AGENTS.md` |
 | History | `CHANGELOG.md` |
 
-## Missing from this repo (not found locally, upload when located)
+## Still missing
 
-- `blueprints/3d/`: 24 STEP files, 6 STL files (CadQuery model outputs).
-- `code/`: scratch code, tests, pinned requirements.
-- `docs/`: `SI_Console_Overview.md`, `SI_Console_Detailed.md`, `ONSHAPE_IMPORT.md`.
-- `research/`: `reviews/11-skeptic-r3.md` and other review files.
-- `blueprints/2d/`: R3 SVG sources.
+- Review files (e.g. `reviews/11-skeptic-r3.md`).
+- Note: `blueprints/3d/` still includes `soundbar.step` and `monitor.step` (in the assembly). The soundbar is cut from the BOM, see OPEN 2 in `docs/decisions.md`.
 
 Binary files (PNG, STL, STEP) are stored with Git LFS.

@@ -28,7 +28,7 @@ The 122 x 90.5 mm cutout is the full module size, so the screen would fall throu
 2. Keep the full cutout and add a printed bezel on top.
 
 ### OPEN 2. Soundbar cut (owner: Hasan, drawings)
-If the soundbar cut is applied (use monitor speakers over HDMI), remove the speaker grille holes and the soundbar from the drawings. The BOM already has the cut applied.
+If the soundbar cut is applied (use monitor speakers over HDMI), remove the speaker grille holes and the soundbar from the drawings. The BOM already has the cut applied. `blueprints/3d/soundbar.step` and the assembly still include it.
 
 ### OPEN 3. Pi 5 port side (owner: Hasan, CAD)
 Pi 5 HDMI and USB-C power are on its long side, not the USB/Ethernet end. Check back panel cable routing in CAD.

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="970" viewBox="0 0 1200 970">
+<rect x="0" y="0" width="1200" height="970" fill="#fff"/>
+<rect x="0" y="0" width="1200" height="70" fill="#111" />
+<text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
+<text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">03 POWER DIAGRAM</text>
+<text x="700" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
+<text x="700" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
+<text x="20" y="88" font-family="monospace" font-size="13" fill="#000">Wall, 27W PSU, Pi, USB loads, monitor on own supply, headroom.</text>
+<text x="20" y="120" font-family="monospace" font-size="14" font-weight="bold">POWER FLOW, WALL TO PI TO USB LOADS. MONITOR ON ITS OWN SUPPLY.</text>
+<rect x="20" y="140" width="210" height="110" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="30" y="165" font-family="monospace" font-size="12" font-weight="bold">WALL</text>
+<text x="30" y="185" font-family="monospace" font-size="11">120V CA / 220V CN</text>
+<text x="30" y="205" font-family="monospace" font-size="11">50/60 Hz, Type A / I</text>
+<text x="30" y="225" font-family="monospace" font-size="11">Plug adapter only</text>
+<line x1="233" y1="200" x2="246" y2="200" stroke="#000" stroke-width="2"/><polygon points="246,200 240,196 240,204" fill="#000"/>
+<rect x="250" y="140" width="210" height="110" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="260" y="165" font-family="monospace" font-size="12" font-weight="bold">27W PSU</text>
+<text x="260" y="185" font-family="monospace" font-size="11">Raspberry Pi 27W USB-C</text>
+<text x="260" y="205" font-family="monospace" font-size="11">5.1V at 5A, 100-240V</text>
+<text x="260" y="225" font-family="monospace" font-size="11">Official PSU only.</text>
+<line x1="463" y1="200" x2="476" y2="200" stroke="#000" stroke-width="2"/><polygon points="476,200 470,196 470,204" fill="#000"/>
+<rect x="480" y="140" width="210" height="110" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="490" y="165" font-family="monospace" font-size="12" font-weight="bold">PI 5</text>
+<text x="490" y="185" font-family="monospace" font-size="11">Raspberry Pi 5 8GB</text>
+<text x="490" y="205" font-family="monospace" font-size="11">Idle about 4.84W ASSUMED</text>
+<text x="490" y="225" font-family="monospace" font-size="11">Typ 11.9W, peak 19.4W</text>
+<line x1="693" y1="200" x2="706" y2="200" stroke="#000" stroke-width="2"/><polygon points="706,200 700,196 700,204" fill="#000"/>
+<rect x="710" y="140" width="210" height="110" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="720" y="165" font-family="monospace" font-size="12" font-weight="bold">USB LOADS</text>
+<text x="720" y="185" font-family="monospace" font-size="11">See table below</text>
+<text x="720" y="205" font-family="monospace" font-size="11">Total peak 0.60A</text>
+<text x="720" y="225" font-family="monospace" font-size="11">Limit 1.6A. Headroom 1.00A.</text>
+<line x1="923" y1="200" x2="936" y2="200" stroke="#000" stroke-width="2"/><polygon points="936,200 930,196 930,204" fill="#000"/>
+<rect x="940" y="140" width="210" height="110" fill="#eee" stroke="#000" stroke-width="2"/>
+<text x="950" y="165" font-family="monospace" font-size="12" font-weight="bold">MONITOR</text>
+<text x="950" y="185" font-family="monospace" font-size="11">MSI MP165 E6, separate</text>
+<text x="950" y="205" font-family="monospace" font-size="11">10W max, 15W PD</text>
+<text x="950" y="225" font-family="monospace" font-size="11">Own 20W brick. Never from Pi.</text>
+<text x="20" y="280" font-family="monospace" font-size="14" font-weight="bold">USB CURRENT BUDGET, PI USB LIMIT 1.6A WITH OFFICIAL 27W PSU</text>
+<text x="20" y="310" font-family="monospace" font-size="11">Mini screen 5 inch HDMI (H) | 0.00 A on Pi USB | 0.00 A peak | Own USB charger, NOT Pi USB, Rev R2.1. Frees 0.40 A.</text>
+<text x="20" y="330" font-family="monospace" font-size="11">FIFINE AM8 mic | 0.10 A typ | 0.10 A peak | USB, ASSUMED</text>
+<text x="20" y="350" font-family="monospace" font-size="11">USB soundbar | 0.10 A typ | 0.50 A peak | USB audio + power, ASSUMED max, not measured</text>
+<text x="20" y="370" font-family="monospace" font-size="11">TOTAL USB | 0.20 A typ | 0.60 A peak | HEADROOM 1.00 A at peak. Comfortable.</text>
+<text x="20" y="390" font-family="monospace" font-size="11">LEDs 6x via ULN2003, 5V rail | 0.06 A | 0.08 A max | Not USB. From Pi 5V rail, not GPIO.</text>
+<text x="20" y="410" font-family="monospace" font-size="11">5V case fan, 40 mm | 0.14 A | 0.14 A | From Pi 5V rail, not USB. Rear wall exhaust high.</text>
+<text x="20" y="430" font-family="monospace" font-size="11">Pi board + microSD + cooler | about 2.0 A typ | about 3.9 A peak | At 5V. PSU 5A. Headroom about 1.1A.</text>
+<text x="20" y="470" font-family="monospace" font-size="11" font-weight="bold">HEADROOM BAR, USB PEAK: [######------------] 0.60 / 1.60 A used, 1.00 A left. ASSUMED loads, test on real hardware.</text>
+<text x="20" y="495" font-family="monospace" font-size="11">If a 15W supply at 5V 3A is used instead, USB limit drops to 0.60 A. That will brown out. Do not use it.</text>
+<text x="20" y="520" font-family="monospace" font-size="11">Whole system wall, microSD build: typ about 20W, peak about 30-33W. Monitor separate: 7W typ, 10W max.</text>
+<text x="20" y="550" font-family="monospace" font-size="14" font-weight="bold">MONITOR POWER, SEPARATE PATH</text>
+<text x="20" y="575" font-family="monospace" font-size="11">Wall 120/220V - Amazon Basics 20W USB-C brick, 5V 3A, CAD 15.26 LIKELY - MSI MP165 E6 USB-C in.</text>
+<text x="20" y="595" font-family="monospace" font-size="11">MSI draws 10W max, 1.4A typ, 2.0A peak at 5V. That alone exceeds the Pi 1.6A USB limit. Never power it from Pi.</text>
+<text x="20" y="615" font-family="monospace" font-size="11">Test: unplug monitor power while Pi runs. Pi must not reboot. If it does, monitor was drawing from Pi.</text>
+<text x="20" y="645" font-family="monospace" font-size="14" font-weight="bold">CHECKS</text>
+<text x="20" y="670" font-family="monospace" font-size="11">vcgencmd get_throttled must be 0x0 after 10 min, and after 30 min full load. If not 0x0, reduce USB load.</text>
+<text x="20" y="690" font-family="monospace" font-size="11">Brownout signs: lightning icon, Wi-Fi drops, USB disconnect, random reboot, microSD corruption.</text>
+<text x="20" y="710" font-family="monospace" font-size="11">China: 220V 50 Hz, Type A and Type I. Pi PSU takes 100-240V, no converter, plug adapter only. VERIFIED.</text>
+<text x="20" y="730" font-family="monospace" font-size="11">No lithium battery anywhere. Wall power only. Spare official PSU CAD 16.95 VERIFIED, pack if budget allows.</text>
+<text x="20" y="750" font-family="monospace" font-size="11">Do not use NVMe for booth build. NVMe peak about 23.9W, about 4.8A at 5V, 96 percent of 5A limit. Use microSD.</text>
+<text x="20" y="775" font-family="monospace" font-size="15" font-weight="bold" fill="#c00">ASSUMPTIONS</text><text x="20" y="797" font-family="monospace" font-size="11" fill="#c00">* USB currents for mic and soundbar are ASSUMED, not measured on these exact parts. Soundbar 0.5 A max is a planning number, measure with a USB meter.</text><text x="20" y="814" font-family="monospace" font-size="11" fill="#c00">* Pi idle 4.84W and typ 11.9W / peak 19.4W are from previous blueprint, LIKELY, not measured in this build.</text><text x="20" y="831" font-family="monospace" font-size="11" fill="#c00">* Mini screen is NOT on Pi USB in Rev R2.1. It has its own USB charger. The old 1.50 A peak and 0.10 A headroom are stale, do not use them.</text><text x="20" y="848" font-family="monospace" font-size="11" fill="#c00">* Monitor 10W max and 1.4A typ / 2.0A peak are from previous blueprint, LIKELY.</text><text x="20" y="865" font-family="monospace" font-size="11" fill="#c00">* Wall totals 20W typ / 30-33W peak are LIKELY, efficiency about 89 percent ASSUMED.</text>
+<rect x="20" y="900" width="1160" height="54" fill="none" stroke="#000" stroke-width="2"/>
+<text x="30" y="920" font-family="monospace" font-size="12">Project: SI Console | Drawing: 03 POWER DIAGRAM | Rev: R3 | Date: 2026-11-23</text>
+<text x="30" y="940" font-family="monospace" font-size="12" font-weight="bold">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
+</svg>

@@ -1,0 +1,26 @@
+# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
+# SI Console skeleton systemd unit. Reference only. Not for Fallen submission.
+# Autumn used Windows autostart. That is dropped. The Pi uses systemd.
+# One unit per process: bridge, coordinator, dashboard. Restart on failure.
+# The bridge must be up before the coordinator writes a task, or the
+# coordinator waits and retries. Install with:
+# sudo cp bridge.service /etc/systemd/system/
+# sudo systemctl enable --now bridge.service
+[Unit]
+Description=SI Console bridge
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/si-console
+ExecStart=/home/pi/si-console/.venv/bin/uvicorn si_console.bridge:app --host 127.0.0.1 --port 8001
+Restart=on-failure
+RestartSec=5
+# On stop, set all GPIO outputs low, so the LEDs go to a safe state.
+# The stop script is a test item. See TEST_PLAN.md.
+ExecStop=/home/pi/si-console/.venv/bin/python3 -c "from gpiozero import LED; [LED(p).off() for p in (5, 6, 13, 19, 20, 21)]"
+
+[Install]
+WantedBy=multi-user.target

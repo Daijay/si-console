@@ -10,6 +10,9 @@
 
 ## Docs
 - [docs/decisions.md](docs/decisions.md): case, mini screen, model router decisions and the 5 open R3 review items
+- [docs/SI_Console_Overview.md](docs/SI_Console_Overview.md): 2 page overview, connection diagram, parts table, 3 decisions
+- [docs/SI_Console_Detailed.md](docs/SI_Console_Detailed.md): full 13 section compiled document
+- [docs/ONSHAPE_IMPORT.md](docs/ONSHAPE_IMPORT.md): how to import the STEP files into Onshape or Fusion 360
 - [docs/GPIO_PIN_MAP.md](docs/GPIO_PIN_MAP.md): the only GPIO map plus ULN2003 wiring and resistor math (Rev R2)
 
 ## Bill of materials
@@ -22,13 +25,20 @@
 - [blueprints/2d/wiring-diagram-R3.png](blueprints/2d/wiring-diagram-R3.png): wiring diagram
 - [blueprints/2d/power-diagram-R3.png](blueprints/2d/power-diagram-R3.png): power diagram
 - [blueprints/2d/connection-diagram-R3.png](blueprints/2d/connection-diagram-R3.png): system connection diagram
+- [blueprints/2d/README.md](blueprints/2d/README.md): SVG sources of the five R3 drawings
+- [blueprints/3d/si_console_assembly.step](blueprints/3d/si_console_assembly.step): full assembly STEP
+- [blueprints/3d/README.md](blueprints/3d/README.md): list of per-part STEP and STL files
 - [blueprints/3d/render-hero-R3.png](blueprints/3d/render-hero-R3.png): hero render
 - [blueprints/3d/render-exploded-R3.png](blueprints/3d/render-exploded-R3.png): exploded view
 - [blueprints/3d/render-front-R3.png](blueprints/3d/render-front-R3.png): front view
 - [blueprints/3d/render-top-R3.png](blueprints/3d/render-top-R3.png): top view
 
 ## Code
-- [code/README.md](code/README.md): placeholder, code not yet uploaded
+- [code/README.md](code/README.md): DRAFT REFERENCE layout and test command
+- [code/si_console/coordinator.py](code/si_console/coordinator.py): agent loop
+- [code/si_console/bridge.py](code/si_console/bridge.py): vault watcher, buttons, LEDs
+- [code/si_console/gpio_map.py](code/si_console/gpio_map.py): GPIO constants (code side)
+- [code/tests/](code/tests/): 79 mocked tests, no Pi needed
 
 ## Optional (older, superseded)
 - [research/README.md](research/README.md): index of older material

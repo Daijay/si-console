@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1260" viewBox="0 0 1600 1260">
+<rect x="0" y="0" width="1600" height="1260" fill="#fff"/>
+<rect x="0" y="0" width="1600" height="70" fill="#111"/>
+<text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
+<text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">CONNECTION DIAGRAM</text>
+<text x="1180" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
+<text x="1180" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
+<text x="20" y="92" font-family="monospace" font-size="13" fill="#000">Pi 5 in the middle. Every line says how it connects. Prices in CAD. Full parts table in SI_Console_Overview.md.</text>
+<g stroke="#000" stroke-width="2" fill="none">
+<path d="M430 205 H700 V520"/>
+<path d="M430 410 L700 520"/>
+<path d="M1170 205 H900 V520"/>
+<path d="M430 570 L640 660"/>
+<path d="M1170 390 H1020 V620 H960"/>
+<path d="M1170 545 L960 700"/>
+<path d="M1170 715 L960 740"/>
+<path d="M430 755 L640 700"/>
+<path d="M430 930 L640 770"/>
+<path d="M800 860 V800"/>
+</g>
+<g font-family="monospace" font-size="12" fill="#000">
+<text x="445" y="192">micro HDMI, HDMI0</text>
+<text x="710" y="240">adapter + HDMI cable</text>
+<text x="450" y="470">micro HDMI, HDMI1</text>
+<text x="450" y="490">adapter + HDMI cable</text>
+<text x="910" y="300">USB-A, Pi USB</text>
+<text x="445" y="552">GPIO17/27/22/23/24</text>
+<text x="445" y="570">GND, active low</text>
+<text x="1030" y="420">USB-A, Pi USB</text>
+<text x="1030" y="600">5V + GND, 140 mA</text>
+<text x="1010" y="690">USB-C, 27W, wall</text>
+<text x="440" y="732">GPIO5/6/13/19/20/21, 5V</text>
+<text x="445" y="890">40-pin header</text>
+<text x="810" y="830">microSD slot</text>
+</g>
+<rect x="90" y="140" width="340" height="130" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="100" y="163" font-family="monospace" font-size="13" font-weight="bold" fill="#000">MAIN MONITOR, MSI PRO MP165 E6</text>
+<text x="100" y="183" font-family="monospace" font-size="11" fill="#000">15.6 inch, 1920x1080 IPS, 60 Hz</text>
+<text x="100" y="201" font-family="monospace" font-size="11" fill="#000">Full-size HDMI. 2x 1W speakers.</text>
+<text x="100" y="219" font-family="monospace" font-size="11" fill="#000">Power: own 20W USB-C charger.</text>
+<text x="100" y="237" font-family="monospace" font-size="11" fill="#000">Wall. Never from Pi. Bought.</text>
+<text x="100" y="255" font-family="monospace" font-size="11" fill="#000">Self-funded. 89.99 CAD.</text>
+<rect x="1170" y="140" width="340" height="130" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="1180" y="163" font-family="monospace" font-size="13" font-weight="bold" fill="#000">USB MICROPHONE, FIFINE AM8</text>
+<text x="1180" y="183" font-family="monospace" font-size="11" fill="#000">Dynamic, USB/XLR. USB-A to Pi.</text>
+<text x="1180" y="201" font-family="monospace" font-size="11" fill="#000">Voice input, push to talk only.</text>
+<text x="1180" y="219" font-family="monospace" font-size="11" fill="#000">79.99 CAD. LIKELY.</text>
+<rect x="90" y="350" width="340" height="120" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="100" y="373" font-family="monospace" font-size="13" font-weight="bold" fill="#000">MINI SCREEN, WAVESHARE 5 INCH</text>
+<text x="100" y="393" font-family="monospace" font-size="11" fill="#000">HDMI LCD (H), 800x480.</text>
+<text x="100" y="411" font-family="monospace" font-size="11" fill="#000">Touch disabled. Agent chain view.</text>
+<text x="100" y="429" font-family="monospace" font-size="11" fill="#000">Power: own USB charger, not Pi USB.</text>
+<text x="100" y="447" font-family="monospace" font-size="11" fill="#000">73.95 CAD. VERIFIED.</text>
+<rect x="1170" y="330" width="340" height="120" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="1180" y="353" font-family="monospace" font-size="13" font-weight="bold" fill="#000">USB SPEAKER, SOUNDBAR</text>
+<text x="1180" y="373" font-family="monospace" font-size="11" fill="#000">Dual 3W. USB-A, audio + power.</text>
+<text x="1180" y="391" font-family="monospace" font-size="11" fill="#000">Proposed cut. Use monitor speakers.</text>
+<text x="1180" y="409" font-family="monospace" font-size="11" fill="#000">25.99 CAD. LIKELY.</text>
+<rect x="1170" y="490" width="340" height="110" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="1180" y="513" font-family="monospace" font-size="13" font-weight="bold" fill="#000">CASE FAN, 5V 40 MM</text>
+<text x="1180" y="533" font-family="monospace" font-size="11" fill="#000">140 mA. Rear wall, exhaust high.</text>
+<text x="1180" y="551" font-family="monospace" font-size="11" fill="#000">4.19 CAD. VERIFIED.</text>
+<rect x="1170" y="650" width="340" height="130" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="1180" y="673" font-family="monospace" font-size="13" font-weight="bold" fill="#000">PI POWER SUPPLY, 27W USB-C</text>
+<text x="1180" y="693" font-family="monospace" font-size="11" fill="#000">5.1V 5A. Wall. 1.2 m cable.</text>
+<text x="1180" y="711" font-family="monospace" font-size="11" fill="#000">Input 100-240V. 16.95 CAD.</text>
+<text x="1180" y="729" font-family="monospace" font-size="11" fill="#000">VERIFIED.</text>
+<rect x="90" y="500" width="340" height="140" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="100" y="523" font-family="monospace" font-size="13" font-weight="bold" fill="#000">FRONT PANEL CONTROLS</text>
+<text x="100" y="543" font-family="monospace" font-size="11" fill="#000">GREEN button, GPIO17, pin 11</text>
+<text x="100" y="561" font-family="monospace" font-size="11" fill="#000">RED button, GPIO27, pin 13</text>
+<text x="100" y="579" font-family="monospace" font-size="11" fill="#000">KILL switch, GPIO22, pin 15, NC</text>
+<text x="100" y="597" font-family="monospace" font-size="11" fill="#000">PTT button, GPIO23, pin 16</text>
+<text x="100" y="615" font-family="monospace" font-size="11" fill="#000">LANG toggle, GPIO24, pin 18</text>
+<text x="100" y="633" font-family="monospace" font-size="11" fill="#000">All active low, pull-up, 3.3V.</text>
+<rect x="90" y="680" width="340" height="180" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="100" y="703" font-family="monospace" font-size="13" font-weight="bold" fill="#000">ULN2003 + 6 LEDS</text>
+<text x="100" y="723" font-family="monospace" font-size="11" fill="#000">7 channel Darlington, sink only.</text>
+<text x="100" y="741" font-family="monospace" font-size="11" fill="#000">COORD GPIO5, AGENT 1 GPIO6</text>
+<text x="100" y="759" font-family="monospace" font-size="11" fill="#000">AGENT 2 GPIO13, GUARD GPIO19</text>
+<text x="100" y="777" font-family="monospace" font-size="11" fill="#000">Green btn LED GPIO20, red GPIO21</text>
+<text x="100" y="795" font-family="monospace" font-size="11" fill="#000">Resistors: green 150, red/yellow 220,</text>
+<text x="100" y="813" font-family="monospace" font-size="11" fill="#000">blue 100 ohm. 5V rail to GND.</text>
+<text x="100" y="831" font-family="monospace" font-size="11" fill="#000">IN7 to GND. GPIO26 free.</text>
+<rect x="90" y="890" width="340" height="110" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="100" y="913" font-family="monospace" font-size="13" font-weight="bold" fill="#000">GPIO BREAKOUT, COBBLER PLUS</text>
+<text x="100" y="933" font-family="monospace" font-size="11" fill="#000">40-pin header to breadboard.</text>
+<text x="100" y="951" font-family="monospace" font-size="11" fill="#000">Perfboard + ULN2003 on breadboard.</text>
+<text x="100" y="969" font-family="monospace" font-size="11" fill="#000">11.80 CAD. VERIFIED.</text>
+<rect x="640" y="520" width="320" height="280" fill="#fff" stroke="#000" stroke-width="3"/>
+<text x="655" y="550" font-family="monospace" font-size="14" font-weight="bold" fill="#000">RASPBERRY PI 5, 8 GB</text>
+<text x="655" y="575" font-family="monospace" font-size="11" fill="#000">HDMI0: main monitor</text>
+<text x="655" y="600" font-family="monospace" font-size="11" fill="#000">HDMI1: mini screen</text>
+<text x="655" y="625" font-family="monospace" font-size="11" fill="#000">USB: mic, speaker</text>
+<text x="655" y="650" font-family="monospace" font-size="11" fill="#000">GPIO: buttons, kill, PTT, toggle</text>
+<text x="655" y="675" font-family="monospace" font-size="11" fill="#000">GPIO: ULN2003, 6 LEDs</text>
+<text x="655" y="700" font-family="monospace" font-size="11" fill="#000">Active cooler on fan header</text>
+<text x="655" y="725" font-family="monospace" font-size="11" fill="#000">microSD slot below</text>
+<text x="655" y="750" font-family="monospace" font-size="11" fill="#000">RAM 8 GB. No local LLM in v1.</text>
+<rect x="620" y="860" width="360" height="110" fill="#eef" stroke="#000" stroke-width="2"/>
+<text x="630" y="883" font-family="monospace" font-size="13" font-weight="bold" fill="#000">MICROSD, MAIN + SPARE</text>
+<text x="630" y="903" font-family="monospace" font-size="11" fill="#000">Main 128GB, 41.99 CAD. LIKELY.</text>
+<text x="630" y="921" font-family="monospace" font-size="11" fill="#000">Spare 32GB clone, 27.99 CAD.</text>
+<text x="630" y="939" font-family="monospace" font-size="11" fill="#000">Proposed cut. Back up to laptop.</text>
+<text x="630" y="957" font-family="monospace" font-size="11" fill="#000">VERIFIED.</text>
+<text x="20" y="1050" font-family="monospace" font-size="12" fill="#000">Inside the case: Pi 5, mini screen in top panel, front panel controls, ULN2003 and LEDs, breakout, perfboard, case fan, speaker front right.</text>
+<text x="20" y="1072" font-family="monospace" font-size="12" fill="#000">Outside the case: main monitor behind, mic on desk, Pi PSU and chargers at wall.</text>
+<text x="20" y="1094" font-family="monospace" font-size="12" fill="#000">Case 360 x 240 x 140 mm, clear 3 mm acrylic, option A. Size ASSUMED. Front panel holes in blueprints/04-case-drawings-R2.svg.</text>
+<text x="20" y="1116" font-family="monospace" font-size="12" fill="#000">All GPIO 3.3V logic, not 5V tolerant. LEDs run from the 5V rail through the ULN2003 to GND. Never power LEDs from a GPIO pin.</text>
+<text x="20" y="1138" font-family="monospace" font-size="12" fill="#000">Pi USB peak about 0.6A vs 1.6A limit, headroom about 1.0A, ASSUMED. Mini screen is not on Pi USB. Monitor is never powered from the Pi.</text>
+<rect x="20" y="1160" width="1560" height="80" fill="none" stroke="#000" stroke-width="2"/>
+<text x="30" y="1190" font-family="monospace" font-size="12" fill="#000">Project: SI Console | Drawing: Connection Diagram | Rev: R3 | Date: 2026-11-23</text>
+<text x="30" y="1215" font-family="monospace" font-size="12" font-weight="bold" fill="#000">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
+</svg>

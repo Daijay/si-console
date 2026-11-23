@@ -1,0 +1,27 @@
+/* DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM. */
+/* SI Console skeleton theme. Copied from Autumn dashboard/src/index.css. */
+/* Ember theme. Near black ground, muted ember accent #d09256. Dark, one */
+/* accent, readable at a booth. The main screen uses this theme. The mini */
+/* screen uses the same tokens, with larger text and four rows only. */
+:root {
+  --bg: #0e1013;
+  --surface: #16191e;
+  --surface-raised: #1c2026;
+  --border: #252a31;
+  --border-strong: #333a44;
+  --text: #e7e9ec;
+  --muted: #98a1ad;
+  --faint: #828c99;
+  --ember: #d09256;
+  --ember-dim: #8a6038;
+  --danger: #e0897b;
+  --danger-bg: #2a1a17;
+  --mono: ui-monospace, "Cascadia Code", "Cascadia Mono", Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius: 10px;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 var(--sans);
+}
