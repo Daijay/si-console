@@ -1,4 +1,4 @@
-# CHECKS, SI Console Rev R4.1
+# CHECKS, SI Console Rev R4.2
 
 Run 2026-11-23 by `cad/build.py`. Overall: **ALL CHECKS PASSED**.
 
@@ -23,9 +23,11 @@ Screen mode: `window_under`. Laser sheets used: **4** (305 x 406 mm).
 - top: 5 holes, closest to an edge 54.4 mm, closest pair 7.3 mm
 - bottom: 12 holes, closest to an edge 24.9 mm, closest pair 26.7 mm
 - front: 9 holes, closest to an edge 34.4 mm, closest pair 21.9 mm
-- back: 21 holes, closest to an edge 9.3 mm, closest pair 5.5 mm
+- back: 9 holes, closest to an edge 9.3 mm, closest pair 5.4 mm
 - left: 8 holes, closest to an edge 12.0 mm, closest pair 8.0 mm
 - right: 8 holes, closest to an edge 12.0 mm, closest pair 8.0 mm
+- fan: plain chosen. Grille would be 30 holes of 4 mm with 1.5 mm webs, open area 377 mm2 = 50% of the plain 31 mm opening (755 mm2); minimum 60%
+- vent holes (fan grille) are exempt from the hole to hole rule but keep 5 mm from screw holes and panel edges
 
 ## PASS: Every panel fits on a 305 x 406 mm sheet
 

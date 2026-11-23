@@ -328,7 +328,7 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.1/si_console_assembly_R4.1.step",
+    "path": "blueprints/R4.2/si_console_assembly_R4.2.step",
     "type": "data",
     "description": "R4 full assembly STEP",
     "status": "DRAFT",
@@ -336,7 +336,7 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.1/step/",
+    "path": "blueprints/R4.2/step/",
     "type": "data",
     "description": "R4 STEP, one per part (26)",
     "status": "DRAFT",
@@ -344,7 +344,7 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.1/stl/",
+    "path": "blueprints/R4.2/stl/",
     "type": "data",
     "description": "R4 STL for 3D printed parts (screen spacers, or bezel)",
     "status": "DRAFT",
@@ -352,7 +352,7 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.1/dxf/",
+    "path": "blueprints/R4.2/dxf/",
     "type": "data",
     "description": "R4 laser DXF per panel (kerf applied) and nested sheets, 4 sheets of 12 x 16 in; needs review before cutting",
     "status": "DRAFT",
@@ -360,7 +360,7 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.1/drawings/",
+    "path": "blueprints/R4.2/drawings/",
     "type": "data",
     "description": "R4 dimensioned panel drawings, SVG per panel and one PDF",
     "status": "DRAFT",
@@ -368,7 +368,7 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.1/renders/",
+    "path": "blueprints/R4.2/renders/",
     "type": "data",
     "description": "R4 labelled renders: hero, front, top, back, exploded, see-through",
     "status": "DRAFT",

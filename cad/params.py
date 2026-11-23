@@ -1,4 +1,4 @@
-"""SI Console, Rev R4.1: every dimension and every switch lives in this file.
+"""SI Console, Rev R4.2: every dimension and every switch lives in this file.
 
 Change a number here, run `python build.py`, and every part, drawing, laser
 file, render and check is regenerated.
@@ -18,7 +18,7 @@ All lengths are millimetres. Coordinates in the assembly: X is left to right
 face of the back panel), Z is up (0 = underside of the bottom panel).
 """
 
-REV = "R4.1"
+REV = "R4.2"
 
 # --------------------------------------------------------------------------
 # SWITCHES (each current design decision can be flipped here)
@@ -222,9 +222,11 @@ FAN_SIZE = 40.0           # VERIFIED (brief). 40 mm fan.
 FAN_T = 10.0              # ASSUMED. Fan thickness.
 FAN_HOLE_SPACING = 32.0   # VERIFIED (brief). Screw hole spacing.
 FAN_SCREW_D = 3.4         # DESIGN. M3 clearance.
-FAN_AREA_D = 37.0         # DESIGN. Airflow area covered by the hole grid (fan frame opening).
-FAN_GRID_HOLE_D = 3.0     # DESIGN. Diameter of each small grid hole.
-FAN_GRID_PITCH = 8.5      # DESIGN. Grid pitch. Holes are kept at least MIN_HOLE_GAP apart, and from the screw holes.
+FAN_AREA_D = 37.0         # DESIGN. Airflow area covered by the grille (fan frame opening).
+FAN_GRILLE_HOLE_D = 4.0   # DESIGN. Diameter of each grille hole.
+FAN_GRILLE_WEB = 1.5      # DESIGN. Material left between neighbouring grille holes. Vent holes are exempt from MIN_HOLE_GAP; they keep MIN_HOLE_GAP from the screw holes and MIN_EDGE_GAP from panel edges.
+FAN_GRILLE_MIN_RATIO = 0.6  # DESIGN. If the grille's open area is below this fraction of the plain opening, build the plain opening instead.
+FAN_PLAIN_OPENING_D = 31.0  # DESIGN. Fallback single opening; the largest round hole that keeps 5 mm to the screw holes.
 FAN_CX = 90.0             # DESIGN. World X of the fan centre.
 FAN_CZ = 110.0            # DESIGN. High on the back.
 

@@ -26,6 +26,7 @@ class Hole:
     h: float = 0.0
     label: str = ""
     assumed: bool = False
+    vent: bool = False   # vent holes are exempt from the hole to hole spacing rule
 
     def shape(self):
         if self.kind == "circle":
@@ -236,7 +237,9 @@ def build_holes():
                 screws.append(circle(u + sx * P.FAN_HOLE_SPACING / 2, P.FAN_CZ + sz * P.FAN_HOLE_SPACING / 2,
                                      P.FAN_SCREW_D, "fan screw"))
         bk.extend(screws)
-        bk.extend(fan_grid(u, P.FAN_CZ, screws))
+        FAN_INFO.clear()
+        FAN_INFO.update(fan_grille(u, P.FAN_CZ, screws))
+        bk.extend(FAN_INFO["holes"])
 
     # ---- side panels: intake slots low down
     if P.ENABLE_SIDE_VENTS:
@@ -265,23 +268,41 @@ def build_holes():
     return h
 
 
-def fan_grid(cx, cz, screws):
-    """Grid of small holes across the fan area, dropping any hole that would sit
-    closer than MIN_HOLE_GAP to a screw hole or leave the circular fan area."""
-    from shapely.geometry import Point
-    r = P.FAN_GRID_HOLE_D / 2
-    n = int(P.FAN_AREA_D // P.FAN_GRID_PITCH) + 1
-    out = []
-    for i in range(-n, n + 1):
-        for j in range(-n, n + 1):
-            x, z = cx + i * P.FAN_GRID_PITCH, cz + j * P.FAN_GRID_PITCH
-            if math.hypot(x - cx, z - cz) + r > P.FAN_AREA_D / 2 + 1e-9:
-                continue
-            h = circle(x, z, P.FAN_GRID_HOLE_D, "fan grid")
-            if any(h.shape().distance(s.shape()) < P.MIN_HOLE_GAP + 1e-6 for s in screws):
-                continue
-            out.append(h)
-    return out
+FAN_INFO = {}
+
+
+def fan_grille(cx, cz, screws):
+    """Staggered grille of small holes with FAN_GRILLE_WEB between neighbours, across the fan
+    area. Keeps MIN_HOLE_GAP to the screw holes. Falls back to one plain opening when the
+    open area is below FAN_GRILLE_MIN_RATIO of that opening."""
+    r = P.FAN_GRILLE_HOLE_D / 2
+    pitch = P.FAN_GRILLE_HOLE_D + P.FAN_GRILLE_WEB
+    rowh = pitch * math.sqrt(3) / 2
+    best = []
+    for ox in (0.0, pitch / 2):
+        for oz in (0.0, rowh / 2):
+            hs = []
+            n = int(P.FAN_AREA_D // pitch) + 2
+            for j in range(-n, n + 1):
+                for i in range(-n, n + 1):
+                    x = cx + ox + i * pitch + (pitch / 2 if j % 2 else 0)
+                    z = cz + oz + j * rowh
+                    if math.hypot(x - cx, z - cz) + r > P.FAN_AREA_D / 2 + 1e-9:
+                        continue
+                    h = circle(x, z, P.FAN_GRILLE_HOLE_D, "fan grille")
+                    h.vent = True
+                    if any(h.shape().distance(s.shape()) < P.MIN_HOLE_GAP + 1e-6 for s in screws):
+                        continue
+                    hs.append(h)
+            if len(hs) > len(best):
+                best = hs
+    area = len(best) * math.pi * r * r
+    plain = math.pi * (P.FAN_PLAIN_OPENING_D / 2) ** 2
+    ratio = area / plain
+    if ratio >= P.FAN_GRILLE_MIN_RATIO:
+        return dict(holes=best, mode="grille", count=len(best), area=area, plain=plain, ratio=ratio)
+    h = circle(cx, cz, P.FAN_PLAIN_OPENING_D, "fan opening")
+    return dict(holes=[h], mode="plain", count=len(best), area=area, plain=plain, ratio=ratio)
 
 
 def pi_y0():

@@ -2,6 +2,10 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-23, R4.2
+- Fan grille rule: vent holes are exempt from the 5 mm hole to hole spacing (they still keep 5 mm from the fan screw holes and from panel edges). Tried 4 mm holes with 1.5 mm webs in a staggered pattern across the 37 mm area: 30 holes, 377 mm2, which is 50% of the plain 31 mm opening (755 mm2), under the 60% threshold. Reverted to the single 31 mm opening. The grille is kept as code in `cad/panels.py` and switches in automatically if it reaches 60%.
+- All checks pass. Finals now in `blueprints/R4.2/` with `_R4.2` file names; `blueprints/R4.1/` removed.
+
 ## 2026-11-23, R4.1
 - Back panel: second micro-HDMI cutout removed; new 16 x 10 mm (ASSUMED) cable hole for the mini screen USB power cable from an outside charger. Screen HDMI stays inside the case.
 - AGENT 1 white LED resistor set to 100 ohm. `docs/GPIO_PIN_MAP.md` (dated R4.1 section) and the schematic and wiring SVG updated. Closes OPEN 4.

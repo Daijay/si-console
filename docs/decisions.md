@@ -75,3 +75,7 @@ Open after R4: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), have H
 - Back view render now hides the monitor so the panel is visible.
 - Outputs are named `_R4.1` and live in `blueprints/R4.1/` (the R4 folder was removed, its history stays in git).
 
+## E. Rev R4.2 change (2026-11-23)
+
+- Fan: the R4.1 grid of 3 mm holes is dropped. Vent holes are now exempt from the 5 mm hole to hole rule. A 4 mm hole, 1.5 mm web grille across the 37 mm area reaches only 50% of the plain 31 mm opening's area (limit set at 60%), so the single 31 mm opening is back. To get a grille that passes, use smaller webs or a bigger area; the numbers are in `cad/output/CHECKS.md`.
+

@@ -71,12 +71,19 @@ def check_holes(panel_dict):
                 r.fail(f"{name}: '{h.label}' at ({h.cx:.1f}, {h.cy:.1f}) is {d:.2f} mm from an edge")
         for (h1, s1), (h2, s2) in itertools.combinations(shapes, 2):
             d = s1.distance(s2)
+            if h1.vent and h2.vent:
+                continue
             if d < P.MIN_HOLE_GAP - 1e-6:
                 r.fail(f"{name}: '{h1.label}' and '{h2.label}' are {d:.2f} mm apart")
         if shapes:
             md = min([p.outline.exterior.distance(s) for _, s in shapes])
-            mh = min([a.distance(b) for (_, a), (_, b) in itertools.combinations(shapes, 2)] or [999])
+            mh = min([a.distance(b) for (h1, a), (h2, b) in itertools.combinations(shapes, 2) if not (h1.vent and h2.vent)] or [999])
             r.note(f"{name}: {len(shapes)} holes, closest to an edge {md:.1f} mm, closest pair {mh:.1f} mm")
+    fi = pn.FAN_INFO
+    if fi:
+        r.note(f"fan: {fi['mode']} chosen. Grille would be {fi['count']} holes of {P.FAN_GRILLE_HOLE_D:g} mm with {P.FAN_GRILLE_WEB:g} mm webs, "
+               f"open area {fi['area']:.0f} mm2 = {fi['ratio'] * 100:.0f}% of the plain {P.FAN_PLAIN_OPENING_D:g} mm opening ({fi['plain']:.0f} mm2); minimum {P.FAN_GRILLE_MIN_RATIO * 100:.0f}%")
+    r.note("vent holes (fan grille) are exempt from the hole to hole rule but keep 5 mm from screw holes and panel edges")
     return r
 
 
