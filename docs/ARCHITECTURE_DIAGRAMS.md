@@ -1,7 +1,9 @@
 # SI Console — Architecture Visualizations
 
 Status: DRAFT companion to `docs/ARCHITECTURE.md` (the authoritative spec).
-Date 2026-11-23. This document only visualizes; it does not change the spec.
+Date 2026-11-23, tier diagrams updated 2026-11-24. This document only
+visualizes; it does not change the spec. The four-tier model shown in diagrams
+1, 3 and 6 is PROPOSED in `docs/MODEL_TIERS.md`.
 
 Each diagram is Mermaid, so it renders on GitHub and in most Markdown viewers.
 A legend after each diagram maps the parts to the spec section and to the
@@ -29,9 +31,9 @@ flowchart TB
 
     subgraph A["AGENT RUNTIME ( Christopher + Jayden )"]
         IN["Intake<br/>(reject if KILLED or busy)"]
-        ROUTER["ROUTER<br/>skill / keywords / length<br/>FAST | THINK"]
-        COORD["COORDINATOR<br/>DeepSeek flash, fixed JSON menu<br/>max 3 rounds"]
-        WORK["WORKERS<br/>FAST=flash / THINK=pro"]
+        ROUTER["ROUTER (rules only)<br/>skill / keywords / length<br/>v1: FAST | THINK<br/>proposed: T0 | T1 | T2 | T3"]
+        COORD["COORDINATOR / T0<br/>DeepSeek flash, fixed JSON menu<br/>max 3 rounds, writes worker prompts"]
+        WORK["WORKERS (proposed)<br/>T1 heavy / T2 medium / T3 small"]
         POLICY["POLICY CHECK<br/>default deny"]
         GUARD["GUARD<br/>deterministic code"]
         EXEC["EXECUTE<br/>own process group + timeout"]
@@ -45,8 +47,8 @@ flowchart TB
         SQLITE[("SQLite<br/>how it ran")]
     end
 
-    subgraph P["PROVIDERS + OFFLINE"]
-        DS["DeepSeek flash + pro"]
+    subgraph P["PROVIDERS + OFFLINE (proposed tiers shown)"]
+        DS["T0/T2: DeepSeek V4.1 Flash<br/>T1: Qwen4 Max, Kimi K3.1 Pro<br/>T2: Hy4, Agnes, MiMo · T3: GLM 5.4<br/>(all PROPOSED — see MODEL_TIERS.md)"]
         BOCHA["Bocha search"]
         REC[("Recorded runs<br/>in the vault")]
     end
@@ -73,6 +75,7 @@ flowchart TB
     COORD --> SQLITE
     WORK --> DS
     WORK --> BOCHA
+    ROUTER -.->|"per-task routing"| WORK
     DS & BOCHA -.-> IG
     DS --> REC
     REC -. "booth fallback on failure" .-> WORK
@@ -88,8 +91,9 @@ truth with `state.json` rebuilt from it; SQLite telemetry is **GAP**. DeepSeek +
 Bocha are **DONE**; offline recording/replay is **GAP**. External-agent API is
 **DONE / aligned** (home-mode, rate limit, claim types).
 
-Spec sections: STATE MACHINE, FLOW, SAFETY, MEMORY AND STATE, PROVIDERS,
-OFFLINE, EXTERNAL AGENTS.
+The four-tier worker expansion is **PROPOSED** (see `docs/MODEL_TIERS.md`);
+the v1 spec still names FAST/THINK and DeepSeek-only. Spec sections: STATE
+MACHINE, FLOW, SAFETY, MEMORY AND STATE, PROVIDERS, OFFLINE, EXTERNAL AGENTS.
 
 ---
 
@@ -134,12 +138,15 @@ flowchart TD
     INTAKE -- yes --> REJECT["REJECT input"]
     INTAKE -- no --> ROUTER["ROUTER (rules only, v1)<br/>skill + keywords + length"]
 
-    ROUTER -->|FAST| CF["COORDINATOR<br/>DeepSeek flash"]
-    ROUTER -->|THINK| CP["COORDINATOR<br/>DeepSeek flash (planning)"]
-    CF & CP --> MENU["Fixed JSON action menu<br/>max 3 rounds"]
+    ROUTER --> O["COORDINATOR / T0<br/>DeepSeek flash<br/>plan + write worker prompts"]
+    O --> MENU["Fixed JSON action menu<br/>max 3 rounds"]
     MENU -->|3 rounds used| ESC["escalate_to_human"]
-    MENU -->|action| WORKER["WORKER<br/>FAST = deepseek-v4-flash<br/>THINK = deepseek-v4-pro"]
-    WORKER -->|failure| PRO["one escalation to pro"]
+    MENU -->|task prompt| R2{{"ROUTER (rules only)<br/>per-task tier pick"}}
+    R2 -->|T3 small| W3["GLM 5.4 → MiMo → $0 paths"]
+    R2 -->|T2 medium| W2["Hy4 → DeepSeek Flash<br/>→ Agnes(trial) → MiMo(bg)"]
+    R2 -->|T1 heavy| W1["Qwen4 Max → Kimi K3.1 Pro"]
+    W1 & W2 & W3 -->|result| O
+    W1 -->|failure| PRO["one escalation<br/>Qwen4 Max → Kimi<br/>→ escalate_to_human"]
     PRO --> TOOL["TOOL CALL"]
 
     TOOL --> POLICY{"POLICY CHECK<br/>default deny"}
@@ -156,9 +163,10 @@ flowchart TD
 
 **Legend:** the coordinator skeleton has the **PARTIAL** pieces (fixed
 12-action menu, 3-round limit → escalation note, validation, GUARD check, an
-approval *pause* that only logs). Router, tiered workers, one-pro-escalation,
-default-deny policy, exact-command display, process-group execution and result
-verification are **GAP**. Spec sections: FLOW, SAFETY, STATE MACHINE.
+approval *pause* that only logs). Router, tiered workers (the T1/T2/T3 chains
+shown are **PROPOSED** — see `docs/MODEL_TIERS.md`), one-escalation, default-deny
+policy, exact-command display, process-group execution and result verification
+are **GAP**. Spec sections: FLOW, SAFETY, STATE MACHINE.
 
 ---
 
@@ -219,23 +227,30 @@ STATE, OFFLINE.
 
 ```mermaid
 flowchart TB
-    R{"ROUTER (rules only)<br/>skill · keywords · length"}
-    R -->|FAST| F["deepseek-v4-flash<br/>(think disabled for tools)"]
-    R -->|THINK| P["deepseek-v4-pro"]
-    F -->|one retry on failure| P
-    R -.->|"optional, HOME ONLY,<br/>0.8 s limit, ignored on timeout,<br/>logged for comparison"| J["Jev shadow advisor"]
-    F --> B["Bocha search<br/>(research notes only,<br/>never feeds ranking)"]
-    P --> B
-    OTHERS["NOT on critical path:<br/>Claude · Qwen · GLM · Kimi<br/>Booth assumes no Claude access"]
+    R{"ROUTER (rules only) — runs TWICE<br/>1. intake → T0 orchestrator<br/>2. per task → worker tier + model"}
+
+    R -->|intake| T0["T0 ORCHESTRATOR<br/>DeepSeek V4.1 Flash → Hy4 → GLM 5.4*"]
+
+    R -->|T3 small| T3["GLM 5.4* → MiMo → $0 paths"]
+    R -->|T2 medium| T2["Hy4 → DeepSeek Flash<br/>→ Agnes(trial) → MiMo(bg)"]
+    R -->|T1 heavy| T1["Qwen4 Max → Kimi K3.1 Pro<br/>→ escalate_to_human"]
+
+    T1 & T2 & T3 -->|result| T0
+    T0 --> B["Bocha search<br/>best-effort, never blocks"]
+    R -.->|"optional, HOME ONLY,<br/>0.8 s limit, ignored on timeout"| J["Jev shadow advisor<br/>(no candidate: Inkling culled)"]
+    CULL["Culled: Qwen 3.8 27B · GLM 5.3 Flash**<br/>· Gemini 4 Neon (booth, GFW) · Inkling 2 Small"]
+    NOTE["* GLM 5.4 provisional on price only —<br/>** GLM 5.3 Flash is designated revert<br/>until 5.4 benches (see MODEL_TIERS.md)"]
 ```
 
-**Legend:** DeepSeek-only is **DONE** in `models.py` + `deepseek_client.py`
-(the router fails closed to DeepSeek; there is no Anthropic client — deliberately,
-because the booth is in Shenzhen). Bocha is **DONE** as a best-effort search that
-never blocks and never changes a ranking. The **rules-based tier router** and the
-**one-time pro escalation** are **GAP**; today tiers are chosen by caller name
-(coordinator/worker/narration/premium). Jev shadow advisor is **GAP / optional**.
-Spec section: PROVIDERS.
+**Legend:** all four tier chains are **PROPOSED** (recorded in
+`docs/MODEL_TIERS.md`) and are **NOT implemented** — `models.py` +
+`deepseek_client.py` are DeepSeek-only today (router fails closed to DeepSeek;
+no Anthropic client, deliberately, because the booth is in Shenzhen). Bocha is
+**DONE** as a best-effort search that never blocks and never changes a ranking.
+The **rules-based tier router** and the **one-time escalation** are **GAP**;
+today tiers are chosen by caller name (coordinator/worker/narration/premium).
+Jev shadow advisor is **GAP / optional** and now has no candidate (Inkling was
+culled). Spec section: PROVIDERS.
 
 ---
 
@@ -336,7 +351,7 @@ for the two owners to reconcile.
 | 3. End-to-end flow | FLOW, SAFETY | PARTIAL |
 | 4. Safety stack | SAFETY | mixed (GUARD DONE, others GAP/PARTIAL) |
 | 5. Memory and state | MEMORY AND STATE, OFFLINE | PARTIAL / GAP |
-| 6. Providers and routing | PROVIDERS | PARTIAL / GAP |
+| 6. Providers and routing | PROVIDERS | PARTIAL / GAP (4 tiers PROPOSED) |
 | 7. Offline fallback | OFFLINE | GAP (rules engine DONE) |
 | 8. External agents | EXTERNAL AGENTS | DONE / aligned |
 | 9. Ownership map | OWNERSHIP | informational |
