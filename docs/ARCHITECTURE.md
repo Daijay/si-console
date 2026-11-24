@@ -29,6 +29,8 @@ Obsidian-compatible markdown vault is the source of truth for tasks (one note pe
 
 v1 runtime is DeepSeek only (flash + pro) plus Bocha search. Claude, Qwen, GLM, Kimi and Jev are NOT on the critical path. Jev may run as an optional shadow advisor to the router at home only (0.8s limit, ignored on timeout, logged for comparison). Booth assumes no Claude access and possibly no internet.
 
+Candidate multi-provider tier assignments (T0 orchestrator / T1 heavy / T2 medium / T3 small), benchmark data, and cull decisions are recorded separately in `docs/MODEL_TIERS.md`. That document is PROPOSED and does not change this spec.
+
 ## OFFLINE (from Jayden)
 
 every live run is recorded to the vault. If DeepSeek or network fails, the console switches automatically to recorded runs for the demo scenarios. No feature may require internet at the booth without this fallback.
