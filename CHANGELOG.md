@@ -10,6 +10,9 @@ Dated log of decisions and revisions. Newest first.
 - BOM: 5V case fan removed, acrylic buy cut from 6 sheets to a 4-pack (2 needed, 2 spare). Fundable total 767.15 CAD (was 791.33).
 - R4.2 (boxed case) moved to `research/R4.2-boxed/` with its source; git tag `r4.2-boxed`. `blueprints/R4.2/` removed from `blueprints/`.
 
+## 2026-11-24, Software architecture writeup
+- `docs/SOFTWARE_ARCHITECTURE.md`: short prose summary of the runtime (bridge/coordinator/vault/GUARD/providers) and the v1 gaps. Indexed in README, llms.txt, INDEX.json. Diagrams and spec remain the detailed sources.
+
 ## 2026-11-23, Architecture visualizations
 - `docs/ARCHITECTURE_DIAGRAMS.md`: 9 Mermaid diagrams covering the whole merged v1 architecture (big picture, state machine, end-to-end flow, safety stack, memory/state, providers, offline fallback, external agents, ownership). Each has a per-part DONE/PARTIAL/GAP legend. Indexed in README, llms.txt, INDEX.json. Spec remains authoritative.
 

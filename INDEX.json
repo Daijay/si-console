@@ -48,6 +48,14 @@
     "owner": "Jayden, Christopher"
   },
   {
+    "path": "docs/SOFTWARE_ARCHITECTURE.md",
+    "type": "doc",
+    "description": "~1000-char prose writeup of the software architecture (bridge, coordinator, vault, safety, providers, v1 gaps)",
+    "status": "DRAFT",
+    "last_updated": "2026-11-24",
+    "owner": "Jayden, Christopher"
+  },
+  {
     "path": "docs/decisions.md",
     "type": "doc",
     "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes and the R5 open-frame decision",
