@@ -79,3 +79,19 @@ Open after R4: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), have H
 
 - Fan: the R4.1 grid of 3 mm holes is dropped. Vent holes are now exempt from the 5 mm hole to hole rule. A 4 mm hole, 1.5 mm web grille across the 37 mm area reaches only 50% of the plain 31 mm opening's area (limit set at 60%), so the single 31 mm opening is back. To get a grille that passes, use smaller webs or a bigger area; the numbers are in `cad/output/CHECKS.md`.
 
+## F. Rev R5, open frame (2026-11-23)
+
+Decision: the console is redesigned as an open-frame "cyberdeck" with no enclosure, so it does not look like a mini PC and the electronics and wiring are the visual feature. The boxed R4.2 is kept as the alternative in `research/R4.2-boxed/`.
+
+- Base: one clear 3 mm acrylic plate, 330 x 220 mm (ASSUMED, sized for a 300 mm strip and 15 mm margins), rounded corners, 4 rubber feet. Pi 5 with Active Cooler, perfboard with ULN2003 and the GPIO breakout sit exposed on standoffs, laid out so the wires between them are short and visible, with cable-tie slot pairs along the routes.
+- Control strip: separate 300 x 70 mm panel at a 20 degree slope on two laser-cut brackets, with the R4.2 hole sizes and LED colours (AGENT 1 white). Clearances (50 mm behind green and red, 75 mm behind the kill switch) are checked against the base and every other part.
+- Mini screen: on a small angled laser-cut stand behind the strip (a plate plus two props, tab and slot). Facing the user.
+- Main monitor: behind the base on its own kickstand, assembly only.
+- Removed: fan, side walls, lid, back panel, finger joints, the top-panel screen window and its bezel switch. No printed parts.
+- Wiring is drawn as colour-coded tubes that follow the wiring table, so the renders show it.
+- 2 laser sheets (was 4). BOM: fan and 2 acrylic sheets removed, fundable total 767.15 CAD (was 791.33).
+
+Effect on the R3 review items: OPEN 1 (screen cutout) no longer applies, the screen is no longer in a panel. OPEN 2 stays decided (no soundbar, no grille). OPEN 3 stays as in R4: the Pi is rotated 180 degrees, power and HDMI face the back, and now the cables leave straight off the back edge of the open base. OPEN 5: R5 supplies candidate DXFs; Hasan reviews them before cutting.
+
+Open after R5: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), review the DXF, dry fit the strip slope and the wire lengths with the real parts. The 20 degree slope is read as 20 degrees from vertical; say if it should be from horizontal. The "Printed wedge" BOM line is probably obsolete. Cable ties are not in the BOM.
+

@@ -1,22 +1,22 @@
-"""Panel geometry: finger-jointed outlines, holes, and the matching 3D solids.
+"""Laser-cut parts of Rev R5: base plate, control strip, strip brackets, screen plate, screen props.
 
-Every panel is described in its own "view" coordinates (u, v), the way you
-would look at it from outside. The same 2D model feeds the 3D STEP solids,
-the DXF laser files and the dimensioned drawings, so they cannot disagree.
+Each part is one 2D outline plus holes in its own (u, v) view coordinates. The same 2D model feeds the
+3D STEP solids, the DXF laser files and the dimensioned drawings, so they cannot disagree.
 """
-import math
 from dataclasses import dataclass, field
 
 import cadquery as cq
-from shapely.geometry import box as sbox
-from shapely.ops import transform, unary_union
+from shapely.geometry import Point, Polygon, box as sbox
+from shapely.ops import unary_union
 
+import geo
 import params as P
+import wires
 
-W, D, H, T = P.CASE_W, P.CASE_D, P.CASE_H, P.T
+T = P.T
+V = cq.Vector
 
 
-# ---------------------------------------------------------------- holes --
 @dataclass
 class Hole:
     kind: str            # "circle" or "rect"
@@ -26,14 +26,11 @@ class Hole:
     h: float = 0.0
     label: str = ""
     assumed: bool = False
-    vent: bool = False   # vent holes are exempt from the hole to hole spacing rule
 
     def shape(self):
         if self.kind == "circle":
-            from shapely.geometry import Point
             return Point(self.cx, self.cy).buffer(self.w / 2.0, 64)
-        return sbox(self.cx - self.w / 2, self.cy - self.h / 2,
-                    self.cx + self.w / 2, self.cy + self.h / 2)
+        return sbox(self.cx - self.w / 2, self.cy - self.h / 2, self.cx + self.w / 2, self.cy + self.h / 2)
 
 
 def circle(cx, cy, d, label, assumed=False):
@@ -44,286 +41,155 @@ def rect(cx, cy, w, h, label, assumed=False):
     return Hole("rect", cx, cy, w, h, label, assumed)
 
 
-# --------------------------------------------------------------- panels --
 @dataclass
 class Panel:
-    name: str
-    view: str                      # description of the view the (u,v) axes are drawn in
-    outline: object                # shapely Polygon in view coords
+    name: str                 # laser part name, e.g. "base_plate"
+    view: str
+    outline: object           # shapely Polygon in view coordinates
     holes: list = field(default_factory=list)
-    origin: tuple = (0, 0, 0)      # world position of view (0,0) on the extrusion start face
+    instances: list = field(default_factory=list)   # [(solid name, plane origin)]
     udir: tuple = (1, 0, 0)
     vdir: tuple = (0, 1, 0)
-    thickness_dir: int = 1         # kept for clarity: extrusion is always along udir x vdir
+    xf: tuple = None          # (rotate about X in degrees, (tx, ty, tz)) applied after extrusion
+    desc: str = ""
 
     @property
-    def bounds(self):
-        return self.outline.bounds
+    def qty(self):
+        return len(self.instances)
 
     @property
     def size(self):
-        b = self.bounds
+        b = self.outline.bounds
         return (b[2] - b[0], b[3] - b[1])
 
 
-def finger_count(length):
-    """Odd number of equal fingers closest to FINGER_W."""
-    n = max(3, round(length / P.FINGER_W))
-    if n % 2 == 0:
-        # pick the odd neighbour that keeps the width closest to the target
-        lo, hi = n - 1, n + 1
-        n = lo if abs(length / lo - P.FINGER_W) <= abs(length / hi - P.FINGER_W) else hi
-    return n
+def rrect(w, h, r):
+    return sbox(0, 0, w, h).buffer(-r).buffer(r, resolution=16)
 
 
-def segments(lo, hi):
-    n = finger_count(hi - lo)
-    w = (hi - lo) / n
-    return [(lo + i * w, lo + (i + 1) * w) for i in range(n)]
+# ----------------------------------------------------------- brackets --
+def support_profile(frame, v_span, tabs_v, foot):
+    """Side profile (view coords u = world Y, v = world Z) of a bracket or prop: a triangle-ish body
+    standing on the base with a sloped edge that touches the plate's rear face, tabs that pass through
+    the plate (sloped edge) and tabs that pass through the base (bottom edge)."""
+    deg = frame[3]
+    s, c = geo.tilt_cs(deg)
+    nrm = (-c, s)                                   # outward normal of the plate (y, z)
 
+    def R(v):
+        return geo.rear_face_pt(frame, v)
 
-# A strip is the T x T x L bar along one case edge where two panels interlock.
-# even = panel owning segments 0, 2, 4 ...; odd = panel owning segments 1, 3, ...
-# cross = (xrange, yrange, zrange) with the strip axis range replaced by its span.
-def edge_strips():
-    S = []
-    # horizontal edges on top and bottom plates
-    for zname, (z0, z1) in (("top", (H - T, H)), ("bottom", (0, T))):
-        S.append(dict(name=f"{zname}-front", axis="x", span=(T, W - T), x=None, y=(0, T), z=(z0, z1), even=zname, odd="front"))
-        S.append(dict(name=f"{zname}-back", axis="x", span=(T, W - T), x=None, y=(D - T, D), z=(z0, z1), even=zname, odd="back"))
-        S.append(dict(name=f"{zname}-left", axis="y", span=(T, D - T), x=(0, T), y=None, z=(z0, z1), even=zname, odd="left"))
-        S.append(dict(name=f"{zname}-right", axis="y", span=(T, D - T), x=(W - T, W), y=None, z=(z0, z1), even=zname, odd="right"))
-    # vertical edges
-    for nm, ys, a, b in (("front", (0, T), "front", None), ("back", (D - T, D), "back", None)):
-        S.append(dict(name=f"{nm}-left", axis="z", span=(T, H - T), x=(0, T), y=ys, z=None, even=nm, odd="left"))
-        S.append(dict(name=f"{nm}-right", axis="z", span=(T, H - T), x=(W - T, W), y=ys, z=None, even=nm, odd="right"))
-    return S
-
-
-def corner_cubes():
-    """The 8 T x T x T corner cubes. Top and bottom plates own them."""
-    out = []
-    for zname, (z0, z1) in (("top", (H - T, H)), ("bottom", (0, T))):
-        for x in ((0, T), (W - T, W)):
-            for y in ((0, T), (D - T, D)):
-                out.append(dict(owner=zname, x=x, y=y, z=(z0, z1)))
-    return out
-
-
-PLANE_AXES = {"top": ("x", "y"), "bottom": ("x", "y"), "front": ("x", "z"),
-              "back": ("x", "z"), "left": ("y", "z"), "right": ("y", "z")}
-SLAB = {"top": ("z", (H - T, H)), "bottom": ("z", (0, T)), "front": ("y", (0, T)),
-        "back": ("y", (D - T, D)), "left": ("x", (0, T)), "right": ("x", (W - T, W))}
-CORE = {"top": [(T, W - T), (T, D - T)], "bottom": [(T, W - T), (T, D - T)],
-        "front": [(T, W - T), (T, H - T)], "back": [(T, W - T), (T, H - T)],
-        "left": [(T, D - T), (T, H - T)], "right": [(T, D - T), (T, H - T)]}
-
-
-def owned_rects(panel):
-    """Rectangles (in this panel's world-plane axes) that the panel owns on the edge strips."""
-    a_ax, b_ax = PLANE_AXES[panel]
-    rects = []
-    for s in edge_strips():
-        if panel not in (s["even"], s["odd"]):
-            continue
-        mine = 0 if s["even"] == panel else 1
-        ax = s["axis"]
-        assert ax in (a_ax, b_ax), (panel, s["name"])
-        # the strip's cross range on the panel's thickness axis must be the panel slab
-        t_ax, t_rng = SLAB[panel]
-        assert tuple(s[t_ax]) == tuple(t_rng), (panel, s["name"], t_ax)
-        other = b_ax if ax == a_ax else a_ax
-        for i, (lo, hi) in enumerate(segments(*s["span"])):
-            if i % 2 != mine:
-                continue
-            r = {ax: (lo, hi), other: s[other]}
-            rects.append((r[a_ax], r[b_ax]))
-    for c in corner_cubes():
-        if c["owner"] == panel:
-            rects.append((c[a_ax], c[b_ax]))
-    return rects
-
-
-def world_outline(panel):
-    (a0, a1), (b0, b1) = CORE[panel]
-    geoms = [sbox(a0, b0, a1, b1)]
-    for (ra, rb) in owned_rects(panel):
-        geoms.append(sbox(ra[0], rb[0], ra[1], rb[1]))
-    return unary_union(geoms).simplify(1e-9)
-
-
-# world-plane (a, b) -> view (u, v)
-def _view_fn(panel):
-    if panel == "back":
-        return lambda a, b, z=None: (W - a, b)
-    if panel == "left":
-        return lambda a, b, z=None: (D - a, b)
-    return lambda a, b, z=None: (a, b)
-
-
-def view_outline(panel):
-    f = _view_fn(panel)
-    return transform(lambda xs, ys, zs=None: tuple(zip(*[f(x, y) for x, y in zip(xs, ys)])), world_outline(panel))
-
-
-PLACEMENT = {
-    # origin of view (0,0) on the extrusion start face, u direction, v direction.
-    # Extrusion runs along u x v and ends on the far face of the slab.
-    "top": ((0, 0, H - T), (1, 0, 0), (0, 1, 0), "outside view from above"),
-    "bottom": ((0, 0, 0), (1, 0, 0), (0, 1, 0), "plan view from above (inside face up)"),
-    "front": ((0, T, 0), (1, 0, 0), (0, 0, 1), "outside view from the front"),
-    "back": ((W, D - T, 0), (-1, 0, 0), (0, 0, 1), "outside view from the back"),
-    "left": ((T, D, 0), (0, -1, 0), (0, 0, 1), "outside view from the left"),
-    "right": ((W - T, 0, 0), (0, 1, 0), (0, 0, 1), "outside view from the right"),
-}
-
-
-def view_to_world(panel, u, v, face="start"):
-    o, ud, vd, _ = PLACEMENT[panel]
-    return tuple(o[i] + ud[i] * u + vd[i] * v for i in range(3))
-
-
-# ---------------------------------------------------------- hole layouts --
-def x_to_u(panel, x):
-    """World X to view U for the back panel (mirrored); identity otherwise."""
-    return W - x if panel == "back" else x
-
-
-def build_holes():
-    h = {k: [] for k in PLACEMENT}
-
-    # ---- front panel (u = x, v = z)
-    fr = h["front"]
-    fr.append(circle(P.GREEN_X, P.BTN_Z, P.GREEN_HOLE, "green button"))
-    fr.append(circle(P.RED_X, P.BTN_Z, P.RED_HOLE, "red button"))
-    fr.append(circle(P.KILL_X, P.BTN_Z, P.KILL_HOLE, "kill switch"))
-    fr.append(circle(P.PTT_X, P.BTN_Z, P.PTT_HOLE, "push to talk"))
-    fr.append(circle(P.TOGGLE_X, P.BTN_Z, P.TOGGLE_HOLE, "EN/ZH toggle"))
-    x0 = W / 2 - 1.5 * P.LED_PITCH
-    for i, nm in enumerate(P.LED_NAMES):
-        fr.append(circle(x0 + i * P.LED_PITCH, P.LED_Z, P.LED_HOLE, f"LED {nm} ({P.LED_COLOURS[i]})"))
-    if P.ENABLE_SPEAKER_GRILLE:
-        gx0 = W / 2 - (P.GRILLE_COUNT - 1) * P.GRILLE_PITCH / 2
-        for i in range(P.GRILLE_COUNT):
-            fr.append(rect(gx0 + i * P.GRILLE_PITCH, P.GRILLE_Z, P.GRILLE_SLOT_L, P.GRILLE_SLOT_W, f"grille {i + 1}"))
-
-    # ---- top panel (u = x, v = y)
-    tp = h["top"]
-    if P.SCREEN_MODE == "window_under":
-        wx = P.SCREEN_CX + P.SCREEN_VIS_OFFSET_X
-        wy = P.SCREEN_CY + P.SCREEN_VIS_OFFSET_Y
-        tp.append(rect(wx, wy, P.SCREEN_VIS_W, P.SCREEN_VIS_D, "screen window (visible area)", assumed=True))
-        for sx in (-1, 1):
-            for sy in (-1, 1):
-                hx = P.SCREEN_CX + sx * (P.SCREEN_MODULE_W / 2 - P.SCREEN_HOLE_INSET)
-                hy = P.SCREEN_CY + sy * (P.SCREEN_MODULE_D / 2 - P.SCREEN_HOLE_INSET)
-                tp.append(circle(hx, hy, P.SCREEN_HOLE_D, "screen screw", assumed=True))
+    s1, s2 = R(v_span[0]), R(v_span[1])
+    y_end = s2[0] + foot
+    body = Polygon([(s1[0], T), (y_end, T), (s2[0], s2[1]), (s1[0], s1[1])])
+    parts = [body]
+    for (a, b) in tabs_v:
+        ra, rb = R(a), R(b)
+        parts.append(Polygon([ra, rb, (rb[0] + T * nrm[0], rb[1] + T * nrm[1]), (ra[0] + T * nrm[0], ra[1] + T * nrm[1])]))
+    length = y_end - s1[0]
+    tl = 15.0
+    if length >= 55:
+        ys = [s1[0] + 5, y_end - 5 - tl]
     else:
-        tp.append(rect(P.SCREEN_CX, P.SCREEN_CY, P.SCREEN_MODULE_W + 2 * P.SCREEN_BEZEL_CLEARANCE,
-                       P.SCREEN_MODULE_D + 2 * P.SCREEN_BEZEL_CLEARANCE, "screen cutout (full module, bezel mode)"))
+        ys = [s1[0] + (length - tl) / 2]
+    for y in ys:
+        parts.append(sbox(y, 0, y + tl, T))
+    u = unary_union([g.buffer(1e-4, join_style=2) for g in parts]).buffer(-1e-4, join_style=2).simplify(1e-6)
+    assert u.geom_type == "Polygon", u.geom_type
+    return u, ys, tl
 
-    # ---- back panel (u = W - x, v = z)
-    bk = h["back"]
-    z = P.CUT_Z
-    bk.append(rect(W - P.HDMI0_CUT_X, z, *P.HDMI_CUT, "micro-HDMI 0 cable (main monitor)", assumed=True))
-    bk.append(rect(W - P.SCREEN_PWR_CUT_X, z, *P.SCREEN_PWR_CUT, "mini screen USB power cable", assumed=True))
-    bk.append(rect(W - P.USBC_CUT_X, z, *P.USBC_CUT, "Pi USB-C power", assumed=True))
-    bk.append(rect(W - P.MIC_CUT_X, z, *P.MIC_CUT, "mic USB cable", assumed=True))
-    if P.ENABLE_FAN:
-        u = W - P.FAN_CX
-        screws = []
-        for sx in (-1, 1):
-            for sz in (-1, 1):
-                screws.append(circle(u + sx * P.FAN_HOLE_SPACING / 2, P.FAN_CZ + sz * P.FAN_HOLE_SPACING / 2,
-                                     P.FAN_SCREW_D, "fan screw"))
-        bk.extend(screws)
-        FAN_INFO.clear()
-        FAN_INFO.update(fan_grille(u, P.FAN_CZ, screws))
-        bk.extend(FAN_INFO["holes"])
 
-    # ---- side panels: intake slots low down
-    if P.ENABLE_SIDE_VENTS:
-        for side in ("left", "right"):
-            for zr in P.VENT_ROWS_Z:
-                for uc in P.VENT_COLS_U:
-                    h[side].append(rect(uc, zr, P.VENT_SLOT_L, P.VENT_SLOT_W, "vent"))
+def tab_slot_v(tabs_v):
+    return [((a + b) / 2, b - a) for a, b in tabs_v]
 
-    # ---- bottom panel (u = x, v = y)
-    bt = h["bottom"]
-    x0 = P.PI_X0
-    y0 = pi_y0()
+
+def tilt_xf(frame):
+    x0, y0, z0, deg = frame
+    return (-deg, (x0, y0, z0))
+
+
+# -------------------------------------------------------------- parts --
+def build_panels():
+    panels = {}
+    # ---------------- control strip
+    sh = []
+    sh.append(circle(P.GREEN_U, P.BTN_V, P.GREEN_HOLE, "green button"))
+    sh.append(circle(P.RED_U, P.BTN_V, P.RED_HOLE, "red button"))
+    sh.append(circle(P.KILL_U, P.BTN_V, P.KILL_HOLE, "kill switch"))
+    sh.append(circle(P.PTT_U, P.BTN_V, P.PTT_HOLE, "push to talk"))
+    sh.append(circle(P.TOGGLE_U, P.BTN_V, P.TOGGLE_HOLE, "EN/ZH toggle"))
+    x0 = P.STRIP_W / 2 - 1.5 * P.LED_PITCH
+    for i, nm in enumerate(P.LED_NAMES):
+        sh.append(circle(x0 + i * P.LED_PITCH, P.LED_V, P.LED_HOLE, f"LED {nm} ({P.LED_COLOURS[i]})"))
+    for k, u in enumerate(P.BRACKET_U):
+        for (vc, ln) in tab_slot_v(P.BRACKET_TABS_V):
+            sh.append(rect(u, vc, T, ln, f"bracket {k + 1} slot"))
+    sf = geo.STRIP_FRAME
+    panels["control_strip"] = Panel("control_strip", "front face, as the user sees it (U right, V up the slope)",
+                                    rrect(P.STRIP_W, P.STRIP_H, P.STRIP_RADIUS), sh, [("control_strip", (0, T, 0))],
+                                    (1, 0, 0), (0, 0, 1), tilt_xf(sf), "sloped control strip")
+    prof, ys_strip, tl = support_profile(sf, P.BRACKET_V, P.BRACKET_TABS_V, P.BRACKET_FOOT)
+    panels["strip_bracket"] = Panel("strip_bracket", "side view (U = depth Y, V = height Z), console front to the left", prof, [],
+                                    [(f"strip_bracket_{k + 1}", (P.STRIP_X0 + u - T / 2, 0, 0)) for k, u in enumerate(P.BRACKET_U)],
+                                    (0, 1, 0), (0, 0, 1), None, "strip bracket")
+    # ---------------- screen plate and props
+    pf = geo.plate_frame()
+    ph = []
+    mx0 = (P.PLATE_W - P.SCREEN_MODULE_W) / 2
+    for sx in (0, 1):
+        for sy in (0, 1):
+            hu = mx0 + (P.SCREEN_HOLE_INSET if sx == 0 else P.SCREEN_MODULE_W - P.SCREEN_HOLE_INSET)
+            hv = P.PLATE_MOD_V0 + (P.SCREEN_HOLE_INSET if sy == 0 else P.SCREEN_MODULE_D - P.SCREEN_HOLE_INSET)
+            ph.append(circle(hu, hv, P.SCREEN_HOLE_D, "screen standoff screw", assumed=True))
+    for k, u in enumerate(P.PROP_U):
+        for (vc, ln) in tab_slot_v(P.PROP_TABS_V):
+            ph.append(rect(u, vc, T, ln, f"prop {k + 1} slot"))
+    panels["screen_plate"] = Panel("screen_plate", "front face, as the user sees it (U right, V up the slope)",
+                                   rrect(P.PLATE_W, P.PLATE_H, P.PLATE_RADIUS), ph, [("screen_plate", (0, T, 0))],
+                                   (1, 0, 0), (0, 0, 1), tilt_xf(pf), "mini screen plate")
+    prof2, ys_prop, tl2 = support_profile(pf, P.PROP_V, P.PROP_TABS_V, P.PROP_FOOT)
+    px0 = pf[0]
+    panels["screen_prop"] = Panel("screen_prop", "side view (U = depth Y, V = height Z), console front to the left", prof2, [],
+                                  [(f"screen_prop_{k + 1}", (px0 + u - T / 2, 0, 0)) for k, u in enumerate(P.PROP_U)],
+                                  (0, 1, 0), (0, 0, 1), None, "mini screen prop")
+    # ---------------- base plate
+    bh = []
     for bx in (P.PI_HOLE_INSET, P.PI_HOLE_INSET + P.PI_HOLE_SX):
         for by in (P.PI_HOLE_INSET, P.PI_HOLE_INSET + P.PI_HOLE_SY):
-            bt.append(circle(x0 + P.PI_L - bx, y0 + P.PI_W - by, P.PI_HOLE_D, "Pi standoff (M2.5)"))
+            x, y = geo.pi_world(bx, by)
+            bh.append(circle(x, y, P.PI_HOLE_D, "Pi standoff (M2.5)"))
     for sx in (-1, 1):
         for sy in (-1, 1):
-            bt.append(circle(P.PERF_CX + sx * (P.PERF_X / 2 - P.PERF_HOLE_INSET),
-                             P.PERF_CY + sy * (P.PERF_Y / 2 - P.PERF_HOLE_INSET), P.PERF_HOLE_D, "perfboard standoff (M3)"))
-    for fx in (P.FOOT_INSET, W - P.FOOT_INSET):
-        for fy in (P.FOOT_INSET, D - P.FOOT_INSET):
-            bt.append(circle(fx, fy, P.FOOT_HOLE_D, "rubber foot", assumed=True))
-    if P.ENABLE_BOTTOM_VENTS:
-        for i in range(4):
-            bt.append(rect(P.PI_X0 + 42.5, P.BOTTOM_VENT_Y + i * 10, 60, 4, "bottom vent"))
-    return h
-
-
-FAN_INFO = {}
-
-
-def fan_grille(cx, cz, screws):
-    """Staggered grille of small holes with FAN_GRILLE_WEB between neighbours, across the fan
-    area. Keeps MIN_HOLE_GAP to the screw holes. Falls back to one plain opening when the
-    open area is below FAN_GRILLE_MIN_RATIO of that opening."""
-    r = P.FAN_GRILLE_HOLE_D / 2
-    pitch = P.FAN_GRILLE_HOLE_D + P.FAN_GRILLE_WEB
-    rowh = pitch * math.sqrt(3) / 2
-    best = []
-    for ox in (0.0, pitch / 2):
-        for oz in (0.0, rowh / 2):
-            hs = []
-            n = int(P.FAN_AREA_D // pitch) + 2
-            for j in range(-n, n + 1):
-                for i in range(-n, n + 1):
-                    x = cx + ox + i * pitch + (pitch / 2 if j % 2 else 0)
-                    z = cz + oz + j * rowh
-                    if math.hypot(x - cx, z - cz) + r > P.FAN_AREA_D / 2 + 1e-9:
-                        continue
-                    h = circle(x, z, P.FAN_GRILLE_HOLE_D, "fan grille")
-                    h.vent = True
-                    if any(h.shape().distance(s.shape()) < P.MIN_HOLE_GAP + 1e-6 for s in screws):
-                        continue
-                    hs.append(h)
-            if len(hs) > len(best):
-                best = hs
-    area = len(best) * math.pi * r * r
-    plain = math.pi * (P.FAN_PLAIN_OPENING_D / 2) ** 2
-    ratio = area / plain
-    if ratio >= P.FAN_GRILLE_MIN_RATIO:
-        return dict(holes=best, mode="grille", count=len(best), area=area, plain=plain, ratio=ratio)
-    h = circle(cx, cz, P.FAN_PLAIN_OPENING_D, "fan opening")
-    return dict(holes=[h], mode="plain", count=len(best), area=area, plain=plain, ratio=ratio)
-
-
-def pi_y0():
-    """World Y of the Pi board's front edge (board rotated so the HDMI edge faces back)."""
-    return (D - T) - P.PI_BACK_GAP - P.PI_W
-
-
-def build_panels():
-    holes = build_holes()
-    panels = {}
-    for name, (o, ud, vd, view) in PLACEMENT.items():
-        panels[name] = Panel(name, view, view_outline(name), holes[name], o, ud, vd)
+            bh.append(circle(P.PERF_CX + sx * (P.PERF_X / 2 - P.PERF_HOLE_INSET), P.PERF_CY + sy * (P.PERF_Y / 2 - P.PERF_HOLE_INSET),
+                             P.PERF_HOLE_D, "perfboard standoff (M3)"))
+    for fx in (P.FOOT_INSET, P.BASE_W - P.FOOT_INSET):
+        for fy in (P.FOOT_INSET, P.BASE_D - P.FOOT_INSET):
+            bh.append(circle(fx, fy, P.FOOT_HOLE_D, "rubber foot", assumed=True))
+    for k, u in enumerate(P.BRACKET_U):
+        for y in ys_strip:
+            bh.append(rect(P.STRIP_X0 + u, y + tl / 2, T, tl, f"strip bracket {k + 1} tab slot"))
+    for k, u in enumerate(P.PROP_U):
+        for y in ys_prop:
+            bh.append(rect(px0 + u, y + tl2 / 2, T, tl2, f"screen prop {k + 1} tab slot"))
+    if P.ENABLE_TIE_SLOTS:
+        tw, tlen = P.TIE_SLOT
+        for (cx, cy, along, span) in wires.tie_pairs():
+            off = span / 2 + P.WIRE_R + tw / 2 + 1.0
+            for sgn in (-1, 1):
+                if along == "y":
+                    bh.append(rect(cx + sgn * off, cy, tw, tlen, "cable tie slot"))
+                else:
+                    bh.append(rect(cx, cy + sgn * off, tlen, tw, "cable tie slot"))
+    panels["base_plate"] = Panel("base_plate", "plan view from above", rrect(P.BASE_W, P.BASE_D, P.BASE_RADIUS), bh,
+                                 [("base_plate", (0, 0, 0))], (1, 0, 0), (0, 1, 0), None, "base plate")
     return panels
 
 
 # ------------------------------------------------------------- 3D solids --
-def panel_solid(p: Panel):
-    """CadQuery solid at nominal size (no kerf) in world coordinates."""
+def panel_solid(p: Panel, origin):
     ud, vd = p.udir, p.vdir
     n = (ud[1] * vd[2] - ud[2] * vd[1], ud[2] * vd[0] - ud[0] * vd[2], ud[0] * vd[1] - ud[1] * vd[0])
-    plane = cq.Plane(origin=p.origin, xDir=ud, normal=n)
+    plane = cq.Plane(origin=origin, xDir=ud, normal=n)
     coords = list(p.outline.exterior.coords)[:-1]
     wp = cq.Workplane(plane).polyline(coords).close().extrude(T)
     for hl in p.holes:
@@ -332,4 +198,8 @@ def panel_solid(p: Panel):
         else:
             cut = cq.Workplane(plane).center(hl.cx, hl.cy).rect(hl.w, hl.h).extrude(T)
         wp = wp.cut(cut)
-    return wp.val()
+    s = wp.val()
+    if p.xf:
+        ang, (tx, ty, tz) = p.xf
+        s = s.rotate(V(0, 0, 0), V(1, 0, 0), ang).translate(V(tx, ty, tz))
+    return s

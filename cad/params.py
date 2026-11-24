@@ -1,74 +1,142 @@
-"""SI Console, Rev R4.2: every dimension and every switch lives in this file.
+"""SI Console, Rev R5 (open frame "cyberdeck"): every dimension and switch lives in this file.
 
-Change a number here, run `python build.py`, and every part, drawing, laser
-file, render and check is regenerated.
+No enclosure. One clear acrylic base plate carries everything. A sloped control
+strip stands at the front on two brackets, a small angled stand holds the mini
+screen, and the Pi, perfboard and wiring sit fully exposed on the base.
+
+Change a number here, run `python build.py`, and every part, laser file, drawing,
+render and check is regenerated.
 
 Each parameter carries a tag in its trailing comment:
 
-  VERIFIED  taken from the brief, from a manufacturer drawing, or from a
-            published standard. Safe to cut from.
+  VERIFIED  from the brief, a manufacturer drawing, or a published standard.
   ASSUMED   an estimate. MEASURE WITH CALIPERS before cutting. build.py lists
-            every ASSUMED parameter in output/ASSUMED.md and marks it on the
-            drawings.
-  DESIGN    a free layout choice made in this file. Nothing to measure; change
-            it if you want something different.
+            every ASSUMED parameter in output/ASSUMED.md and marks it on the drawings.
+  DESIGN    a free layout choice made in this file. Nothing to measure.
 
-All lengths are millimetres. Coordinates in the assembly: X is left to right
-(0 to 360), Y is front to back (0 = front face of the front panel, 240 = back
-face of the back panel), Z is up (0 = underside of the bottom panel).
+All lengths are millimetres. Assembly axes: X left to right, Y front to back
+(0 = front edge of the base plate), Z up (0 = underside of the base plate).
 """
 
-REV = "R4.2"
+REV = "R5"
 
 # --------------------------------------------------------------------------
-# SWITCHES (each current design decision can be flipped here)
+# SWITCHES
 # --------------------------------------------------------------------------
-SCREEN_MODE = "window_under"  # DESIGN. "window_under": window cut to the visible display only, module screwed UNDER the panel. "bezel": full module cutout plus a printed bezel on top.
-INCLUDE_MONITOR = True        # DESIGN. Draw the MSI monitor in the assembly (never a cut part).
-ENABLE_FAN = True             # DESIGN. 40 mm exhaust fan mount, high on the back panel.
-ENABLE_SIDE_VENTS = True      # DESIGN. Intake vent slots low on both side panels.
-ENABLE_SPEAKER_GRILLE = False # DESIGN. Off: sound comes from the monitor over HDMI. True adds a slot grille to the lower front panel (speaker body not modelled).
-ENABLE_BOTTOM_VENTS = False   # DESIGN. Off: no vents on the bottom. True adds a slot field under the Pi.
+INCLUDE_MONITOR = True   # DESIGN. Draw the MSI monitor behind the base (assembly only, never cut).
+INCLUDE_WIRES = True     # DESIGN. Draw colour-coded wire tubes.
+ENABLE_TIE_SLOTS = True  # DESIGN. Cable-tie slot pairs in the base plate along the wire routes.
 
 # --------------------------------------------------------------------------
-# CASE (clear acrylic, finger joints)
+# LASER MATERIAL AND RULES
 # --------------------------------------------------------------------------
-CASE_W = 360.0   # VERIFIED (brief). Outer width, X.
-CASE_D = 240.0   # VERIFIED (brief). Outer depth, Y.
-CASE_H = 140.0   # VERIFIED (brief). Outer height, Z.
-T = 3.0          # ASSUMED. Acrylic thickness as delivered (brief says 3 mm, cast sheet varies 2.9 to 3.2). Finger fit depends on it.
-KERF = 0.2       # VERIFIED (brief). Laser kerf. DXF cut paths are offset by KERF/2 so finished parts come out at nominal size.
-FINGER_W = 15.0  # VERIFIED (brief). Target finger width. Each edge gets an odd number of equal fingers closest to this.
-
-# Laser sheet (12 x 16 inch)
-SHEET_W = 305.0       # VERIFIED (brief). 12 in, rounded down from 304.8 would be tighter; brief says 305.
-SHEET_L = 406.0       # VERIFIED (brief). 16 in.
-SHEET_MARGIN = 5.0    # DESIGN. Unused border on every sheet.
-NEST_GAP = 5.0        # DESIGN. Spacing between nested parts.
-
-# Hole rules enforced by the checks
-MIN_EDGE_GAP = 5.0    # VERIFIED (brief). Min distance from a hole to any panel edge.
-MIN_HOLE_GAP = 5.0    # VERIFIED (brief). Min distance between two holes.
+T = 3.0          # ASSUMED. Acrylic thickness as delivered (cast sheet varies 2.9 to 3.2). Tab and slot fit depends on it.
+KERF = 0.2       # VERIFIED (brief). DXF cut paths are offset by KERF/2 so parts finish at nominal size.
+SHEET_W = 305.0  # VERIFIED (brief). 12 in.
+SHEET_L = 406.0  # VERIFIED (brief). 16 in.
+SHEET_MARGIN = 4.0   # DESIGN. Unused border on every sheet.
+NEST_GAP = 5.0       # DESIGN. Spacing between nested parts.
+MIN_EDGE_GAP = 5.0   # VERIFIED (brief). Min distance from a hole to any part edge.
+MIN_HOLE_GAP = 5.0   # VERIFIED (brief). Min distance between two holes.
+PART_MARGIN = 15.0   # VERIFIED (brief). Margin between everything on the base and the base edge (plugs and cables may hang off the edge).
 
 # --------------------------------------------------------------------------
-# MINI SCREEN: Waveshare 5inch HDMI LCD (H)
+# BASE PLATE
 # --------------------------------------------------------------------------
-SCREEN_MODULE_W = 121.0     # VERIFIED (brief). Module width.
-SCREEN_MODULE_D = 89.48     # VERIFIED (brief). Module depth.
-SCREEN_MODULE_H = 13.0      # ASSUMED. Module thickness incl. glass and rear connectors; check the Waveshare drawing.
-SCREEN_VIS_W = 109.0        # ASSUMED. Visible display width (brief: about 109). Check the Waveshare drawing.
-SCREEN_VIS_D = 66.0         # ASSUMED. Visible display height (brief: about 66). Check the Waveshare drawing.
-SCREEN_VIS_OFFSET_X = 0.0   # ASSUMED. Visible area centre offset from module centre, X. Real modules are often off-centre.
-SCREEN_VIS_OFFSET_Y = 0.0   # ASSUMED. Visible area centre offset from module centre, Y.
-SCREEN_HOLE_INSET = 3.5     # ASSUMED. Module mounting hole centre, distance from each module edge.
-SCREEN_HOLE_D = 2.7         # DESIGN. Clearance hole for an M2.5 screw.
-SCREEN_GAP = 3.0            # ASSUMED. Space between panel underside and module top face (printed spacer length).
-SCREEN_CX = 180.0           # DESIGN. Module centre X in the case.
-SCREEN_CY = 100.0           # DESIGN. Module centre Y (from the front).
-SCREEN_BEZEL_CLEARANCE = 0.5  # DESIGN. Bezel mode: extra cutout clearance around the full module.
-BEZEL_WALL = 7.0            # DESIGN. Bezel mode: printed frame width beyond the cutout.
-BEZEL_T = 3.0               # DESIGN. Bezel mode: printed frame thickness.
-BEZEL_BOSS_D = 5.0          # DESIGN. Bezel mode: screw boss diameter under the bezel.
+BASE_W = 330.0       # ASSUMED. Base plate width: the 300 mm strip plus 15 mm margins each side.
+BASE_D = 220.0       # ASSUMED. Base plate depth.
+BASE_RADIUS = 12.0   # DESIGN. Corner radius.
+FOOT_D = 15.0        # ASSUMED. Rubber foot diameter.
+FOOT_H = 6.0         # ASSUMED. Rubber foot height.
+FOOT_HOLE_D = 4.2    # ASSUMED. Foot screw hole (M4).
+FOOT_INSET = 22.5    # DESIGN. Foot centre distance from the two nearest edges.
+TIE_SLOT = (3.0, 5.0)    # VERIFIED (brief). Cable-tie slot size, width x length.
+TIE_PAIR_GAP = 6.0       # DESIGN. Material between the two slots of a tie pair (the strap goes through both).
+
+# --------------------------------------------------------------------------
+# CONTROL STRIP (sloped, at the front)
+# --------------------------------------------------------------------------
+STRIP_X0 = 15.0       # DESIGN. X of the strip's left edge (centres the 300 mm strip on the base).
+STRIP_W = 300.0      # ASSUMED. Strip width ("about 300").
+STRIP_H = 70.0       # ASSUMED. Strip height ("about 80", trimmed so base plus strip share one 305 mm sheet).
+STRIP_RADIUS = 4.0   # DESIGN. Corner radius.
+STRIP_TILT = 20.0    # VERIFIED (brief). Slope in degrees, measured from vertical, leaning back so the face looks up at the user.
+STRIP_Y = 34.0       # DESIGN. Y of the bottom edge of the strip's front face.
+STRIP_Z = 26.0       # DESIGN. Height of that bottom edge above the underside of the base (lets the kill switch zone clear the base).
+BRACKET_U = (15.0, 285.0)   # DESIGN. Bracket positions across the strip.
+BRACKET_FOOT = 40.0  # DESIGN. How far a bracket's base extends behind its strip contact.
+BRACKET_V = (5.0, 65.0)     # DESIGN. Span of the strip rear face that a bracket touches.
+BRACKET_TABS_V = ((8.0, 23.0), (47.0, 62.0))  # DESIGN. Tab positions along the strip (15 mm tabs).
+
+# Control positions on the strip face: U from its left edge, V up from its bottom edge
+BTN_V = 26.0       # DESIGN. Height of the button row.
+LED_V = 56.0       # DESIGN. Height of the LED row (above the buttons).
+GREEN_U = 50.0     # DESIGN.
+GREEN_BODY = 30.0  # VERIFIED (brief). 30 mm arcade button.
+GREEN_HOLE = 30.2  # VERIFIED (brief).
+RED_U = 105.0      # DESIGN.
+RED_BODY = 30.0    # VERIFIED (brief).
+RED_HOLE = 30.2    # VERIFIED (brief).
+KILL_U = 165.0     # DESIGN.
+KILL_BODY = 22.0   # VERIFIED (brief). 22 mm kill switch.
+KILL_HOLE = 22.3   # VERIFIED (brief).
+PTT_U = 220.0      # DESIGN.
+PTT_BODY = 12.0    # VERIFIED (brief). Push-to-talk.
+PTT_HOLE = 12.2    # VERIFIED (brief).
+TOGGLE_U = 260.0   # DESIGN. EN/ZH toggle.
+TOGGLE_BODY = 12.0 # VERIFIED (brief).
+TOGGLE_HOLE = 12.2 # VERIFIED (brief).
+LED_BODY = 5.0     # VERIFIED (brief). 5 mm LEDs.
+LED_HOLE = 5.2     # VERIFIED (brief).
+LED_PITCH = 30.0   # DESIGN. Spacing of the 4 LEDs, centred on the strip.
+LED_COLOURS = ["green", "white", "blue", "yellow"]  # VERIFIED (brief). Left to right: COORD, AGENT 1, AGENT 2, GUARD.
+LED_NAMES = ["coord", "agent1", "agent2", "guard"]  # DESIGN.
+
+CLEAR_ARCADE = 50.0   # VERIFIED (brief). Clear space behind the green and red buttons, measured along the button axis from the strip's rear face.
+CLEAR_KILL = 75.0     # VERIFIED (brief). Behind the kill switch.
+CLEAR_PTT = 30.0      # DESIGN. Behind PTT and toggle (not in the brief).
+CLEAR_MARGIN = 5.0    # DESIGN. Sideways margin added around each control for the clear-space box.
+
+# Control body models
+BTN_FLANGE_D = 36.0   # ASSUMED. Arcade button front flange diameter.
+BTN_CAP_PROUD = 10.0  # ASSUMED. Arcade cap height in front of the strip.
+BTN_BODY_CLEAR = 0.4  # DESIGN. Body is this much smaller than the hole (diameter).
+ARCADE_REAR = 30.0    # ASSUMED. Arcade body depth behind the strip (incl. microswitch).
+KILL_HEAD_D = 40.0    # ASSUMED. Kill switch mushroom head diameter.
+KILL_HEAD_H = 22.0    # ASSUMED. Kill switch head height in front of the strip.
+KILL_REAR = 55.0      # ASSUMED. Kill switch body depth behind the strip.
+PTT_HEAD_D = 14.0     # ASSUMED.
+PTT_HEAD_H = 6.0      # ASSUMED.
+PTT_REAR = 20.0       # ASSUMED.
+TOGGLE_LEVER_D = 4.0  # ASSUMED.
+TOGGLE_LEVER_H = 15.0 # ASSUMED.
+TOGGLE_REAR = 20.0    # ASSUMED.
+LED_FLANGE_D = 5.9    # ASSUMED. LED rim, sits behind the strip.
+LED_DOME_PROUD = 1.0  # ASSUMED.
+LED_REAR = 8.0        # ASSUMED.
+
+# --------------------------------------------------------------------------
+# MINI SCREEN: Waveshare 5inch HDMI LCD (H) on an angled stand
+# --------------------------------------------------------------------------
+SCREEN_MODULE_W = 121.0   # VERIFIED (brief).
+SCREEN_MODULE_D = 89.48   # VERIFIED (brief).
+SCREEN_MODULE_H = 13.0    # ASSUMED. Module thickness incl. rear connectors.
+SCREEN_HOLE_INSET = 3.5   # ASSUMED. Module mounting hole distance from each module edge.
+SCREEN_HOLE_D = 2.7       # DESIGN. M2.5 clearance.
+SCREEN_STANDOFF_H = 5.0   # DESIGN. M2.5 standoff between the stand plate and the module.
+SCREEN_STANDOFF_D = 5.0   # DESIGN.
+SCREEN_TILT = 20.0        # DESIGN. Plate tilt from vertical, leaning back (faces the user).
+SCREEN_CX = 165.0         # DESIGN. Plate centre X.
+SCREEN_Y = 96.0           # DESIGN. Y of the plate's bottom edge (front face).
+SCREEN_Z = 60.0           # DESIGN. Height of that bottom edge above the base underside.
+PLATE_W = 150.0           # DESIGN. Screen plate width.
+PLATE_H = 114.0           # DESIGN. Screen plate height.
+PLATE_MOD_V0 = 18.0       # DESIGN. Module bottom edge, up from the plate bottom.
+PLATE_RADIUS = 4.0        # DESIGN.
+PROP_U = (7.0, 143.0)     # DESIGN. Prop positions across the plate (at its edges, clear of the module screws).
+PROP_V = (6.0, 56.0)      # DESIGN. Span of the plate rear face that a prop touches.
+PROP_FOOT = 10.0          # DESIGN. How far a prop's base extends behind its plate contact.
+PROP_TABS_V = ((8.0, 23.0), (38.0, 53.0))  # DESIGN. Tab positions along the plate.
 
 # --------------------------------------------------------------------------
 # MAIN MONITOR: MSI PRO MP165 E6 (assembly only)
@@ -76,178 +144,75 @@ BEZEL_BOSS_D = 5.0          # DESIGN. Bezel mode: screw boss diameter under the 
 MON_W = 356.5      # VERIFIED (brief).
 MON_H = 210.35     # VERIFIED (brief).
 MON_T = 13.85      # VERIFIED (brief).
-MON_TILT = 15.0    # ASSUMED. Kickstand tilt from vertical, degrees.
-MON_GAP = 45.0     # DESIGN. Desk gap between the back of the case and the monitor's lowest front edge (also the exhaust air gap).
+MON_TILT = 15.0    # ASSUMED. Kickstand tilt from vertical.
+MON_GAP = 40.0     # DESIGN. Desk gap between the back of the base and the monitor's lowest front edge (cables run through it).
 
 # --------------------------------------------------------------------------
-# FRONT PANEL CONTROLS (positions are on the front face, X from the left edge
-# of the case, Z from the underside of the bottom panel; hole = cut diameter)
+# RASPBERRY PI 5 + Active Cooler (official mechanical drawing and STEP)
 # --------------------------------------------------------------------------
-BTN_Z = 62.0       # DESIGN. Height of the button row.
-LED_Z = 100.0      # DESIGN. Height of the LED row (above the buttons).
-
-GREEN_X = 64.0     # DESIGN.
-GREEN_BODY = 30.0  # VERIFIED (brief). 30 mm arcade button.
-GREEN_HOLE = 30.2  # VERIFIED (brief).
-RED_X = 124.0      # DESIGN.
-RED_BODY = 30.0    # VERIFIED (brief).
-RED_HOLE = 30.2    # VERIFIED (brief).
-KILL_X = 199.0     # DESIGN.
-KILL_BODY = 22.0   # VERIFIED (brief). 22 mm kill switch.
-KILL_HOLE = 22.3   # VERIFIED (brief).
-PTT_X = 259.0      # DESIGN.
-PTT_BODY = 12.0    # VERIFIED (brief). Push-to-talk.
-PTT_HOLE = 12.2    # VERIFIED (brief).
-TOGGLE_X = 304.0   # DESIGN. EN/ZH toggle.
-TOGGLE_BODY = 12.0 # VERIFIED (brief).
-TOGGLE_HOLE = 12.2 # VERIFIED (brief).
-
-LED_BODY = 5.0     # VERIFIED (brief). 5 mm LEDs.
-LED_HOLE = 5.2     # VERIFIED (brief).
-LED_PITCH = 30.0   # DESIGN. Spacing of the 4 LEDs, centred on the panel.
-LED_COLOURS = ["green", "white", "blue", "yellow"]  # VERIFIED (brief). Left to right: COORD, AGENT 1, AGENT 2, GUARD.
-LED_NAMES = ["coord", "agent1", "agent2", "guard"]  # DESIGN.
-
-# Clear space required behind the front panel (measured from its inner face)
-CLEAR_ARCADE = 50.0   # VERIFIED (brief). Behind the green and red buttons.
-CLEAR_KILL = 75.0     # VERIFIED (brief). Behind the kill switch.
-CLEAR_PTT = 30.0      # DESIGN. Behind PTT and toggle (not in the brief; own bodies are shorter).
-CLEAR_MARGIN = 5.0    # DESIGN. Sideways margin added around each control's footprint for the clear-space box.
-
-# Control body models (used for the assembly and the clearance check)
-BTN_FLANGE_D = 36.0   # ASSUMED. Arcade button front flange diameter.
-BTN_CAP_PROUD = 10.0  # ASSUMED. Arcade cap height in front of the panel.
-BTN_BODY_CLEAR = 0.4  # DESIGN. Body is this much smaller than the hole (total, diameter).
-ARCADE_REAR = 30.0    # ASSUMED. Arcade body depth behind the panel inner face (incl. microswitch).
-KILL_HEAD_D = 40.0    # ASSUMED. Kill switch mushroom head diameter.
-KILL_HEAD_H = 22.0    # ASSUMED. Kill switch head height in front of the panel.
-KILL_REAR = 55.0      # ASSUMED. Kill switch body depth behind the panel inner face.
-PTT_HEAD_D = 14.0     # ASSUMED.
-PTT_HEAD_H = 6.0      # ASSUMED.
-PTT_REAR = 20.0       # ASSUMED.
-TOGGLE_LEVER_D = 4.0  # ASSUMED.
-TOGGLE_LEVER_H = 15.0 # ASSUMED.
-TOGGLE_REAR = 20.0    # ASSUMED.
-LED_FLANGE_D = 5.9    # ASSUMED. LED rim, sits behind the panel.
-LED_DOME_PROUD = 1.0  # ASSUMED. LED dome in front of the panel.
-LED_REAR = 8.0        # ASSUMED. LED body behind the panel.
-
-# Speaker grille (only when ENABLE_SPEAKER_GRILLE)
-GRILLE_Z = 25.0       # DESIGN.
-GRILLE_SLOT_W = 3.0   # DESIGN.
-GRILLE_SLOT_L = 40.0  # DESIGN.
-GRILLE_COUNT = 8      # DESIGN.
-GRILLE_PITCH = 20.0   # DESIGN.
-
-# --------------------------------------------------------------------------
-# RASPBERRY PI 5 + Active Cooler (official mechanical drawing, rev 2026)
-# --------------------------------------------------------------------------
-PI_L = 85.0               # VERIFIED (brief, official drawing). Board length.
-PI_W = 56.0               # VERIFIED (brief, official drawing). Board width.
-PI_PCB_T = 1.6            # VERIFIED. Standard PCB thickness.
-PI_HOLE_SX = 58.0         # VERIFIED (brief, official drawing). Hole spacing along the length.
-PI_HOLE_SY = 49.0         # VERIFIED (brief, official drawing). Hole spacing along the width.
-PI_HOLE_INSET = 3.5       # VERIFIED (brief, official drawing). Hole centre from board edges.
-PI_HOLE_D = 2.7           # VERIFIED (official drawing). Board hole diameter, M2.5.
+PI_L = 85.0               # VERIFIED (brief, official drawing).
+PI_W = 56.0               # VERIFIED (brief, official drawing).
+PI_PCB_T = 1.6            # VERIFIED.
+PI_HOLE_SX = 58.0         # VERIFIED (brief, official drawing).
+PI_HOLE_SY = 49.0         # VERIFIED (brief, official drawing).
+PI_HOLE_INSET = 3.5       # VERIFIED (brief, official drawing).
+PI_HOLE_D = 2.7           # VERIFIED (official drawing).
 PI_STANDOFF_H = 10.0      # VERIFIED (brief). M2.5 standoff height.
-PI_STANDOFF_D = 5.0       # DESIGN. Standoff outer diameter.
-# Port positions measured on the official drawing, in board coordinates
-# (BX from the left edge, BY from the long edge that carries the power and HDMI ports)
-PI_USBC_BX = 11.2         # VERIFIED (official drawing). USB-C power centre along the long edge.
-PI_HDMI0_BX = 25.8        # VERIFIED (official drawing). micro-HDMI 0.
-PI_HDMI1_BX = 39.2        # VERIFIED (official drawing). micro-HDMI 1.
-PI_USB_BY = (29.1, 47.0)  # VERIFIED (official drawing). Centres of the two USB stacks, measured from the HDMI long edge.
-PI_ETH_BY = 10.2          # VERIFIED (official drawing). Ethernet centre, measured from the HDMI long edge.
-PI_PORT_Z = 1.7           # ASSUMED. Height of the USB-C and micro-HDMI port centres above the PCB top.
-PI_USB_STACK = (17.0, 14.5, 15.9)  # VERIFIED height (official STEP, top at 17.5 above PCB underside); length and width ASSUMED.
-PI_ETH_BOX = (21.0, 16.0, 13.5)    # ASSUMED. Ethernet length (along BY), width (along BX, inside board), height.
-PI_PORT_OVERHANG = 3.0    # VERIFIED (official STEP bbox: 88.05 vs 85). How far the USB/Ethernet shells hang past the short edge.
-PI_EDGE_OVERHANG = 1.6    # VERIFIED (official STEP bbox: -1.63). How far the USB-C/HDMI shells hang past the long edge.
+PI_STANDOFF_D = 5.0       # DESIGN.
+PI_USBC_BX = 11.2         # VERIFIED (official drawing). Port positions along the power/HDMI long edge.
+PI_HDMI0_BX = 25.8        # VERIFIED (official drawing).
+PI_HDMI1_BX = 39.2        # VERIFIED (official drawing).
+PI_USB_BY = (29.1, 47.0)  # VERIFIED (official drawing). USB stack centres from the HDMI long edge.
+PI_ETH_BY = 10.2          # VERIFIED (official drawing).
+PI_PORT_Z = 1.7           # ASSUMED. Height of USB-C and micro-HDMI port centres above the PCB top.
+PI_USB_STACK = (17.0, 14.5, 15.9)  # VERIFIED height (official STEP); length and width ASSUMED.
+PI_ETH_BOX = (21.0, 16.0, 13.5)    # ASSUMED. Ethernet length (along BY), width (along BX), height.
+PI_PORT_OVERHANG = 3.0    # VERIFIED (official STEP). USB/Ethernet overhang past the short edge.
+PI_EDGE_OVERHANG = 1.6    # VERIFIED (official STEP). USB-C/HDMI overhang past the long edge.
 PI_GPIO_BX = 32.5         # VERIFIED (official drawing). GPIO header centre along the length.
-PI_GPIO_BY = 52.5         # VERIFIED (standard 40-pin position). GPIO header centre from the HDMI long edge.
+PI_GPIO_BY = 52.5         # VERIFIED (standard 40-pin position). From the HDMI long edge.
 PI_GPIO_H = 8.5           # VERIFIED. Header height above PCB.
-COOLER_SIZE = (40.0, 40.0, 15.0)   # ASSUMED. Active Cooler footprint X, Y and height above the PCB top.
-COOLER_BX = 34.0          # ASSUMED. Cooler centre along the length.
-COOLER_BY = 26.0          # ASSUMED. Cooler centre from the HDMI long edge.
-
-# Placement. The board is rotated 180 degrees so its long power/HDMI edge faces
-# the back panel and the GPIO header faces the front (toward the perfboard).
-# That puts the USB/Ethernet end against the LEFT wall.
-PI_X0 = 38.0              # DESIGN. World X of the board's left edge.
-PI_BACK_GAP = 65.0        # DESIGN. Gap from the Pi power/HDMI edge to the inner face of the back panel (room for plugs and bends).
+COOLER_SIZE = (40.0, 40.0, 15.0)   # ASSUMED. Active Cooler footprint and height above the PCB top.
+COOLER_BX = 34.0          # ASSUMED.
+COOLER_BY = 26.0          # ASSUMED.
+# The board is rotated 180 degrees: power and HDMI edge faces the back so the cables leave off the back edge
+# of the base; the GPIO header faces the front, toward the breakout; the USB/Ethernet end faces the left.
+PI_X0 = 35.0              # DESIGN. World X of the board's left edge.
+PI_PORT_EDGE_Y = 203.0    # DESIGN. World Y of the power/HDMI edge (plugs hang past the base back edge at 220).
 
 # --------------------------------------------------------------------------
 # PERFBOARD, ULN2003, GPIO BREAKOUT
 # --------------------------------------------------------------------------
-PERF_X = 70.0             # ASSUMED. Perfboard size along X (7 x 9 cm board).
-PERF_Y = 90.0             # ASSUMED. Perfboard size along Y.
+PERF_X = 90.0             # ASSUMED. Perfboard size along X (7 x 9 cm board, long side along X).
+PERF_Y = 70.0             # ASSUMED.
 PERF_T = 1.6              # ASSUMED.
-PERF_HOLE_INSET = 4.0     # ASSUMED. Mounting hole inset from each edge.
+PERF_HOLE_INSET = 4.0     # ASSUMED.
 PERF_HOLE_D = 3.2         # DESIGN. M3 clearance.
 PERF_STANDOFF_H = 10.0    # VERIFIED (brief). M3 standoff height.
 PERF_STANDOFF_D = 6.0     # DESIGN.
-PERF_CX = 180.0           # DESIGN. Perfboard centre X (centre of the case).
-PERF_CY = 125.0           # DESIGN. Perfboard centre Y.
+PERF_CX = 240.0           # DESIGN. Perfboard centre X.
+PERF_CY = 170.0           # DESIGN. Perfboard centre Y.
 ULN_SIZE = (19.5, 6.5, 4.6)  # ASSUMED. ULN2003 DIP-16 length, width, height.
 BREAKOUT_SIZE = (52.0, 22.0, 8.0)  # ASSUMED. GPIO ribbon breakout board.
-BREAKOUT_CX = 90.0        # DESIGN. Between the Pi header and the perfboard.
-BREAKOUT_CY = 96.0        # DESIGN.
-GPIO_RIBBON_LEN = 150.0   # ASSUMED. Ribbon cable length available.
+BREAKOUT_CX = 156.0       # DESIGN. Between the Pi and the perfboard.
+BREAKOUT_CY = 161.0       # DESIGN.
+BREAKOUT_PAD_PITCH = 4.0  # DESIGN. Pitch of the signal pads along the breakout.
 
 # --------------------------------------------------------------------------
-# BOTTOM PANEL
+# WIRES (thin tubes, colours follow the wiring table in blueprints/2d/wiring-diagram.svg)
 # --------------------------------------------------------------------------
-FOOT_D = 15.0         # ASSUMED. Rubber foot diameter.
-FOOT_H = 6.0          # ASSUMED. Rubber foot height.
-FOOT_HOLE_D = 4.2     # ASSUMED. Foot screw hole (M4).
-FOOT_INSET = 30.0     # DESIGN. Foot centre distance from the two nearest outer edges.
-BOTTOM_VENT_Y = 60.0  # DESIGN. Only used when ENABLE_BOTTOM_VENTS.
+WIRE_R = 0.9              # DESIGN. Wire tube radius.
+CABLE_R = 2.5             # DESIGN. HDMI and USB cable tube radius.
+RIBBON_R = 3.0            # DESIGN. GPIO ribbon tube radius.
+WIRE_SLACK = 1.10         # DESIGN. Extra length over the straight path for bends.
+LIMIT_BUTTON = 300.0      # ASSUMED. Max length of a button wire (wiring table rule: under 30 cm).
+LIMIT_LED_IN = 200.0      # ASSUMED. Max length of a GPIO-to-ULN2003 LED wire (rule: under 20 cm).
+LIMIT_LED_OUT = 300.0     # ASSUMED. Max length of a ULN2003 output to LED wire (not in the table; same as buttons).
+LIMIT_POWER = 300.0       # ASSUMED. Max length of 5V and GND wires.
+RIBBON_LEN = 150.0        # ASSUMED. GPIO ribbon cable length available.
+HDMI_MINI_LEN = 500.0     # ASSUMED. Cable length from Pi micro-HDMI 1 to the mini screen (wiring table: 0.5 m).
 
 # --------------------------------------------------------------------------
-# BACK PANEL: cable cutouts and fan (positions are world X, so inside the case
-# they line up with what is in front of them)
+# RENDERING
 # --------------------------------------------------------------------------
-CUT_Z = 24.0           # DESIGN. Centre height of the cable cutouts.
-HDMI_CUT = (24.0, 12.0)   # ASSUMED. micro-HDMI to HDMI adapter cable to the main monitor, plug passes through. Width, height.
-USBC_CUT = (18.0, 10.0)   # ASSUMED. Pi USB-C power plug passes through.
-MIC_CUT = (16.0, 10.0)    # ASSUMED. USB-A plug of the mic cable passes through.
-HDMI0_CUT_X = 98.0     # DESIGN. Cutout for the cable from micro-HDMI 0.
-SCREEN_PWR_CUT = (16.0, 10.0)  # ASSUMED. Cable hole for the mini screen USB power cable (from an outside charger); a USB-A plug passes through. Width, height.
-SCREEN_PWR_CUT_X = 68.0   # DESIGN. World X of that hole (the old second HDMI cutout position).
-SCREEN_PWR_CABLE_LEN = 450.0  # ASSUMED. Length of the screen power cable available inside the case.
-USBC_CUT_X = 127.0     # DESIGN.
-MIC_CUT_X = 38.0       # DESIGN.
-
-FAN_SIZE = 40.0           # VERIFIED (brief). 40 mm fan.
-FAN_T = 10.0              # ASSUMED. Fan thickness.
-FAN_HOLE_SPACING = 32.0   # VERIFIED (brief). Screw hole spacing.
-FAN_SCREW_D = 3.4         # DESIGN. M3 clearance.
-FAN_AREA_D = 37.0         # DESIGN. Airflow area covered by the grille (fan frame opening).
-FAN_GRILLE_HOLE_D = 4.0   # DESIGN. Diameter of each grille hole.
-FAN_GRILLE_WEB = 1.5      # DESIGN. Material left between neighbouring grille holes. Vent holes are exempt from MIN_HOLE_GAP; they keep MIN_HOLE_GAP from the screw holes and MIN_EDGE_GAP from panel edges.
-FAN_GRILLE_MIN_RATIO = 0.6  # DESIGN. If the grille's open area is below this fraction of the plain opening, build the plain opening instead.
-FAN_PLAIN_OPENING_D = 31.0  # DESIGN. Fallback single opening; the largest round hole that keeps 5 mm to the screw holes.
-FAN_CX = 90.0             # DESIGN. World X of the fan centre.
-FAN_CZ = 110.0            # DESIGN. High on the back.
-
-# Cable reach rules (used by the checks)
-HDMI_PLUG_LEN = 25.0      # ASSUMED. Straight, stiff length of a micro-HDMI plug plus strain relief.
-USBC_PLUG_LEN = 22.0      # ASSUMED. Same for the USB-C power plug.
-CABLE_MIN_BEND_R = 20.0   # ASSUMED. Smallest comfortable cable bend radius.
-CABLE_MAX_EXIT_ANGLE = 45.0   # DESIGN. Steepest angle a cable may leave its plug axis, degrees.
-USB_PLUG_CLEAR = 30.0     # ASSUMED. Room needed left of the Pi for the mic USB-A plug.
-MIC_CABLE_LEN = 500.0     # ASSUMED. Mic cable length available inside the case.
-
-# --------------------------------------------------------------------------
-# SIDE VENTS (intake, low on both sides)
-# --------------------------------------------------------------------------
-VENT_SLOT_W = 4.0              # DESIGN.
-VENT_SLOT_L = 40.0             # DESIGN.
-VENT_ROWS_Z = (17.0, 29.0)     # DESIGN. Row centre heights.
-VENT_COLS_U = (50.0, 100.0, 150.0, 200.0)  # DESIGN. Slot centres along the side panel (outside view, from its left edge).
-
-# --------------------------------------------------------------------------
-# PRINTED PARTS AND RENDERING
-# --------------------------------------------------------------------------
-SPACER_OD = 5.0           # DESIGN. Printed screen spacer outer diameter.
 RENDER_SIZE = (1600, 1100)  # DESIGN. PNG size in pixels.

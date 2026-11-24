@@ -8,3 +8,4 @@ Older reference material. DRAFT and SUPERSEDED. Nothing here is current. The cur
 - `older-svgs/`: 2 SVG drawings from 2026-11-22 (electrical schematic, wiring diagram), older than the R3 PNGs.
 - `ui-design-system/`: dashboard UI design tokens and HTML component previews. Its `Hardware.md` describes an earlier case layout and still shows the speaker grille and a red AGENT 1 LED.
 - `overnight-notes/MORNING_SUMMARY_2026-11-23.md`: overnight summary, source of the status, budget and decision figures.
+- `R4.2-boxed/`: the boxed alternative, Rev R4.2. Finger-jointed clear acrylic case with a 40 mm fan. Its `blueprints/` (STEP, DXF, drawings, renders, CHECKS) and the CadQuery source (`cad-source/`) as they were when R5 replaced it. Also at git tag `r4.2-boxed`.

@@ -2,6 +2,14 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-23, R5 (open frame)
+- Redesign: open-frame cyberdeck, no enclosure. Base plate 330 x 220 mm with the Pi 5, perfboard with ULN2003 and the GPIO breakout exposed on standoffs; separate 300 x 70 mm control strip at a 20 degree slope on two laser-cut brackets; mini screen on a small angled laser-cut stand; monitor behind on its own kickstand. No fan, side walls, lid or back panel.
+- Wires modelled as colour-coded tubes following the wiring table; cable-tie slot pairs in the base along the routes.
+- Parametric CadQuery rebuilt in `cad/` (same `params.py` / `build.py` / checks setup). Checks: no collisions, holes with 5 mm margins, every part fits a 305 x 406 mm sheet, tabs and slots mate, 50 mm and 75 mm clearances against the base, wire and cable lengths, 15 mm margins on the base. All pass.
+- Outputs in `blueprints/R5/`: STEP per part and `si_console_assembly_R5.step`, DXF per laser part and 2 nested sheets, dimensioned drawings (SVG, PDF), renders (hero, front, top, exploded).
+- BOM: 5V case fan removed, acrylic buy cut from 6 sheets to a 4-pack (2 needed, 2 spare). Fundable total 767.15 CAD (was 791.33).
+- R4.2 (boxed case) moved to `research/R4.2-boxed/` with its source; git tag `r4.2-boxed`. `blueprints/R4.2/` removed from `blueprints/`.
+
 ## 2026-11-23, Architecture visualizations
 - `docs/ARCHITECTURE_DIAGRAMS.md`: 9 Mermaid diagrams covering the whole merged v1 architecture (big picture, state machine, end-to-end flow, safety stack, memory/state, providers, offline fallback, external agents, ownership). Each has a per-part DONE/PARTIAL/GAP legend. Indexed in README, llms.txt, INDEX.json. Spec remains authoritative.
 

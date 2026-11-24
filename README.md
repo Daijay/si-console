@@ -29,11 +29,11 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 
 ## Current status (2026-11-23)
 
-- **Rev R4.2 CAD is built**: parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, STL, laser DXF (4 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R4.2/`. All six automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF.
-- BOM Rev R2.1 with both cuts: 791.33 CAD fundable before tax, under the 800 CAD team limit. See `bom/BOM_NOTES.md`.
-- R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4.
+- **Rev R5 CAD is built**: open-frame "cyberdeck" (no enclosure) as a parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, laser DXF (2 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R5/`. All automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF. The boxed design (R4.2) is the alternative in `research/R4.2-boxed/`.
+- BOM: 767.15 CAD fundable before tax after the R5 changes (fan and 2 acrylic sheets removed; 791.33 before), under the 800 CAD team limit. See `bom/BOM_NOTES.md`.
+- R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4 and R5.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
-- A candidate laser cut file now exists from R4 (`blueprints/R4.2/dxf/`), pending Hasan's review and the caliper measurements.
+- A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
 - Code tests: run once on 2026-11-23, **89 passed** (79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
@@ -43,13 +43,13 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - Model router: DeepSeek only at the booth (recommended, pending).
 - Both BOM cuts applied: no spare microSD, no USB soundbar (monitor speakers over HDMI).
 
-## Open decisions (R3 review, see `docs/decisions.md`; R4 outcomes noted there)
+## Open decisions (R3 review, see `docs/decisions.md`; R4 and R5 outcomes noted there)
 
-1. Mini screen cutout: R4 cuts the window to the visible area and mounts the module under the panel (bezel is a switch). Measure the real visible area.
-2. Soundbar cut: R4 has no soundbar and no grille. Done in CAD.
-3. Pi 5 port side: R4 rotates the Pi 180 degrees so power and HDMI face the back. Dry fit the cables.
+1. Mini screen cutout: no longer applies in R5, the screen sits on an angled stand instead of in a panel.
+2. Soundbar cut: no soundbar and no grille in R4 or R5. Done in CAD.
+3. Pi 5 port side: the Pi is rotated 180 degrees so power and HDMI face the back and the cables leave off the back edge. Dry fit the cables.
 4. AGENT 1 LED is white with a 100 ohm resistor (closed in R4.1; bench-measure the white Vf).
-5. Laser cut file: R4 supplies a candidate DXF. Hasan reviews it before anything is cut.
+5. Laser cut file: R5 supplies a candidate DXF. Hasan reviews it before anything is cut.
 
 ## Where to find things
 
@@ -60,7 +60,8 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 | Architecture visualizations (9 Mermaid diagrams) | `docs/ARCHITECTURE_DIAGRAMS.md` |
 | GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
 | BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
-| R4 CAD (parametric), outputs and checks | `cad/`, `blueprints/R4.2/` |
+| R5 CAD (parametric, open frame), outputs and checks | `cad/`, `blueprints/R5/` |
+| R4.2 boxed case alternative | `research/R4.2-boxed/` |
 | 2D drawings (SVG sources and PNG, R3) | `blueprints/2d/` |
 | 3D: STEP per part and assembly, STL, renders | `blueprints/3d/` |
 | Onshape / Fusion import steps | `docs/ONSHAPE_IMPORT.md` |

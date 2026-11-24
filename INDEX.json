@@ -50,7 +50,7 @@
   {
     "path": "docs/decisions.md",
     "type": "doc",
-    "description": "Decisions, R3 review items (OPEN 1 to 5) and the R4 outcomes",
+    "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes and the R5 open-frame decision",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -66,7 +66,7 @@
   {
     "path": "bom/BOM.csv",
     "type": "data",
-    "description": "Only current BOM, Rev R2.1, both cuts, 791.33 CAD",
+    "description": "Only current BOM, Rev R5 on R2.1 (fan and 2 acrylic sheets removed), 767.15 CAD fundable",
     "status": "LIKELY",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -298,7 +298,7 @@
   {
     "path": "cad/README.md",
     "type": "doc",
-    "description": "How to run and change the R4 parametric CAD, Pi orientation, ASSUMED list",
+    "description": "The R5 open-frame design, how to run and change the parametric CAD, ASSUMED list",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -306,7 +306,7 @@
   {
     "path": "cad/params.py",
     "type": "code",
-    "description": "Every R4 dimension and switch, tagged VERIFIED, ASSUMED or DESIGN",
+    "description": "Every R5 dimension and switch, tagged VERIFIED, ASSUMED or DESIGN",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -314,7 +314,7 @@
   {
     "path": "cad/build.py",
     "type": "code",
-    "description": "Builds all R4 outputs and runs the checks",
+    "description": "Builds all R5 outputs and runs the checks",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -330,7 +330,7 @@
   {
     "path": "cad/output/CHECKS.md",
     "type": "doc",
-    "description": "R4 check results (collisions, holes, sheet fit, fingers, clearances, cables)",
+    "description": "R5 check results (collisions, holes, sheet fit, tabs and slots, clearances, wires, margins)",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
@@ -344,50 +344,106 @@
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.2/si_console_assembly_R4.2.step",
-    "type": "data",
-    "description": "R4 full assembly STEP",
+    "path": "cad/geo.py",
+    "type": "code",
+    "description": "Shared geometry helpers (tilted frames, Pi, pins)",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.2/step/",
-    "type": "data",
-    "description": "R4 STEP, one per part (26)",
+    "path": "cad/panels.py",
+    "type": "code",
+    "description": "The 5 laser parts as 2D models plus 3D solids",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.2/stl/",
-    "type": "data",
-    "description": "R4 STL for 3D printed parts (screen spacers, or bezel)",
+    "path": "cad/parts.py",
+    "type": "code",
+    "description": "Components, wire tubes and the assembly",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.2/dxf/",
-    "type": "data",
-    "description": "R4 laser DXF per panel (kerf applied) and nested sheets, 4 sheets of 12 x 16 in; needs review before cutting",
+    "path": "cad/wires.py",
+    "type": "code",
+    "description": "Wire and cable routes, colours, length limits, tie slots",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.2/drawings/",
-    "type": "data",
-    "description": "R4 dimensioned panel drawings, SVG per panel and one PDF",
+    "path": "cad/checks.py",
+    "type": "code",
+    "description": "R5 design checks",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
   },
   {
-    "path": "blueprints/R4.2/renders/",
-    "type": "data",
-    "description": "R4 labelled renders: hero, front, top, back, exploded, see-through",
+    "path": "cad/outputs.py",
+    "type": "code",
+    "description": "STEP, DXF, nesting and drawings",
     "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/render.py",
+    "type": "code",
+    "description": "Labelled PNG renders",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/si_console_assembly_R5.step",
+    "type": "data",
+    "description": "R5 full assembly STEP",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/step/",
+    "type": "data",
+    "description": "R5 STEP, one per part and per wire",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/dxf/",
+    "type": "data",
+    "description": "R5 laser DXF per part (kerf applied) and 2 nested sheets of 12 x 16 in; needs review before cutting",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/drawings/",
+    "type": "data",
+    "description": "R5 dimensioned drawings of every laser part, SVG per part and one PDF",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/renders/",
+    "type": "data",
+    "description": "R5 renders: hero, front, top, exploded",
+    "status": "DRAFT",
+    "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "research/R4.2-boxed/",
+    "type": "research",
+    "description": "Boxed alternative, Rev R4.2: outputs and CadQuery source, also git tag r4.2-boxed",
+    "status": "SUPERSEDED",
     "last_updated": "2026-11-23",
     "owner": "Jayden"
   }
