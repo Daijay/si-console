@@ -58,7 +58,6 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 | Decisions and open items | `docs/decisions.md` |
 | Agent runtime spec (authoritative v1) and gaps | `docs/ARCHITECTURE.md` |
 | Architecture visualizations (9 Mermaid diagrams) | `docs/ARCHITECTURE_DIAGRAMS.md` |
-| Software architecture writeup (short prose) | `docs/SOFTWARE_ARCHITECTURE.md` |
 | GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
 | BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
 | R5 CAD (parametric, open frame), outputs and checks | `cad/`, `blueprints/R5/` |
