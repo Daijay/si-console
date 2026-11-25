@@ -2,6 +2,13 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-25, screen UI design and mockups
+- Research, direction choice and full screen spec: `docs/UI_RESEARCH.md`, `docs/UI_SPEC.md`.
+- Static mockups with fake data for 33 states on both screens in EN and ZH: `code/dashboard/mockups/`; screenshots in `docs/images/ui/`.
+- `code/dashboard/strings.json`: added `ui_` screen strings; spoken sentences unchanged. Chinese not reviewed by a native speaker.
+- UI skills added under `.claude/skills/`.
+- Not wired to the console; no change under `code/si_console/`. Missing bridge work is listed in `docs/UI_SPEC.md` section 7.
+
 ## 2026-11-24, BOM: soundbar, spare card, API credits
 - Restored the USB soundbar (25.99) and the spare microSD 32GB (27.99); added DeepSeek and Bocha API credits (40.00).
 - Fundable total 851.13 CAD before tax (was 757.15; the printed wedge removal had taken it from 767.15 to 757.15), 953.27 with tax. Over the 800 CAD team limit by 51.13.

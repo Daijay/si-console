@@ -1,0 +1,79 @@
+/* SI Console screen tokens. Neutrals and the ember brand colour come from
+   the existing theme.css; this file adds state and agent colours. */
+@import url("../../theme.css");
+@import url("../fonts/fonts.css");
+
+:root {
+  --ink: #f4f6f8;
+  --ink-2: #bcc4cf;          /* secondary text, 10.8:1 on --bg */
+  --ink-dark: #07090b;       /* text on lit tiles and on green */
+  --line: #3a424e;
+  --off: #232830;
+  --edge: #66707f;           /* idle graph arrows, 3.8:1 on --bg */
+
+  /* Identity colours match the four panel LEDs. */
+  --coord: #3ddc84;
+  --a1: #f4f6f8;
+  --a2: #5aa9ff;
+  --guard: #ffd23f;
+
+  /* Red and green button fills are reserved for the two buttons and the
+     kill switch. Faults use white on a hatched band instead. */
+  --approve: #3ddc84;
+  --reject: #c4151c;
+  --kill: #b30f16;
+
+  --deck: "SI Deck", "SI Sans SC", "Noto Sans CJK SC", sans-serif;
+  --deck-mono: "SI Term", "SI Sans SC", "Noto Sans CJK SC", monospace;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-state: 200ms;
+  --t-takeover: 180ms;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: dark; }
+body {
+  font-family: var(--deck);
+  color: var(--ink);
+  background: var(--bg);
+  overflow: hidden;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+html[lang="zh"] body { line-break: strict; }
+
+.who-coord { --c: var(--coord); }
+.who-a1 { --c: var(--a1); }
+.who-a2 { --c: var(--a2); }
+.who-guard { --c: var(--guard); }
+.who-you { --c: var(--ink-2); }
+
+.icon { width: 1em; height: 1em; flex: none; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; }
+
+/* ---------- shared motion: transform and opacity only ---------- */
+@keyframes alive { 0%, 100% { opacity: 0; transform: scale(1); } 50% { opacity: 1; transform: scale(1.035); } }
+@keyframes slow-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .25; } }
+@keyframes fast-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .25; } }
+@keyframes attention { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
+@keyframes breathe { 0%, 100% { opacity: .18; transform: scale(.82); } 25% { opacity: 1; transform: scale(1); } 55% { opacity: .18; transform: scale(.82); } }
+@keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes takeover { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes travel { from { transform: translateX(0); } to { transform: translateX(100%); } }
+@keyframes drain { from { transform: scaleX(var(--from, 1)); } to { transform: scaleX(0); } }
+@keyframes mic { 0%, 100% { transform: scaleY(var(--lo)); } 50% { transform: scaleY(var(--hi)); } }
+@keyframes dots { 0%, 60%, 100% { opacity: .2; } 30% { opacity: 1; } }
+@keyframes toast { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+.enter { animation: enter var(--t-state) var(--ease-out) both; }
+
+.hatch {
+  background: repeating-linear-gradient(-45deg, #f4f6f8 0 14px, #07090b 14px 28px);
+}
+
+/* Screenshot and reduced-motion mode: hold every loop on its lit frame. */
+html.still *, html.still *::before, html.still *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

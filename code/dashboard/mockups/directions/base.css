@@ -1,0 +1,9 @@
+/* Shared by the three direction studies only. */
+@import url("../../theme.css");
+@import url("../fonts/fonts.css");
+*{box-sizing:border-box;margin:0;padding:0}
+body{overflow:hidden}
+.view{display:none;position:relative;overflow:hidden}
+.mini{width:800px;height:480px}
+.mon{width:1920px;height:1080px}
+body[data-view=idle] #idle,body[data-view=approval] #approval,body[data-view=monitor] #monitor{display:flex;flex-direction:column}

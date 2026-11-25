@@ -56,6 +56,22 @@
     "owner": "Jayden, Christopher"
   },
   {
+    "path": "docs/UI_SPEC.md",
+    "type": "doc",
+    "description": "Screen design for the 5 inch screen and monitor: states, drivers, motion, missing bridge work",
+    "status": "DRAFT",
+    "last_updated": "2026-11-25",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/UI_RESEARCH.md",
+    "type": "doc",
+    "description": "UI skills used, visual references and design principles",
+    "status": "DRAFT",
+    "last_updated": "2026-11-25",
+    "owner": "Jayden"
+  },
+  {
     "path": "docs/decisions.md",
     "type": "doc",
     "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes, R5 open-frame, and the accepted 2026-11-25 model router decision (see MODEL_TIERS.md)",
