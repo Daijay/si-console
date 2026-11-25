@@ -14,7 +14,7 @@ Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py
 - Voice intents: negations were case-sensitive, so STT text "Don't buy XLK" or "Never buy XLE" became a buy proposal. Reject phrases ("do not approve", "不要这个") were unreachable behind the negation check.
 - Rules engine: a sector with no price file got momentum 0 and was proposed in any falling market. No history now means no signal; no SPY history means hold cash.
 - Vault: a UTF-8 BOM made a note vanish from `list_tasks`; `depends_on` ids and research `task_id` are validated against the id rule.
-- GPIO map: AGENT 1 resistor 220 → 100 ohm (white LED, closed in R4.1 per `docs/GPIO_PIN_MAP.md`).
+- Not changed: `gpio_map.py` still lists AGENT 1 as 220 ohm (R2), while `docs/GPIO_PIN_MAP.md` R4.1 says white, 100 ohm. ARCHITECTURE.md leaves this to Jayden + Christopher to reconcile.
 - `.env.example` was documented but never committed (`.gitignore` `.env.*` swallowed it); added with names only. Empty path variables in `.env` no longer resolve to the working directory.
 - Removed a duplicate `tier_config` in `models.py`.
 - Known, not fixed: no real wait for green inside the coordinator (skeleton logs the pause), DNS rebinding between the `fetch_url` check and connect, `SI_DEEPSEEK_DAILY_CAP_USD` is read but not enforced, claims.json has no file lock.
