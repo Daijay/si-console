@@ -2,6 +2,12 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-24, R5 submission assets
+- New R5 wiring diagram `blueprints/R5/wiring_diagram_R5.svg` and `.png` (generator `cad/wiring_diagram.py`).
+- R5 hero, front, top and exploded renders copied to `docs/images/`.
+- R3 2D drawings in `blueprints/2d/` marked superseded by R5.
+- `cad/build.py` no longer deletes other files in `blueprints/R5/` when it copies finals.
+
 ## 2026-11-24, Accepted model roster implemented in code
 `code/` no longer routes to DeepSeek only. Implements `docs/MODEL_TIERS.md` (requested by Christopher, router owner). 163 tests pass (was 134); every provider is mocked, and no live call has been made yet.
 - `chat_client.py`: one OpenAI-compatible client for DeepSeek, Tencent Hunyuan (Hy4), Zhipu GLM 5.4, Alibaba Bailian/DashScope (Qwen4 Max, Singapore endpoint) and Xiaomi MiMo. Per-provider thinking fields; GLM effort capped at `high`. `deepseek_client.py` is now a wrapper over it.

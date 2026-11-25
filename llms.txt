@@ -29,9 +29,11 @@
 - [cad/output/CHECKS.md](cad/output/CHECKS.md): check results
 - [cad/output/ASSUMED.md](cad/output/ASSUMED.md): measure with calipers before cutting
 - [blueprints/R5/](blueprints/R5/): finals. `si_console_assembly_R5.step`, `step/`, `dxf/` (laser, 2 sheets), `drawings/` (SVG, PDF), `renders/`
+- [blueprints/R5/wiring_diagram_R5.svg](blueprints/R5/wiring_diagram_R5.svg): current wiring diagram ([PNG](blueprints/R5/wiring_diagram_R5.png))
+- [docs/images/](docs/images/): R5 renders
 - [research/R4.2-boxed/](research/R4.2-boxed/): the boxed case alternative (Rev R4.2) with its outputs and source
 
-## Blueprints (R3, reference only)
+## Blueprints (R3, SUPERSEDED by R5)
 - [blueprints/2d/case-panels-R3.png](blueprints/2d/case-panels-R3.png): case panel drawings
 - [blueprints/2d/electrical-schematic-R3.png](blueprints/2d/electrical-schematic-R3.png): electrical schematic
 - [blueprints/2d/wiring-diagram-R3.png](blueprints/2d/wiring-diagram-R3.png): wiring diagram
