@@ -1,7 +1,6 @@
 # SI Console Detailed
 
 Date: 2026-11-23.
-Status: DRAFT REFERENCE. Not for Fallen submission. Not Jayden's README.
 Rev: R2.1 for BOM and power. Wiring and GPIO map follow GPIO_PIN_MAP.md (updated 2026-11-24). Rev R3 for the case drawings, power diagram, and 3D model, in blueprints-R3/. The R3 drawings supersede the R2 drawings. In the repo, the R3 drawings live in blueprints/ and the 3D files in cad/.
 Model note: the model-router sections below describe the 2026-11-23 two-option decision (DeepSeek plus Claude vs DeepSeek only). The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25) and supersedes those options for model selection.
 Source folder: ~/workspace/si-console-research-2/
@@ -111,7 +110,7 @@ The earlier proposal to cut the spare 32GB microSD (27.99) and the USB soundbar 
 | 5V case fan | 2-wire red and black leads, 130 mm cable. Draws 140 mA, 0.7W. Mounts on the rear wall, exhaust high. Replaces the AC Infinity MULTIFAN S5 at 25.99 CAD, saves 21.80 CAD. VERIFIED 2026-11-23. |
 | M2.5 standoff kit | Needed because the Hilitchi kit has no M2.5. Pi mounting holes are M2.5. LIKELY. |
 
-### 2.5 Self-funded and reference only rows
+### 2.5 Self-funded and uncounted rows
 
 | Part | Model | Qty | Unit CAD | Store | Status | Link |
 |---|---|---|---|---|---|---|
@@ -551,7 +550,7 @@ How slides are shown on screen is undefined. make_slides writes a .pptx to the v
 
 ## 8. Autumn reuse plan
 
-Autumn is Jayden's FastAPI plus React dashboard, local-first, private repo Daijay/autumn, head commit d88368d, 2026-09-07. Scratch copy at ~/workspace/si-console-research-2/scratch/autumn-clone/. 79 files, local git only, no remote, never pushed, real repo never edited.
+Autumn is Jayden's FastAPI plus React dashboard, local-first, repo Daijay/autumn, head commit d88368d, 2026-09-07. Scratch copy at ~/workspace/si-console-research-2/scratch/autumn-clone/. 79 files, local git only, no remote, never pushed, real repo never edited.
 
 ### 8.1 Audit findings
 
@@ -635,7 +634,7 @@ Safety: safety glasses on. Soldering iron 60W adjustable. Borrow first. Do not s
 | Dates | Work | Gate |
 |---|---|---|
 | Fri Nov 20 | Design day 1. Research, blueprints, ARCHITECTURE.md, INTEGRATION.md, BOM.csv, LASER_AND_TOOLS.md, BUILD_PLAN.md, TEST_PLAN.md, DEMO_SCRIPT.md, OPEN_QUESTIONS.md, MORNING_SUMMARY.md. | Research done. |
-| Sat Nov 21 to Sun Nov 22 | Design days 2 to 3. Budget and monitor decisions. Start CAD. Draw all 6 acrylic panels. Cardboard mockup. Test button spacing. Start the starter firmware skeleton, reference only. | Cardboard mockup passes Stage 0. CAD draft is complete enough to send for a quote. |
+| Sat Nov 21 to Sun Nov 22 | Design days 2 to 3. Budget and monitor decisions. Start CAD. Draw all 6 acrylic panels. Cardboard mockup. Test button spacing. Start the starter firmware skeleton. | Cardboard mockup passes Stage 0. CAD draft is complete enough to send for a quote. |
 | Mon Nov 23 to Tue Nov 24 | Submit the Fallen design package. Ask Fallen the grant cap, approval time, self-funded parts, AI-assisted code with disclosure, team size. See section 13.4. Send the CAD files to MakerLabs for a quote in parallel. Do not wait for Fallen approval to get a laser quote. | Submission sent. MakerLabs quote in hand. Laser cost known, 50 to 90 CAD ASSUMED. |
 | Wed Nov 25 to Fri Nov 27 | Approval window, ASSUMED 2 to 4 business days. If approval comes early, move the order up. If approval is late, do not order the Pi on a guess. Wait for approval. Use the wait to finish the firmware skeleton and the voice test plan. If approval has not come by Fri Nov 27, email Fallen once to ask for a status update. | Fallen approval received, or a clear no-go date is set. |
 | Mon Nov 30 | Parts arrival target. Order the PiShop.ca parts in one order on approval: Pi 5 8GB, PSU, cooler, microSD, mini screen. Order buttons, kill switch, LEDs, perfboard, wires, breakout, acrylic, cables, mic, speaker, travel adapter. Recheck every ASSUMED price at checkout before paying. If the spare card cut is not taken, clone the microSD as soon as the first card is flashed and keep the spare card in carry-on. If the cut is taken, back up the image to a laptop instead. | All parts are in hand, or a missing part has a named fallback and a new arrival date. |

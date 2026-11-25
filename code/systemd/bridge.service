@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton systemd unit. Reference only. Not for Fallen submission.
 # Autumn used Windows autostart. That is dropped. The Pi uses systemd.
 # One unit per process: bridge, coordinator, dashboard. Restart on failure.
 # The bridge must be up before the coordinator writes a task, or the

@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # These tests check the coordinator validation, the tool registry,
 # the voice matcher, and the rules engine lookahead rule. None of
 # them calls DeepSeek. None needs a Pi. None needs an API key.

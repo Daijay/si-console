@@ -99,7 +99,7 @@ Christopher owns router, policy, injection guard, telemetry, state machine code.
 
 ## Implementation gaps (DRAFT, code review 2026-11-23)
 
-The `code/` skeleton is DRAFT REFERENCE and does not yet implement all of the
+The code in `code/` does not yet implement all of the
 above. This list is for planning. It does not change the authoritative spec.
 
 | Spec requirement | Current skeleton | Gap |

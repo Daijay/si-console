@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file is Autumn's autumn/groq_client.py, rewired for DeepSeek.
 # What changed: the provider is DeepSeek, reached through its OpenAI
 # compatible API at the base URL in config. The Groq SDK is gone.

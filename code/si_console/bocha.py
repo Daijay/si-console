@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The Bocha client is new code. Autumn had no web search client.
 # The tool is web_search, tag SAFE, per ARCHITECTURE.md section 5.4.
 # Rules from the architecture: search is research only. Results never

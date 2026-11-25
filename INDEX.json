@@ -90,7 +90,7 @@
   {
     "path": "blueprints/2d/case-panels-R3.png",
     "type": "drawing",
-    "description": "Superseded by R5. Case panel drawings R3, reference only, known errors",
+    "description": "Superseded by R5. Case panel drawings R3, known errors",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Hasan"
@@ -210,7 +210,7 @@
   {
     "path": "blueprints/2d/case-drawings.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: case-drawings, reference only",
+    "description": "Superseded by R5. R3 SVG source: case-drawings",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Hasan"
@@ -218,7 +218,7 @@
   {
     "path": "blueprints/2d/connection-diagram.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: connection-diagram, reference only",
+    "description": "Superseded by R5. R3 SVG source: connection-diagram",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -226,7 +226,7 @@
   {
     "path": "blueprints/2d/electrical-schematic.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: electrical-schematic, reference only",
+    "description": "Superseded by R5. R3 SVG source: electrical-schematic",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -234,7 +234,7 @@
   {
     "path": "blueprints/2d/power-diagram.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: power-diagram, reference only",
+    "description": "Superseded by R5. R3 SVG source: power-diagram",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -242,7 +242,7 @@
   {
     "path": "blueprints/2d/wiring-diagram.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: wiring-diagram, reference only",
+    "description": "Superseded by R5. R3 SVG source: wiring-diagram",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -250,7 +250,7 @@
   {
     "path": "blueprints/3d/si_console_assembly.step",
     "type": "cad",
-    "description": "Full assembly STEP, R3, reference only",
+    "description": "Full assembly STEP, R3, superseded",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Hasan"
@@ -274,7 +274,7 @@
   {
     "path": "code/README.md",
     "type": "doc",
-    "description": "DRAFT REFERENCE layout and test command",
+    "description": "What is built, what is planned, and the test command",
     "status": "DRAFT",
     "last_updated": "2026-11-23",
     "owner": "Christopher"

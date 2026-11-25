@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # These tests check the GPIO pin map in gpio_map.py. No test
 # touches real GPIO. No test needs a Pi. The map is the single
 # source of truth. gpio_test.py imports it, it does not copy it.

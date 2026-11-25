@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file holds the shared error shapes. It is copied from Autumn's
 # autumn/schema.py and autumn/models.py, which both use the same idea:
 # one error type per layer, with a message, a fix the user can act on,

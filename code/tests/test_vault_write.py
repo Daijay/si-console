@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # These tests are Autumn's test_vault_write.py, adapted for frontmatter.
 # Autumn's test used a scratch note and a hash check of every other
 # note. This test does the same shape: create a note, change its

@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # Jev 1.14 judge (TypeSafe), per docs/MODEL_TIERS.md. A decision model,
 # not a worker: it returns typed, calibrated decisions in ~100 ms and
 # cannot write code. Used for ambiguous routing, winner pick and tab

@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # GPIO test script. Run this on the Pi before connecting the bridge
 # program. It tests buttons, LEDs through the ULN2003, the kill
 # switch, and the language toggle, one at a time, with plain output.

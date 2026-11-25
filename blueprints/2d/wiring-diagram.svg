@@ -5,7 +5,6 @@
 <text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
 <text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">02 WIRING DIAGRAM</text>
 <text x="700" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
-<text x="700" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
 <text x="20" y="88" font-family="monospace" font-size="13" fill="#000">Physical layout, wire colours, labels, lengths. Breakout to each part.</text>
 <text x="20" y="120" font-family="monospace" font-size="14" font-weight="bold">WIRING LAYOUT, TOP VIEW, INSIDE CASE 360 x 240 mm, LOOKING DOWN</text>
 <rect x="80" y="140" width="1040" height="520" fill="none" stroke="#000" stroke-width="3"/>
@@ -67,5 +66,4 @@
 <text x="20" y="1255" font-family="monospace" font-size="11" fill="#c00">* Speaker grille size and position ASSUMED. Measure the real soundbar first.</text><text x="20" y="1272" font-family="monospace" font-size="11" fill="#c00">* GND pin sharing in the table is ASSUMED. Any Pi GND pin works. Use pins 6, 9, 14, 20, 25, 30, 34, 39.</text>
 <rect x="20" y="1307" width="1160" height="54" fill="none" stroke="#000" stroke-width="2"/>
 <text x="30" y="1327" font-family="monospace" font-size="12">Project: SI Console | Drawing: 02 WIRING DIAGRAM | Rev: R3 | Date: 2026-11-23</text>
-<text x="30" y="1347" font-family="monospace" font-size="12" font-weight="bold">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
 </svg>

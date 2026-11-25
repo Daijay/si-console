@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # One client for every chat provider in the accepted roster
 # (docs/MODEL_TIERS.md): DeepSeek, Tencent Hunyuan (Hy4), Zhipu GLM,
 # Alibaba Bailian/DashScope (Qwen4 Max) and Xiaomi MiMo. All five speak

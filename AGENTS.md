@@ -11,9 +11,9 @@ SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 in
 - `cad/`: Rev R5 (open frame) parametric CadQuery model (`params.py`, `build.py`, `README.md`). Regenerate with `python build.py`; do not hand-edit `cad/output/` or `blueprints/R5/`.
 - `blueprints/R5/`: R5 finals (STEP, DXF, drawings, renders) copied from `cad/output/`.
 - `research/R4.2-boxed/`: the boxed alternative (R4.2), historical; do not edit.
-- `blueprints/2d/`: R3 SVG sources and PNGs, reference only.
-- `blueprints/3d/`: STEP (one per part plus `si_console_assembly.step`), STL, renders. Generated from a parametric CadQuery model; reference only.
-- `code/`: DRAFT REFERENCE scratch code (`si_console/`, `tests/`, `systemd/`, `dashboard/`).
+- `blueprints/2d/`: R3 SVG sources and PNGs, superseded by R5.
+- `blueprints/3d/`: STEP (one per part plus `si_console_assembly.step`), STL, renders. Generated from a parametric CadQuery model; superseded by R5.
+- `code/`: Python code (`si_console/`, `tests/`, `systemd/`, `dashboard/`).
 - `research/`: superseded material. Never cite it as current.
 - Index files: `README.md` (humans), `llms.txt`, `INDEX.json`, `CHANGELOG.md`.
 

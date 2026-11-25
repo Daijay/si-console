@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton systemd unit. Reference only. Not for Fallen submission.
 # The coordinator runs the agent loop. It does not touch GPIO. It does
 # not touch state.json directly. It writes the vault, and the bridge
 # follows. The coordinator waits for the bridge to be up first.

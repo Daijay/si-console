@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton requirements. Reference only. Not for Fallen submission.
 # Every version is pinned. Autumn's requirements were unpinned, and a
 # fresh install pulled anthropic 2.11.0, fastapi 0.165.0, groq 1.7.0,
 # APScheduler 3.11.3, and google-api-python-client 2.202.0. That worked

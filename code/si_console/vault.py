@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file is new code built from two Autumn patterns, not a copy.
 # Pattern 1, from autumn/vault_writer.py: the write is atomic, temp
 # file in the same folder then os.replace, so a crash can never leave
