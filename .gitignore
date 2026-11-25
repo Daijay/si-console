@@ -1,6 +1,8 @@
 # secrets
 .env
 .env.*
+# The example holds variable names only, never values. Keep it tracked.
+!.env.example
 *.pem
 *.key
 secrets*
@@ -17,6 +19,10 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+# runtime state and telemetry (never commit)
+telemetry.sqlite
+code/state.json
+code/claims.json
 # local scratch
 *.log
 *.tmp

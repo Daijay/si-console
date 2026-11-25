@@ -32,6 +32,26 @@ class ModelError(ConsoleError):
         super().__init__("MODEL_ERROR", message, remedy, status)
 
 
+class EscalationNeeded(ModelError):
+    """T1 is exhausted or denied: the task goes to escalate_to_human
+    (MODEL_TIERS.md "Qwen4 Max -> escalate_to_human")."""
+
+    def __init__(self, message: str, remedy: str = ""):
+        super().__init__(message, remedy or "Escalate to the human at the console.", 503)
+        self.code = "ESCALATE"
+
+
+class ZeroPathNeeded(ModelError):
+    """T3 is exhausted: the caller must use a $0 code path instead
+    (voice_intents.py or a prewritten narration sentence)."""
+
+    def __init__(self, message: str, remedy: str = ""):
+        super().__init__(
+            message, remedy or "Use voice_intents.py or a prewritten sentence.", 503
+        )
+        self.code = "ZERO_PATH"
+
+
 class VaultError(ConsoleError):
     """A vault read or write could not be done safely.
 

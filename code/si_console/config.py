@@ -33,13 +33,15 @@ VAULT_IGNORE_DIRS = {".obsidian", ".trash", ".git", "node_modules", ".venv"}
 
 # State file for the screens. Outside the vault. The dashboard reads it.
 # The vault wins if state.json and the vault ever disagree.
-STATE_PATH = Path(os.getenv("SI_STATE_PATH", PROJECT_ROOT / "state.json"))
+# "or" and not a getenv default: an empty SI_STATE_PATH= line in .env
+# must fall back to the default, not become Path("") (the cwd).
+STATE_PATH = Path(os.getenv("SI_STATE_PATH", "").strip() or PROJECT_ROOT / "state.json")
 
 # Claims file for external agents. Outside the vault. See bridge.py.
-CLAIMS_PATH = Path(os.getenv("SI_CLAIMS_PATH", PROJECT_ROOT / "claims.json"))
+CLAIMS_PATH = Path(os.getenv("SI_CLAIMS_PATH", "").strip() or PROJECT_ROOT / "claims.json")
 
 # Price data lives outside the vault, so the bridge never parses big files.
-DATA_DIR = Path(os.getenv("SI_DATA_DIR", PROJECT_ROOT / "data" / "market"))
+DATA_DIR = Path(os.getenv("SI_DATA_DIR", "").strip() or PROJECT_ROOT / "data" / "market")
 
 # --- DeepSeek ------------------------------------------------------------
 # Secret. From .env only. Never logged or returned.
@@ -107,78 +109,180 @@ MODE = os.getenv("SI_MODE", "booth").strip()  # home or booth
 REPLAY_SCENARIO = os.getenv("SI_REPLAY_SCENARIO", "2020").strip()  # 2020 or 2022
 LANG = os.getenv("SI_LANG", "en").strip()  # en or zh
 
+# --- Providers (accepted roster, docs/MODEL_TIERS.md 2026-11-25) -------
+# Every provider below is reached with an OpenAI-compatible
+# /chat/completions call, except Jev, which uses the OpenRouter
+# Decisions API (see judge.py). Keys are secrets: .env only, never
+# logged or returned. Model ids are NOT hard coded: pin each one in
+# .env after checking the provider's own model list, same rule as
+# DeepSeek. A provider with no key or no model id is skipped by the
+# router, so a tier falls through to its next slot instead of failing.
+# Base URLs below were checked against provider docs on 2026-11-24
+# (LIKELY: docs read, no live call yet). Test one live call per
+# provider from Shenzhen before the booth.
+
+# Tencent Hunyuan (Hy4). T0 backup #1, T2 primary.
+HUNYUAN_API_KEY = os.getenv("HUNYUAN_API_KEY", "").strip()
+HUNYUAN_BASE_URL = (
+    os.getenv("HUNYUAN_BASE_URL", "").strip() or "https://api.hunyuan.cloud.tencent.com/v1"
+)
+HY4_MODEL = os.getenv("HY4_MODEL", "").strip()
+
+# Zhipu GLM 5.4. T0 backup #3, T2 #3. Effort is capped at "high" in
+# code (MODEL_TIERS.md: max effort burns ~1M reasoning tokens).
+# Mainland endpoint by default; the international one is
+# https://api.z.ai/api/paas/v4 with its own key.
+GLM_API_KEY = os.getenv("GLM_API_KEY", "").strip()
+GLM_BASE_URL = os.getenv("GLM_BASE_URL", "").strip() or "https://open.bigmodel.cn/api/paas/v4"
+GLM_MODEL = os.getenv("GLM_MODEL", "").strip()
+
+# Alibaba Cloud Model Studio (Bailian / DashScope), Qwen4 Max. T1, the
+# only heavy worker. Singapore (international) endpoint by default, as
+# MODEL_TIERS.md picks it for China reachability. Beijing is
+# https://dashscope.aliyuncs.com/compatible-mode/v1 (separate key).
+DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "").strip()
+DASHSCOPE_BASE_URL = (
+    os.getenv("DASHSCOPE_BASE_URL", "").strip()
+    or "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+)
+QWEN_MODEL = os.getenv("QWEN_MODEL", "").strip()
+
+# Xiaomi MiMo 2.6 Flash. T3, the only small model.
+MIMO_API_KEY = os.getenv("MIMO_API_KEY", "").strip()
+MIMO_BASE_URL = os.getenv("MIMO_BASE_URL", "").strip() or "https://api.xiaomimimo.com/v1"
+MIMO_MODEL = os.getenv("MIMO_MODEL", "").strip()
+
+# Jev 1.14 judge (TypeSafe), through OpenRouter's Decisions API.
+# Typed decisions only: ambiguous routing, winner pick, tab promotion.
+# Never a worker, never bypasses GUARD. The URL is configurable so the
+# judge can be moved to another decisions endpoint without code edits.
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
+JEV_URL = os.getenv("JEV_URL", "").strip() or "https://openrouter.ai/api/alpha/decisions"
+JEV_MODEL = os.getenv("JEV_MODEL", "").strip()
+JEV_TIMEOUT_SECONDS = int(os.getenv("SI_JEV_TIMEOUT_SECONDS", "5"))
+
+# One timeout for every chat provider. DeepSeek keeps its own setting.
+PROVIDER_TIMEOUT_SECONDS = int(os.getenv("SI_PROVIDER_TIMEOUT_SECONDS", "30"))
+
 # --- Model tiers ---------------------------------------------------------
-# Copied from Autumn config.MODEL_TIERS. Callers ask for a tier, never
-# a model. Moving a feature between tiers is a one word edit.
-#   coordinator: the agent loop. Needs tool calling. DeepSeek chat model.
-#   worker:      research and explanation. Same model, smaller budget.
-#   narration:   booth narration. No model call at all. Prewritten
-#                bilingual sentences from strings.json. This tier exists
-#                so code that asks for narration never reaches for a
-#                local LLM by accident. ARCHITECTURE.md drops Qwen in v1.
-#   premium:     optional higher tier. DeepSeek pro model only, never
-#                a Claude model in the booth build. See CLAUDE_ENABLED.
-# Claude is never called from this code. CLAUDE_ENABLED is a policy
-# flag, default false. When false, the router in models.py maps every
-# tier to a DeepSeek model and never touches Anthropic. This is on
-# purpose. Claude Fable 5.2 is real, but it costs 8 USD input and 40
-# USD output per 1M tokens, about 27 times DeepSeek flash input, and
-# Anthropic policy does not support use by persons physically in
-# mainland China, Hong Kong, or Macau, VERIFIED on Anthropic's own
-# Supported Regions page 2026-11-23. The booth is in Shenzhen. The
-# booth build ships with CLAUDE_ENABLED false and no Anthropic key
-# in .env, so the code cannot call Claude even by accident. If the
-# team later wants Claude for home use in Canada, the change is one
-# flag and one key in .env. The coordinator loop does not change.
-# There is no Anthropic client in this codebase. Do not add one for
-# the booth build. The router stub is a table and a flag, not a
-# second provider client.
+# Callers ask for a tier, never a model. The router in models.py walks
+# the tier's chain in order and falls back on any failure. The chains
+# are the accepted roster in docs/MODEL_TIERS.md:
+#   T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4
+#   T1 heavy        : Qwen4 Max -> escalate_to_human
+#   T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4
+#   T3 small        : MiMo 2.6 Flash -> $0 code paths
+# Claude is not in the roster and there is no Anthropic client. It is
+# never called from the booth build (Anthropic does not support use
+# from mainland China). CLAUDE_ENABLED stays as a policy flag only.
 CLAUDE_ENABLED = os.getenv("SI_CLAUDE_ENABLED", "false").strip().lower() == "true"
-# The Claude model string a premium tier would name if Claude were
-# ever enabled for home use. It is a name only. Nothing in this code
-# calls it. claude-opus-5-5 is the daily driver, not Fable. Fable
-# is too expensive for any tier here. VERIFIED on Anthropic docs
-# 2026-11-23: claude-opus-5-5 is 4 USD input and 20 USD output per
-# 1M tokens, claude-fable-5-2 is 8 and 40 USD.
-CLAUDE_MODEL_PREMIUM = os.getenv("SI_CLAUDE_MODEL_PREMIUM", "claude-opus-5-5").strip()
-LIGHT = "light"
-COORDINATOR = "coordinator"
-WORKER = "worker"
+CLAUDE_MODEL_PREMIUM = os.getenv("SI_CLAUDE_MODEL_PREMIUM", "").strip() or "claude-opus-5-5"
+
+T0 = "t0"
+T1 = "t1"
+T2 = "t2"
+T3 = "t3"
 NARRATION = "narration"
-PREMIUM = "premium"
+# Older names, kept so existing callers keep working. They now point
+# at the accepted tiers, not at DeepSeek only.
+COORDINATOR = T0
+WORKER = T2
+PREMIUM = T1
+LIGHT = T3
+TIER_ALIASES = {
+    "coordinator": T0,
+    "orchestrator": T0,
+    "worker": T2,
+    "medium": T2,
+    "premium": T1,
+    "heavy": T1,
+    "light": T3,
+    "small": T3,
+}
+
+# Slot id -> provider and the config attribute that holds its model id.
+# Slot ids are the pin values operators use (SI_ORCH_A=hy4 and so on).
+MODEL_SLOTS = {
+    "deepseek-v4.1-flash": {"provider": "deepseek", "model_attr": "DEEPSEEK_MODEL"},
+    "hy4": {"provider": "hunyuan", "model_attr": "HY4_MODEL"},
+    "glm-5.4": {"provider": "glm", "model_attr": "GLM_MODEL"},
+    "qwen4-max": {"provider": "dashscope", "model_attr": "QWEN_MODEL"},
+    "mimo-2.6-flash": {"provider": "mimo", "model_attr": "MIMO_MODEL"},
+}
 
 MODEL_TIERS = {
-    COORDINATOR: {
-        "provider": "deepseek",
-        "model": DEEPSEEK_MODEL,
+    # Tool calling needs thinking off, so the orchestrator never thinks.
+    T0: {
+        "chain": ["deepseek-v4.1-flash", "hy4", "glm-5.4"],
         "max_tokens": DEEPSEEK_MAX_TOKENS,
+        "thinking": "disabled",
+        "on_exhausted": "error",
     },
-    WORKER: {
-        "provider": "deepseek",
-        "model": DEEPSEEK_MODEL,
-        "max_tokens": 1200,
+    # Thinking off by default: DashScope documents that some models
+    # reject enable_thinking=true on non-streaming calls, which would
+    # turn every heavy task into an escalation. ASSUMED until one live
+    # Qwen4 Max call with thinking on is tested; then flip to "high".
+    T1: {
+        "chain": ["qwen4-max"],
+        "max_tokens": 4000,
+        "thinking": "disabled",
+        "on_exhausted": "escalate_to_human",
     },
+    T2: {
+        "chain": ["hy4", "deepseek-v4.1-flash", "glm-5.4"],
+        "max_tokens": 1500,
+        "thinking": "low",
+        "on_exhausted": "error",
+    },
+    T3: {
+        "chain": ["mimo-2.6-flash"],
+        "max_tokens": 600,
+        "thinking": "disabled",
+        "on_exhausted": "zero_path",
+    },
+    # No model call at all: prewritten EN/ZH sentences from strings.json.
     NARRATION: {
-        "provider": "prewritten",
-        "model": "strings.json",
+        "chain": [],
         "max_tokens": 0,
-    },
-    # Premium tier. DeepSeek pro model when DEEPSEEK_MODEL_PRO is set.
-    # The router in models.py enforces this. If the pro model is not
-    # set, asking for premium is a loud error, not a silent downgrade.
-    PREMIUM: {
-        "provider": "deepseek",
-        "model": DEEPSEEK_MODEL_PRO,
-        "max_tokens": DEEPSEEK_MAX_TOKENS,
-    },
-    # LIGHT is kept as an alias for WORKER, so Autumn callers that ask
-    # for LIGHT still work. It is the same DeepSeek model, not Groq.
-    LIGHT: {
-        "provider": "deepseek",
-        "model": DEEPSEEK_MODEL,
-        "max_tokens": 1200,
+        "thinking": "disabled",
+        "on_exhausted": "prewritten",
     },
 }
+
+# --- Arena panes (MODEL_TIERS.md "Configurable model selection") ------
+# Three orchestrator panes, A, B and C. Each can be pinned to one T0
+# slot or left on "auto" (T0 chain order). A pinned pane falls back
+# down the T0 chain from its pinned position only when its FALLBACK
+# setting is yes. Each pane has a T2 allowlist ("all", "none", or a
+# comma list of T2 slot ids) and can be denied T1 (SI_ORCH_A_T1=off).
+# Defaults follow the doc's table: A auto (DeepSeek), B Hy4, C GLM 5.4.
+PANES = ("A", "B", "C")
+_PANE_DEFAULT_PIN = {"A": "auto", "B": "hy4", "C": "glm-5.4"}
+
+
+def _pane_setting(pane: str, suffix: str, default: str) -> str:
+    key = f"SI_ORCH_{pane}{suffix}"
+    return os.getenv(key, "").strip().lower() or default
+
+
+PANE_CONFIG = {
+    pane: {
+        "pin": _pane_setting(pane, "", _PANE_DEFAULT_PIN[pane]),
+        "t2": _pane_setting(pane, "_T2", "all"),
+        "t1": _pane_setting(pane, "_T1", "on"),
+        "fallback": _pane_setting(pane, "_FALLBACK", "yes"),
+    }
+    for pane in PANES
+}
+# The pane a single coordinator process serves (one process per pane).
+COORDINATOR_PANE = os.getenv("SI_COORDINATOR_PANE", "").strip().upper() or "A"
+
+# --- Telemetry -----------------------------------------------------------
+# SQLite: route, pane, tier, slot, model, tokens, latency, cost, error
+# code. Never prompt text, never keys, never personal data.
+TELEMETRY_PATH = Path(
+    os.getenv("SI_TELEMETRY_PATH", "").strip() or PROJECT_ROOT / "telemetry.sqlite"
+)
 
 # --- Scheduler -----------------------------------------------------------
 # Copied from Autumn server.py and briefing.py. APScheduler, one job

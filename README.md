@@ -34,15 +34,15 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4 and R5.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
-- Code tests: run once on 2026-11-23, **89 passed** (79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
-- Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Accepted for model selection, not yet implemented — `code/` still routes to DeepSeek only.
+- Code tests: last run 2026-11-24, **163 passed** (134 before the roster router, 89 before the 2026-11-24 bug pass, 79 before the R3 bug fixes; mocked providers and GPIO, no Pi, no API keys). Not tested on the Pi.
+- Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Implemented in `code/` 2026-11-24 with fallback chains, pane pinning, Jev routing tie-break and SQLite telemetry; mocked tests only, no live provider call yet. Keys and model ids go in `code/.env` (see `code/.env.example`).
 - **Booth API cost (2 days, Dec 12–13):** ~$43–77 USD at packed traffic (100 contests/day), ~$21–38 at typical traffic (50/day). Worst case dominated by Qwen4 Max ~$36, Hy4 ~$21.6, DeepSeek ~$15.4, GLM 5.4 ~$4, Jev ~$0.05. Full breakdown in `docs/MODEL_TIERS.md`.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
 
 - Case: clear acrylic now (recommended, final choice pending).
 - Mini screen: 5 inch HDMI (recommended, pending).
-- Model router: v1 runtime is DeepSeek only. Four-tier provider roster with Jev judge **accepted 2026-11-25** (`docs/MODEL_TIERS.md`), pending implementation.
+- Model router: four-tier provider roster with Jev judge **accepted 2026-11-25** (`docs/MODEL_TIERS.md`), implemented in `code/` 2026-11-24 (mocked tests).
 - Both BOM cuts applied: no spare microSD, no USB soundbar (monitor speakers over HDMI).
 
 ## Open decisions (R3 review, see `docs/decisions.md`; R4 and R5 outcomes noted there)

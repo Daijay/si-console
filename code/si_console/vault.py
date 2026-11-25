@@ -186,6 +186,10 @@ class TaskNote:
 
 def parse_note(text: str, task_id: str = "") -> TaskNote:
     """Parse one note. Bad frontmatter is an error, never a guess."""
+    # A UTF-8 BOM (Notepad and some editors add one), or CRLF text
+    # passed in directly, fails the frontmatter regex, and list_tasks
+    # then drops the note without a word.
+    text = text.lstrip("\ufeff").replace("\r\n", "\n")
     match = FRONTMATTER_RE.match(text)
     if not match:
         raise VaultError(
@@ -340,6 +344,10 @@ def create_task(note: TaskNote, initial_status: str = "queued") -> dict:
             remedy="Pick a new id, or update the existing task.",
         )
     for dep in note.depends_on:
+        # Same id rule as the task itself, so a dependency can never
+        # point outside tasks/ ("../../x") or probe other files.
+        if not isinstance(dep, str) or not TASK_ID_RE.fullmatch(dep):
+            raise VaultError("bad_dependency", f"Invalid depends_on id: {dep!r}.")
         dep_path = root / TASK_DIR / f"{dep}.md"
         if not dep_path.is_file():
             raise VaultError(
@@ -470,6 +478,8 @@ def write_research_note(title: str, content: str, task_id: str = "") -> str:
         path = folder / f"{stamp}-{slug}-{counter}.md"
         counter += 1
     if task_id:
+        if not TASK_ID_RE.fullmatch(str(task_id)):
+            raise VaultError("not_found", f"Invalid task id: {task_id!r}.")
         content = content.rstrip() + f"\n\nRelated task: [[{task_id}]]\n"
     _write_atomic(path, content)
     return path.name

@@ -9,10 +9,14 @@ the Pi yet. (CODE_NOTES.md and autumn-clone/ from the original workspace are not
 
 ## Layout
 - si_console/ : the rewired code. Start with config.py, then coordinator.py.
-  - config.py : settings, tiers, allow lists. DeepSeek only. No Gmail.
+  - config.py : settings, provider keys, tier chains, arena panes, allow lists. No Gmail.
   - errors.py : shared error shapes, copied from Autumn.
   - deepseek_client.py : DeepSeek API layer, rewired from groq_client.py.
-  - models.py : model tiering, rewired from Autumn models.py.
+  - models.py : tier router for the accepted roster: T0-T3 chains, fallback, pane pins.
+  - chat_client.py : one OpenAI-compatible client for DeepSeek, Hunyuan, GLM, Bailian/Qwen, MiMo.
+  - router.py : rules-only routing (skill, keywords, length), Jev tie-break, dispatch.
+  - judge.py : Jev 1.14 judge through the OpenRouter Decisions API.
+  - telemetry.py : SQLite telemetry for routes and model calls.
   - vault.py : task notes, frontmatter, atomic writes. New code.
   - search.py : vault search, repointed from Autumn search.py.
   - context.py : prompt compression, repointed from Autumn context.py.
