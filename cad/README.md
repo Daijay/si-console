@@ -2,7 +2,7 @@
 
 Parametric CadQuery model of the whole console as an open-frame "cyberdeck": no enclosure, no side walls, no lid, no back panel, no fan. The electronics and the wiring are the visual feature. Change one number in `params.py`, run `build.py`, and every part, laser file, drawing, render and check is regenerated.
 
-Status: DRAFT. The geometry is complete and every automated check passes (`output/CHECKS.md`), but some dimensions are estimates. See [Measure with calipers before cutting](#measure-with-calipers-before-cutting) at the bottom before sending anything to a laser.
+The geometry is complete and every automated check passes (`output/CHECKS.md`), but some dimensions are estimates. See [Measure with calipers before cutting](#measure-with-calipers-before-cutting) at the bottom before sending anything to a laser.
 
 The earlier boxed design (Rev R4.2: finger-jointed clear acrylic case, 40 mm fan) is kept as an alternative in `../research/R4.2-boxed/` and at git tag `r4.2-boxed`.
 

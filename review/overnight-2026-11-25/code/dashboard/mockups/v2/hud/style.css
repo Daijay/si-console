@@ -1,0 +1,477 @@
+/* SI Console UI v2, direction: hud.
+   Holographic HUD. Cyan thin line work on deep navy-black. Flat
+   background, no gradients. Glow is text-shadow only. Motion is
+   transform and opacity only. System fonts only. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #05080f;
+}
+
+#screen {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #05080f;
+  color: #d7e6ee;
+  font-family: "Instrument Sans", system-ui, "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.mono {
+  font-family: "IBM Plex Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+}
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid #14313f;
+  padding: 0 18px;
+  height: 48px;
+}
+.monitor .topbar { height: 56px; }
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  font-size: 15px;
+  color: #59d8ff;
+  text-shadow: 0 0 14px rgba(89, 216, 255, 0.45);
+  white-space: nowrap;
+}
+.monitor .brand { font-size: 17px; }
+
+.pl-strip {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 14px;
+  color: #cfe3ec;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.monitor .pl-strip { font-size: 17px; }
+
+.pl-strip .neg { color: #ff8a76; }
+.pl-strip .pos { color: #2ecc71; }
+
+.lang-switch {
+  font-size: 14px;
+  color: #9fc3d4;
+  white-space: nowrap;
+}
+.monitor .lang-switch { font-size: 15px; }
+.lang-switch .active { color: #59d8ff; font-weight: 700; }
+
+/* ---------- main layout ---------- */
+
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  min-height: 0;
+}
+
+.monitor .main {
+  display: grid;
+  grid-template-columns: 372px 1fr 372px;
+  gap: 16px;
+  padding: 16px;
+}
+
+.mini .main {
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 12px 0 12px;
+  gap: 2px;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+}
+
+.panel {
+  border: 1px solid #14313f;
+  background: #07111a;
+  padding: 12px 14px;
+}
+
+.panel-label {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: #7fb6c9;
+  margin-bottom: 10px;
+}
+
+/* Chinese: no tracking. Han characters sit on a fixed em grid, and
+   letter-spacing breaks it. Applies to panel labels, tape label,
+   state word, and button chips when the screen is in Chinese. */
+.lang-zh .panel-label,
+.lang-zh .tapebar .tape-label,
+.lang-zh .state-word,
+.lang-zh .btn-chip { letter-spacing: 0; }
+
+/* ---------- ring ---------- */
+
+.ringwrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+.monitor .ringwrap { padding: 4px; }
+.mini .ringwrap { flex: 1 1 auto; width: 100%; }
+
+.ringwrap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.monitor .ringwrap svg { max-width: 640px; max-height: 640px; }
+.mini .ringwrap svg { max-width: 300px; max-height: 300px; }
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 18px;
+  pointer-events: none;
+}
+
+.state-word {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #eaf7ff;
+  text-shadow: 0 0 18px rgba(89, 216, 255, 0.5);
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.monitor .state-word { font-size: 66px; }
+.mini .state-word { font-size: 64px; }
+
+.st-frozen .state-word,
+.st-error .state-word {
+  color: #ffe9b0;
+  text-shadow: 0 0 18px rgba(245, 197, 66, 0.5);
+}
+
+.sentence {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.35;
+  color: #a8c9d8;
+  max-width: 460px;
+}
+.mini .sentence { font-size: 18px; max-width: 720px; }
+
+.proposal-block {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.proposal-line {
+  font-size: 21px;
+  color: #2ecc71;
+}
+.monitor .proposal-line { font-size: 23px; }
+.proposal-sub {
+  font-size: 16px;
+  color: #cfe3ec;
+}
+.countdown {
+  font-size: 40px;
+  color: #59d8ff;
+  text-shadow: 0 0 16px rgba(89, 216, 255, 0.5);
+  line-height: 1.1;
+}
+.countdown-sub { font-size: 14px; color: #9fc3d4; }
+
+.btn-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+  justify-content: center;
+}
+.mini .btn-row { margin-top: 2px; }
+.btn-chip {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  border: 1px solid;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.btn-chip .dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+.btn-green { color: #2ecc71; border-color: #2ecc71; }
+.btn-green .dot { background: #2ecc71; }
+.btn-red { color: #ff8a76; border-color: #ff8a76; }
+.btn-red .dot { background: #ff8a76; }
+
+.frozen-note, .error-note {
+  margin-top: 12px;
+  font-size: 16px;
+  color: #f5c542;
+  max-width: 440px;
+  line-height: 1.4;
+}
+.error-note { color: #ffb199; }
+.error-code {
+  margin-top: 8px;
+  font-size: 18px;
+  color: #ffb199;
+  letter-spacing: 0.1em;
+}
+
+/* ring svg state classes */
+.arc-spin {
+  animation: hud-spin 2.4s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes hud-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- roster ---------- */
+
+.roster-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 15px;
+}
+.roster-row .dot {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.roster-row .rname { font-weight: 700; letter-spacing: 0.08em; }
+.roster-row .rrole { color: #7fb6c9; font-size: 13px; }
+.roster-row .rstatus {
+  margin-left: auto;
+  color: #a8c9d8;
+  font-size: 14px;
+}
+.roster-row .rstatus.working { color: #59d8ff; }
+.roster-row .rstatus.frozen, .roster-row .rstatus.offline { color: #f5c542; }
+
+.mini-roster {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 4px 0;
+  font-size: 14px;
+}
+.mini-roster .chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: #cfe3ec;
+}
+.mini-roster .chip .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* ---------- handoff ---------- */
+
+.handoff-svg { width: 100%; height: 64px; display: block; }
+
+/* ---------- meters ---------- */
+
+.meter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 5px 0;
+  font-size: 15px;
+}
+.meter-row .mlabel { color: #7fb6c9; letter-spacing: 0.12em; font-size: 13px; }
+.meter-row .mvalue { color: #eaf7ff; }
+.meter-bar {
+  height: 6px;
+  background: #0e2230;
+  margin: 2px 0 8px 0;
+}
+.meter-bar .fill {
+  height: 100%;
+  background: #59d8ff;
+}
+.round-dots { display: flex; gap: 8px; }
+.round-dots .rdot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #59d8ff;
+}
+.round-dots .rdot.on { background: #59d8ff; }
+
+/* ---------- risk gauge ---------- */
+
+.risk-svg { width: 100%; height: 96px; display: block; }
+.risk-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  padding-top: 6px;
+}
+.risk-line .risk-low { color: #2ecc71; font-weight: 700; }
+
+/* ---------- sectors ---------- */
+
+.sector-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 14px;
+}
+.sector-row .stick { width: 44px; font-weight: 700; color: #eaf7ff; }
+.sector-row .sname { flex: 1; color: #7fb6c9; font-size: 13px; }
+.sector-row .sprice { color: #cfe3ec; }
+.sector-row .schg { width: 64px; text-align: right; }
+.sector-row .up { color: #2ecc71; }
+.sector-row .down { color: #ff8a76; }
+
+/* ---------- task queue ---------- */
+
+.task-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #0e2230;
+}
+.task-row:last-child { border-bottom: none; }
+.task-row .tid { width: 82px; color: #eaf7ff; }
+.task-row .tagent { width: 42px; color: #7fb6c9; font-size: 13px; }
+.task-row .ttick { width: 40px; color: #cfe3ec; }
+.task-row .tamt { margin-left: auto; color: #cfe3ec; }
+.task-row .tstatus { width: 66px; text-align: right; }
+.task-row .tstatus.done { color: #2ecc71; }
+.task-row .tstatus.working { color: #59d8ff; }
+.task-row .tstatus.queued { color: #7fb6c9; }
+
+/* ---------- tape ---------- */
+
+.tapebar {
+  flex: 0 0 auto;
+  border-top: 1px solid #14313f;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 18px;
+  height: 44px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.monitor .tapebar { height: 56px; font-size: 14px; }
+.tapebar .tape-label {
+  color: #7fb6c9;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  flex: 0 0 auto;
+}
+.tape-ev { flex: 0 0 auto; color: #cfe3ec; }
+.tape-ev .tt { color: #5f8a9c; margin-right: 6px; }
+.tape-ev .tw { margin-right: 6px; font-weight: 700; }
+
+/* mini proposal strip under the ring */
+.mini-proposal {
+  flex: 0 0 auto;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #2ecc71;
+  padding: 2px 12px;
+}
+.mini-proposal .sub {
+  display: block;
+  font-size: 16px;
+  color: #cfe3ec;
+}
+
+/* rail stretch: last panel in each rail grows to fill the column */
+.rail .panel.grow {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+/* ---------- LEDs panel ---------- */
+
+.led-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 15px;
+}
+.led-row .dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.led-row .lname { font-weight: 700; letter-spacing: 0.08em; }
+.led-row .lstate { margin-left: auto; color: #a8c9d8; font-size: 14px; }
+.led-row .lstate.off { opacity: 0.45; }
+
+/* ---------- voice panel ---------- */
+
+.voice-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 52px;
+  padding: 4px 0;
+}
+.voice-bars .vbar {
+  flex: 1 1 0;
+  background: #2a5a70;
+  min-height: 3px;
+}
+.voice-bars .vbar.live { background: #59d8ff; }
+.voice-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #a8c9d8;
+  padding-top: 6px;
+}
+.voice-line .mic-live { color: #59d8ff; font-weight: 700; }

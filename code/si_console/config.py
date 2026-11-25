@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file is Autumn's autumn/config.py, rewired for SI Console.
 # What changed: Gmail and OAuth are gone. Groq and Anthropic are gone.
 # DeepSeek is the only cloud model. Bocha is the web search provider.

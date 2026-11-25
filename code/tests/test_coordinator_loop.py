@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # These tests run the coordinator loop with a mocked DeepSeek. No
 # test calls the real DeepSeek API. No test needs a Pi or a key.
 # The vault is a temp folder. The model is a fake function that

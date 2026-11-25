@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # Voice intents are new code, built from an Autumn idea, not Autumn
 # code. The idea is the deterministic handoff matcher in Autumn's
 # dashboard/src/handoff.js: negatives are checked first and win

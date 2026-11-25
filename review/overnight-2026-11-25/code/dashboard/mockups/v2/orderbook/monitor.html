@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920">
+<meta name="theme-color" content="#0b0d10">
+<title>SI Console monitor: orderbook</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="screen"></div>
+<script src="../shared/v2-data.js"></script>
+<script src="render.js"></script>
+<script>
+(function () {
+  var p = {};
+  location.hash.replace(/^#/, "").split("&").forEach(function (kv) {
+    var a = kv.split("=");
+    if (a[0]) p[a[0]] = decodeURIComponent(a[1] || "");
+  });
+  var state = (window.V2 && V2.STATES.indexOf(p.state) >= 0) ? p.state : "idle";
+  var lang = p.lang === "zh" ? "zh" : "en";
+  window.V2Render("monitor", state, lang);
+})();
+</script>
+</body>
+</html>

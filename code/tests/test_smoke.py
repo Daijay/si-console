@@ -1,4 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
 # Tests for si_console.smoke. No network: httpx and DNS are faked.
 """Smoke check tests."""
 

@@ -1,6 +1,6 @@
 # SI Console Overview
 
-Rev R3. Date 2026-11-23. Status: DRAFT REFERENCE, NOT FOR SUBMISSION.
+Rev R3. Date 2026-11-23.
 Model note: the router options below are the 2026-11-23 two-option decision. The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25).
 Team: Jayden (overall, hardware, integration), Hasan (CAD, Fusion 360), Christopher (software architecture, model router).
 Build deadline Dec 8, 2026. Booth at Maker Faire Shenzhen, Dec 12-13, 2026.
@@ -44,11 +44,11 @@ Pi 5 sits in the middle. Each line is labelled with the connection type. GPIO ma
 | API credits, DeepSeek and Bocha | Paid model and search APIs for the live demo. | Network, no wiring | 40.00 | ASSUMED |
 | Main monitor, MSI PRO MP165 E6 | Main screen. 15.6 inch, 1920x1080 IPS. | Pi 5 micro HDMI0, own USB-C charger | 89.99 | LIKELY, self-funded, bought |
 
-Case size 360 x 240 x 140 mm is ASSUMED, not a CAD result. Confirm before cutting. Front panel holes: LEDs 5.2 mm, buttons 30.2 mm, kill 22.3 mm, PTT and toggle 12.2 mm. See blueprints-R3/case-drawings.svg. Note: the monitor row above is self-funded and not counted in the fundable total. Some rows in this table predate Rev R5; the only current BOM is `bom/BOM.csv`, fundable total 851.13 CAD.
+Case size 360 x 240 x 140 mm is ASSUMED, not a CAD result. Confirm before cutting. Front panel holes: LEDs 5.2 mm, buttons 30.2 mm, kill 22.3 mm, PTT and toggle 12.2 mm. See blueprints-R3/case-drawings.svg. Note: the monitor row above is self-funded and not counted in the fundable total. Some rows in this table predate Rev R5; the only current BOM is `bom/BOM.csv`, fundable total 885.81 CAD.
 
 ## 4. Totals
 
-Fundable (2026-11-24, from `bom/BOM.csv`): 851.13 CAD before tax, 953.27 CAD with 12 percent BC tax. This includes the USB soundbar (25.99), the spare microSD (27.99) and DeepSeek and Bocha API credits (40.00). Self-funded (monitor, brick, travel adapter): 128.24 CAD before tax, 143.63 CAD with tax. Team limit about 800 CAD, hard max 900 CAD. The fundable total is 51.13 CAD over the 800 limit before tax and under the 900 hard max before tax; with tax it is 53.27 CAD over the hard max. Totals exclude shipping, laser time, and tools.
+Fundable (2026-11-24, from `bom/BOM.csv`): 885.81 CAD before tax, 992.11 CAD with 12 percent BC tax. This includes the USB soundbar (25.99), the spare microSD (27.99) and DeepSeek and Bocha API credits (40.00). Self-funded (monitor, brick, travel adapter): 128.24 CAD before tax, 143.63 CAD with tax. Team limit about 800 CAD, hard max 900 CAD. The fundable total is 51.13 CAD over the 800 limit before tax and under the 900 hard max before tax; with tax it is 92.11 CAD over the hard max. Totals exclude shipping, laser time, and tools.
 
 ## 5. Open decisions
 

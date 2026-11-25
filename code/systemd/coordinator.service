@@ -1,4 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
 # SI Console coordinator unit. TEMPLATE: @USER@ and @CODE_DIR@ are
 # filled in by deploy/install_pi.sh. The coordinator runs the agent
 # loop for one arena pane (SI_COORDINATOR_PANE in .env). It does not

@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # GUARD is new code, so these tests are new too. They check the four
 # rules in guard.py: kill blocks everything, a role cannot call a
 # tool outside its list, a NEEDS APPROVAL tool needs a human approval,

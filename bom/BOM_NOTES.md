@@ -1,21 +1,25 @@
 # BOM notes (Rev R5, updated 2026-11-24)
 
-STATUS: DRAFT. Prices CAD, before tax and shipping. Source file: `BOM.csv` (the only current BOM).
+Prices CAD, before tax and shipping. Source file: `BOM.csv` (the only current BOM).
 
 ## Current totals
 
 | Item | CAD |
 | --- | --- |
-| **Fundable total, before tax** | **851.13** |
-| Tax at 12 percent, ASSUMED to apply to every line | 102.14 |
-| Fundable total, with tax | 953.27 |
+| **Fundable total, before tax** | **885.81** |
+| Tax at 12 percent, ASSUMED to apply to every line | 106.30 |
+| Fundable total, with tax | 992.11 |
 | Self-funded (monitor, power brick, travel adapter), before tax | 128.24 |
 | Self-funded, with tax | 143.63 |
-| All-in with tax, before shipping and laser | 1096.90 |
+| All-in with tax, before shipping and laser | 1135.74 |
 
-Re-added from the 27 fundable lines of `BOM.csv`. Status mix of the fundable total: VERIFIED 474.30, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified. Self-funded figures are copied from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`; those rows are `REF ONLY` (qty 0) in the CSV.
+Re-added from the 33 fundable lines of `BOM.csv`. Status mix of the fundable total: VERIFIED 508.98, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified. Self-funded figures are copied from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`; those rows are `REF ONLY` (qty 0) in the CSV.
 
-**Limits:** team limit about 800 CAD, hard max 900 CAD. 851.13 before tax is **51.13 over the team limit** and 48.87 under the hard max. With tax (953.27) it is 53.27 over the hard max, if the limit counts tax.
+**Limits:** team limit about 800 CAD, hard max 900 CAD. 885.81 before tax is **85.81 over the team limit** and 14.19 under the hard max. With tax (992.11) it is 92.11 over the hard max, if the limit counts tax.
+
+## Changes on 2026-11-25
+
+Custom PCB and its parts added (34.68 CAD), total 851.13 to 885.81. The perfboard line stays as the fallback.
 
 ## Changes on 2026-11-24 (decided by Jayden, see `docs/decisions.md`)
 

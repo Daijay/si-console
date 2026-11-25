@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # GUARD is new code. Nothing in Autumn does this. Autumn had no tool
 # calling, no approval gate, and no kill switch, so there was nothing
 # to guard. GUARD is a role, not a separate agent process. GUARD is

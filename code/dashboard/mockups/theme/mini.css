@@ -1,0 +1,134 @@
+/* 5 inch status screen, 800x480. 1 px = 0.135 mm. Smallest text: 24 px. */
+body { width: 800px; height: 480px; }
+#screen { position: relative; width: 800px; height: 480px; display: flex; flex-direction: column; overflow: hidden; }
+
+.bar { height: 52px; flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 12px 0 20px; border-bottom: 2px solid var(--line); font-size: 26px; }
+.bar .mode { color: var(--ink-2); }
+.bar .round { font-weight: 700; }
+.lang { justify-self: end; display: flex; border: 2px solid var(--ink); border-radius: 4px; font-size: 24px; line-height: 34px; }
+.lang span { padding: 0 10px; color: var(--ink-2); }
+.lang span.on { background: var(--ink); color: var(--ink-dark); font-weight: 700; }
+.bar.replay { grid-template-columns: 1fr auto; }
+
+.banner { flex: none; display: flex; align-items: center; justify-content: center; height: 44px; background: var(--ink); color: var(--ink-dark); font-size: 24px; font-weight: 700; }
+
+/* State block: the one thing readable from 2 m. */
+.state { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 20px; }
+.word { font-size: 150px; line-height: 1; font-weight: 700; white-space: nowrap; }
+.word.two { white-space: normal; font-size: 112px; line-height: .98; }
+html[lang="zh"] .word { font-size: 146px; line-height: 1.12; }
+.banner ~ .state .word { font-size: 116px; }
+.sub { font-size: 32px; line-height: 1.25; color: var(--ink-2); margin-top: 10px; text-wrap: balance; }
+.row { display: flex; align-items: center; gap: 20px; }
+.row .icon { font-size: 104px; stroke-width: 2.6; }
+
+.dots { display: inline-flex; gap: 14px; margin-top: 14px; }
+.dots i { width: 22px; height: 22px; background: var(--ink); animation: dots 1200ms linear infinite; }
+.dots i:nth-child(2) { animation-delay: 200ms; }
+.dots i:nth-child(3) { animation-delay: 400ms; }
+
+.meter { display: flex; align-items: flex-end; gap: 8px; height: 62px; margin-top: 14px; }
+.meter i { width: 24px; height: 62px; background: var(--ink); transform-origin: bottom; transform: scaleY(var(--hi)); animation: mic 420ms ease-in-out infinite; }
+
+/* Four agent tiles in LED order. */
+.tiles { flex: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 12px 12px; height: 128px; }
+.tile { position: relative; border-radius: 6px; border: 3px solid var(--line); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; }
+.tile::before { content: ""; position: absolute; left: 12px; right: 12px; bottom: 8px; height: 8px; background: var(--c); }
+.tile b { font-size: 30px; line-height: 1.2; }
+.tile small { font-size: 24px; color: var(--ink-2); line-height: 1.2; margin-bottom: 8px; }
+.tile.working { background: var(--c); border-color: var(--c); color: var(--ink-dark); }
+.tile.working small { color: var(--ink-dark); font-weight: 700; }
+.tile.working::before { display: none; }
+.tile.working::after { content: ""; position: absolute; inset: -8px; border: 4px solid var(--c); border-radius: 10px; opacity: .7; animation: alive 1600ms ease-in-out infinite; pointer-events: none; }
+.tile.queued { border: 5px solid var(--c); }
+.tile.queued::before { animation: slow-blink 2000ms steps(1) infinite; }
+.tile.blocked { border: 5px dashed var(--c); }
+.tile.blocked::before { animation: fast-blink 500ms steps(1) infinite; }
+.tile.done { border-color: var(--c); }
+.tile.frozen::before, .tile.unknown::before { background: var(--line); }
+
+/* ---------- approval takeover ---------- */
+.approval { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg); animation: takeover var(--t-takeover) var(--ease-out) both; }
+.approval::after { content: ""; position: absolute; inset: 0; border: 10px solid var(--ink); animation: attention 1000ms ease-in-out infinite; pointer-events: none; }
+.ap-head { height: 92px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 10px 28px 0; }
+.ap-word { font-size: 58px; font-weight: 700; white-space: nowrap; }
+html[lang="zh"] .ap-word { font-size: 60px; line-height: 1.2; }
+.ap-time { font-size: 40px; font-weight: 700; padding: 0 12px; border-radius: 6px; }
+.ap-time.urgent { background: var(--ink); color: var(--ink-dark); font-size: 54px; }
+.ap-clock { flex: none; height: 10px; margin: 0 28px; background: var(--off); }
+.ap-clock i { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(var(--from)); animation: drain var(--secs) linear forwards; }
+.ap-meta { flex: none; display: flex; justify-content: space-between; align-items: center; padding: 10px 28px 0; font-size: 26px; height: 52px; }
+.chip { display: inline-block; background: var(--c); color: var(--ink-dark); font-weight: 700; padding: 1px 12px; border-radius: 4px; }
+.risk { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.risk i { width: 14px; height: 28px; border: 2px solid var(--ink); }
+.risk i.on { background: var(--ink); }
+.ap-action { flex: 1; min-height: 0; display: flex; align-items: center; padding: 0 28px; font-weight: 700; line-height: 1.1; }
+.ap-action span { display: block; width: 100%; white-space: nowrap; font-size: 62px; line-height: 1.25; }
+.pads { flex: none; display: grid; grid-template-columns: 1fr 1fr; height: 226px; }
+.pad { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; padding-bottom: 8px; }
+.pad .btn { width: 46px; height: 46px; border-radius: 50%; border: 6px solid currentColor; box-shadow: inset 0 0 0 7px var(--pad); background: currentColor; margin-bottom: 4px; }
+.pad span { font-size: 32px; line-height: 1.2; }
+.pad strong { font-size: 80px; line-height: 1.05; white-space: nowrap; }
+html[lang="zh"] .pad strong { font-size: 96px; }
+.pad.yes { --pad: var(--approve); background: var(--approve); color: var(--ink-dark); }
+.pad.no { --pad: var(--reject); background: var(--reject); color: #fff; }
+.confirm-red .pads { grid-template-columns: 1fr 2fr; }
+.confirm-red .pad.yes { background: var(--bg); color: var(--ink); --pad: var(--bg); border-top: 6px solid var(--approve); }
+.confirm-red .pad.yes strong { font-size: 40px; }
+.confirm-red .pad.yes span { font-size: 24px; }
+html[lang="zh"] .confirm-red .pad.yes strong { font-size: 48px; }
+.confirm-red .ap-action span { font-size: 40px; }
+
+/* ---------- frozen and resume ---------- */
+.frozen { position: absolute; inset: 0; background: var(--kill); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 24px; }
+.frozen .word { font-size: 172px; }
+html[lang="zh"] .frozen .word { font-size: 180px; }
+.frozen p { font-size: 34px; line-height: 1.3; margin-top: 8px; text-wrap: balance; }
+.frozen .step { margin-top: 22px; background: #fff; color: #5c0006; font-weight: 700; font-size: 30px; padding: 10px 18px; border-radius: 6px; }
+.corner { position: absolute; top: 10px; right: 12px; }
+.corner.lang { border-color: #fff; }
+.corner.lang span { color: #fff; }
+.corner.lang span.on { background: #fff; color: #5c0006; }
+
+.resume { position: absolute; inset: 0; border: 16px solid var(--kill); display: flex; flex-direction: column; background: var(--bg); }
+.resume .top { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 28px; }
+.resume .word { font-size: 96px; }
+html[lang="zh"] .resume .word { font-size: 110px; }
+.resume .go { height: 160px; display: flex; align-items: center; justify-content: center; gap: 22px; background: var(--approve); color: var(--ink-dark); font-size: 42px; font-weight: 700; padding: 0 16px; text-align: center; }
+
+/* ---------- scenario choice: outlined, so it never looks like an approval ---------- */
+.choose { flex: 1; display: flex; flex-direction: column; padding: 10px 20px 16px; }
+.choose .word { font-size: 76px; margin-top: 8px; }
+html[lang="zh"] .choose .word { font-size: 90px; }
+.years { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+.year { border: 6px solid var(--b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.year strong { font-size: 108px; line-height: 1.05; }
+.year span { font-size: 28px; }
+
+/* ---------- attract ---------- */
+.attract { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 10px 24px 12px; }
+.attract .head { font-size: 66px; font-weight: 700; line-height: 1.1; max-width: 640px; text-wrap: balance; }
+html[lang="zh"] .attract .head { font-size: 62px; max-width: 100%; margin-top: 44px; white-space: nowrap; }
+.attract .alt { font-size: 34px; color: var(--ink-2); margin-top: 8px; }
+.attract .alt + .prompt { margin-top: auto; }
+.prompt { margin-top: auto; border-left: 10px solid var(--ember); padding: 0 0 0 18px; height: 98px; display: flex; flex-direction: column; justify-content: center; }
+.prompt small { font-size: 24px; color: var(--ink-2); }
+.prompt strong { font-size: 44px; line-height: 1.2; white-space: nowrap; }
+.lamps { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 8px; height: 88px; align-items: center; justify-items: center; }
+.lamps i { width: 88px; height: 88px; border-radius: 50%; background: var(--c); animation: breathe 6000ms ease-in-out infinite; }
+.lamps i:nth-child(2) { animation-delay: 750ms; }
+.lamps i:nth-child(3) { animation-delay: 1500ms; }
+.lamps i:nth-child(4) { animation-delay: 2250ms; }
+html.still .lamps i:nth-child(n) { opacity: 1; }
+
+/* ---------- faults: white on hatch, never red or green ---------- */
+.fault { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg); }
+.fault .hatch { height: 40px; flex: none; }
+.fault .body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 28px; }
+.fault h1 { font-size: 70px; line-height: 1.1; display: flex; align-items: center; gap: 18px; white-space: nowrap; }
+html[lang="zh"] .fault h1 { font-size: 78px; }
+.fault p { font-size: 36px; line-height: 1.3; margin-top: 18px; text-wrap: balance; }
+.fault .next { font-size: 28px; color: var(--ink-2); }
+.fault .foot { display: flex; justify-content: space-between; align-items: center; padding: 0 28px; height: 56px; font-size: 24px; color: var(--ink-2); }
+
+.toast { position: absolute; left: 12px; right: 12px; bottom: 12px; min-height: 108px; display: flex; align-items: center; justify-content: center; background: var(--ink); color: var(--ink-dark); border-radius: 8px; padding: 18px 22px; font-size: 40px; font-weight: 700; text-align: center; animation: toast 250ms var(--ease-out) both; box-shadow: 0 0 0 8px var(--bg); }

@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The coordinator loop is new code. Autumn had no coordinator loop.
 # Its chat orchestrator had handoff detection, and the audit says to
 # reuse that idea, not that code. Handoff detection in Autumn was a

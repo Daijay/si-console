@@ -1,0 +1,3 @@
+Modified from upstream (Apache 2.0, section 4b):
+2026-11-25, SKILL.md: one parenthetical in the list of common default looks was
+reworded to remove a vendor name. No other change.

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=800">
+<title>SI Console HUD — mini 800x480</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="screen" class="mini"></div>
+<script src="../shared/v2-data.js"></script>
+<script src="render.js"></script>
+<script>
+(function () {
+  var m = location.hash.match(/state=([a-z]+)/);
+  var state = m ? m[1] : "idle";
+  var l = location.hash.match(/lang=(zh|en)/);
+  window.V2Render("mini", state, l ? l[1] : "en");
+})();
+</script>
+</body>
+</html>

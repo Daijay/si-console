@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file is Autumn's autumn/context.py, repointed at task notes.
 # What stayed: compress before the model sees it. Tasks are the source
 # of truth, so all of them in the chain go in. Snippets are clipped.

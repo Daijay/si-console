@@ -1,6 +1,6 @@
 # Decisions
 
-STATUS: DRAFT. Figures come from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`. "Final choice" stays blank until the team decides. Rev R4 (2026-11-23) built the CAD around the defaults below and closed or narrowed the R3 review items; those lines are marked "R4".
+Figures come from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`. "Final choice" stays blank until the team decides. Rev R4 (2026-11-23) built the CAD around the defaults below and closed or narrowed the R3 review items; those lines are marked "R4".
 
 ## A. From the overnight run (recommendations, awaiting confirmation)
 
@@ -47,7 +47,7 @@ R4: the CAD uses COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow, left to
 R4.1: AGENT 1 white resistor = 100 ohm (Jayden). `docs/GPIO_PIN_MAP.md` has a dated R4.1 section with the math, and `blueprints/2d/electrical-schematic.svg` shows AGENT 1 white, 100 ohm, Vf 3.2 V ASSUMED. The white Vf is still to be measured on the bench like the other colours.
 
 ### OPEN 5. Laser cut file source (owner: Hasan) - R4 supplies a candidate DXF, review pending
-R3 drawings are reference only. The laser cut file must come from Hasan's Fusion model as DXF or SVG cut lines.
+R3 drawings are superseded. The laser cut file must come from Hasan's Fusion model as DXF or SVG cut lines.
 
 R4: `cad/build.py` now generates DXF cut files with kerf applied, plus a nested layout on 4 sheets of 12 x 16 inch stock (`blueprints/R4/dxf/`). They are NOT ready to cut until Hasan reviews them against his Fusion model and the ASSUMED dimensions in `cad/output/ASSUMED.md` are measured with calipers.
 
