@@ -93,12 +93,14 @@ def write_checks(results, sheets):
 
 def copy_finals():
     dst = os.path.join(REPO, "blueprints", P.REV)
-    if os.path.isdir(dst):
-        shutil.rmtree(dst)
+    os.makedirs(dst, exist_ok=True)
     for sub in ("step", "dxf", "drawings", "renders"):
         s = os.path.join(OUT, sub)
+        d = os.path.join(dst, sub)
+        if os.path.isdir(d):
+            shutil.rmtree(d)
         if os.path.isdir(s):
-            shutil.copytree(s, os.path.join(dst, sub))
+            shutil.copytree(s, d)
     for f in (f"si_console_assembly_{P.REV}.step", "CHECKS.md", "ASSUMED.md"):
         shutil.copy(os.path.join(OUT, f), os.path.join(dst, f))
     return dst

@@ -90,41 +90,41 @@
   {
     "path": "blueprints/2d/case-panels-R3.png",
     "type": "drawing",
-    "description": "Case panel drawings R3, reference only, known errors",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. Case panel drawings R3, reference only, known errors",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/2d/electrical-schematic-R3.png",
     "type": "drawing",
-    "description": "Electrical schematic R3",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. Electrical schematic R3",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/2d/wiring-diagram-R3.png",
     "type": "drawing",
-    "description": "Wiring diagram R3",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. Wiring diagram R3",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/2d/power-diagram-R3.png",
     "type": "drawing",
-    "description": "Power diagram R3",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. Power diagram R3",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/2d/connection-diagram-R3.png",
     "type": "drawing",
-    "description": "System connection diagram",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. System connection diagram",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -210,41 +210,41 @@
   {
     "path": "blueprints/2d/case-drawings.svg",
     "type": "drawing",
-    "description": "R3 SVG source: case-drawings, reference only",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. R3 SVG source: case-drawings, reference only",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/2d/connection-diagram.svg",
     "type": "drawing",
-    "description": "R3 SVG source: connection-diagram, reference only",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. R3 SVG source: connection-diagram, reference only",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/2d/electrical-schematic.svg",
     "type": "drawing",
-    "description": "R3 SVG source: electrical-schematic, reference only",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. R3 SVG source: electrical-schematic, reference only",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/2d/power-diagram.svg",
     "type": "drawing",
-    "description": "R3 SVG source: power-diagram, reference only",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. R3 SVG source: power-diagram, reference only",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/2d/wiring-diagram.svg",
     "type": "drawing",
-    "description": "R3 SVG source: wiring-diagram, reference only",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Superseded by R5. R3 SVG source: wiring-diagram, reference only",
+    "status": "SUPERSEDED",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -453,6 +453,38 @@
     "description": "Boxed alternative, Rev R4.2: outputs and CadQuery source, also git tag r4.2-boxed",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-23",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/wiring_diagram_R5.svg",
+    "type": "data",
+    "description": "R5 wiring diagram: pins, colours, ULN2003, LED resistors, displays, mic, power",
+    "status": "DRAFT",
+    "last_updated": "2026-11-24",
+    "owner": "Jayden"
+  },
+  {
+    "path": "blueprints/R5/wiring_diagram_R5.png",
+    "type": "data",
+    "description": "PNG of the R5 wiring diagram",
+    "status": "DRAFT",
+    "last_updated": "2026-11-24",
+    "owner": "Jayden"
+  },
+  {
+    "path": "cad/wiring_diagram.py",
+    "type": "code",
+    "description": "Generates the R5 wiring diagram SVG",
+    "status": "DRAFT",
+    "last_updated": "2026-11-24",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/images/",
+    "type": "data",
+    "description": "R5 renders for documentation: hero, front, top, exploded",
+    "status": "DRAFT",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   }
 ]
