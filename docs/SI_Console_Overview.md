@@ -23,10 +23,10 @@ Pi 5 sits in the middle. Each line is labelled with the connection type. GPIO ma
 | Pi 5 power supply, 27W USB-C | Powers the Pi 5. 5.1V 5A. | Pi 5 USB-C, wall | 16.95 | VERIFIED |
 | Active cooler | Cools the Pi 5. | Pi 5 fan header | 9.29 | LIKELY |
 | microSD 128GB | OS and vault storage. | Pi 5 microSD slot | 41.99 | LIKELY |
-| Spare microSD 32GB | Clone of the main card. Proposed cut. | Pi 5 microSD slot | 27.99 | VERIFIED |
+| Spare microSD 32GB | Spare card in case the main card fails at the booth. | Pi 5 microSD slot | 27.99 | VERIFIED |
 | Mini screen, Waveshare 5 inch HDMI (H) | Agent chain view. 800x480. Touch disabled. | Pi 5 micro HDMI1, own USB charger | 73.95 | VERIFIED |
 | USB microphone, FIFINE AM8 | Voice input. Push to talk only. | Pi 5 USB-A | 79.99 | LIKELY |
-| USB speaker, soundbar | Voice output. Dual 3W. Proposed cut. | Pi 5 USB-A | 25.99 | LIKELY |
+| USB speaker, soundbar | Voice output. Dual 3W. Not modelled in the R5 CAD yet. | Pi 5 USB-A | 25.99 | LIKELY |
 | Arcade buttons, 30 mm, 5 pack | Green approves, red rejects. | Pi 5 GPIO17, GPIO27, GND | 24.99 | ASSUMED |
 | Kill switch, APEM 22 mm latching | Freezes all agents. Normally closed. | Pi 5 GPIO22, GND | 57.37 | VERIFIED |
 | Push to talk button, 12 mm | Starts voice input while held. | Pi 5 GPIO23, GND | 14.99 | ASSUMED |
@@ -41,13 +41,14 @@ Pi 5 sits in the middle. Each line is labelled with the connection type. GPIO ma
 | Toggle switch, 12 mm | Language toggle, EN and Chinese. | Pi 5 GPIO24, GND | 9.99 | ASSUMED |
 | GPIO breakout, Cobbler Plus | Breaks out the 40-pin header. | Pi 5 header to breadboard | 11.80 | VERIFIED |
 | Case fan, 5V 40 mm | Rear wall exhaust. 140 mA. | Pi 5 5V and GND pins | 4.19 | VERIFIED |
+| API credits, DeepSeek and Bocha | Paid model and search APIs for the live demo. | Network, no wiring | 40.00 | ASSUMED |
 | Main monitor, MSI PRO MP165 E6 | Main screen. 15.6 inch, 1920x1080 IPS. | Pi 5 micro HDMI0, own USB-C charger | 89.99 | LIKELY, self-funded, bought |
 
-Case size 360 x 240 x 140 mm is ASSUMED, not a CAD result. Confirm before cutting. Front panel holes: LEDs 5.2 mm, buttons 30.2 mm, kill 22.3 mm, PTT and toggle 12.2 mm. See blueprints-R3/case-drawings.svg. Note: the monitor row above is self-funded and not counted in the fundable total. Summing the whole table gives 935.30 CAD. The fundable total is 845.31 CAD.
+Case size 360 x 240 x 140 mm is ASSUMED, not a CAD result. Confirm before cutting. Front panel holes: LEDs 5.2 mm, buttons 30.2 mm, kill 22.3 mm, PTT and toggle 12.2 mm. See blueprints-R3/case-drawings.svg. Note: the monitor row above is self-funded and not counted in the fundable total. Some rows in this table predate Rev R5; the only current BOM is `bom/BOM.csv`, fundable total 851.13 CAD.
 
 ## 4. Totals
 
-Fundable as listed: 845.31 CAD before tax, 946.75 CAD with 12 percent BC tax. With both proposed cuts (spare microSD 27.99 plus USB speaker 25.99, total 53.98): 791.33 CAD before tax, 886.29 CAD with tax. Self-funded (monitor, brick, travel adapter): 128.24 CAD before tax, 143.63 CAD with tax. Team limit about 800 CAD, hard max 900 CAD. As listed, the fundable total is 45.31 CAD over the 800 limit and under the 900 hard max. With both cuts, it is 8.67 CAD under the 800 limit. Totals exclude shipping, laser time, and tools.
+Fundable (2026-11-24, from `bom/BOM.csv`): 851.13 CAD before tax, 953.27 CAD with 12 percent BC tax. This includes the USB soundbar (25.99), the spare microSD (27.99) and DeepSeek and Bocha API credits (40.00). Self-funded (monitor, brick, travel adapter): 128.24 CAD before tax, 143.63 CAD with tax. Team limit about 800 CAD, hard max 900 CAD. The fundable total is 51.13 CAD over the 800 limit before tax and under the 900 hard max before tax; with tax it is 53.27 CAD over the hard max. Totals exclude shipping, laser time, and tools.
 
 ## 5. Open decisions
 

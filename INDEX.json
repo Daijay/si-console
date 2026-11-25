@@ -4,7 +4,7 @@
     "type": "doc",
     "description": "Human front page",
     "status": "DRAFT",
-    "last_updated": "2026-11-25",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -20,7 +20,7 @@
     "type": "index",
     "description": "Short file index",
     "status": "DRAFT",
-    "last_updated": "2026-11-25",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -28,7 +28,7 @@
     "type": "doc",
     "description": "Dated revision log",
     "status": "DRAFT",
-    "last_updated": "2026-11-25",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -74,7 +74,7 @@
   {
     "path": "bom/BOM.csv",
     "type": "data",
-    "description": "Only current BOM, Rev R5 on R2.1 (fan and 2 acrylic sheets removed), 767.15 CAD fundable",
+    "description": "Only current BOM, Rev R5, 851.13 CAD fundable before tax (soundbar, spare microSD and API credits included)",
     "status": "LIKELY",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -82,7 +82,7 @@
   {
     "path": "bom/BOM_NOTES.md",
     "type": "doc",
-    "description": "BOM totals and cuts",
+    "description": "BOM totals (851.13 CAD fundable), limits and history",
     "status": "VERIFIED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -188,7 +188,7 @@
     "type": "doc",
     "description": "2 page overview",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -196,7 +196,7 @@
     "type": "doc",
     "description": "Full compiled doc, 13 sections",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {

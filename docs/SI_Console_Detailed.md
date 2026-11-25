@@ -35,37 +35,30 @@ What a visitor sees: a console on a desk, a main screen with a dashboard, a smal
 
 ## 2. Full BOM with links and status
 
-BOM Rev R2.1, dated 2026-11-22. All prices in CAD. Tax is 12 percent BC tax.
+Totals updated 2026-11-24 from `bom/BOM.csv`. All prices in CAD. Tax is 12 percent BC tax. The part tables in sections 2.3 to 2.5 are the older R2.1 list; `bom/BOM.csv` is the only current BOM.
 
 ### 2.1 Totals
 
 | Line | Amount CAD | Status |
 |---|---|---|
-| Fundable, before tax | 845.31 | VERIFIED by re-add from BOM.csv |
-| Fundable, tax 12 percent | 101.44 | VERIFIED by re-add from BOM.csv |
-| Fundable, with tax | 946.75 | VERIFIED by re-add from BOM.csv |
-| Self-funded, before tax | 128.24 | VERIFIED by re-add from BOM.csv |
-| Self-funded, with tax | 143.63 | VERIFIED by re-add from BOM.csv |
-| All-in, with tax, before shipping and laser | 1090.38 | VERIFIED by re-add from BOM.csv |
-| All-in, with laser, shipping, tools | About 1240.38 to 1330.38 | ASSUMED |
-| Core after all cuts, before tax | 640.40 | VERIFIED by arithmetic. Voice 120.97 plus mini screen 83.94. Core without the two proposed cuts. |
-| Core after all cuts, with tax | 717.25 | VERIFIED by arithmetic |
-| Core after all cuts, with both proposed cuts, before tax | 612.41 | VERIFIED by arithmetic. 791.33 minus voice remainder 94.98 minus mini screen 83.94. Warning: the voice cut of 120.97 and the proposed cuts both include the soundbar at 25.99. Do not count it twice. |
-| Core after all cuts, with both proposed cuts, with tax | 685.90 | VERIFIED by arithmetic |
-| Team limit | About 800 | VERIFIED from the brief |
-| Hard max | 900 | VERIFIED from the brief |
-| 400 CAD target, missed by | 240.40 before tax, even after all cuts | VERIFIED from the brief |
+| Fundable, before tax | 851.13 | Re-added from BOM.csv |
+| Fundable, tax 12 percent | 102.14 | Tax on every line is ASSUMED |
+| Fundable, with tax | 953.27 | Computed |
+| Self-funded, before tax | 128.24 | From the R2.1 summary |
+| Self-funded, with tax | 143.63 | From the R2.1 summary |
+| All-in, with tax, before shipping and laser | 1096.90 | Computed |
+| All-in, with laser, shipping, tools | About 1246.90 to 1336.90 | ASSUMED |
+| Core after voice cut (120.97) and mini screen cut (83.94), before tax | 646.22 | Computed |
+| Same, with tax | 723.77 | Computed |
+| Team limit | About 800 | VERIFIED from the brief. Exceeded by 51.13 before tax |
+| Hard max | 900 | VERIFIED from the brief. Exceeded by 53.27 with tax |
+| 400 CAD target, missed by | 246.22 before tax, even after both cuts | Computed |
 
-Status mix of the fundable total: VERIFIED 452.50, LIKELY 325.84, ASSUMED 66.97. Do not treat the total as verified.
+Status mix of the fundable total: VERIFIED 474.30, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified.
 
-### 2.2 Proposed cuts, not yet applied
+### 2.2 Spare card, soundbar and API credits
 
-| Cut | Saves CAD | What changes |
-|---|---|---|
-| Spare 32GB microSD | 27.99 | Back up the image to a laptop instead. No spare card in the travel kit. |
-| USB soundbar | 25.99 | Use the monitor built-in speakers over HDMI audio instead. 2x 1W, VERIFIED from MSI spec. |
-| Both cuts | 53.98 | Fundable becomes 791.33 before tax, 886.29 with tax. VERIFIED by re-add. |
-| Both cuts vs team limit | Under 800 before tax, under 900 with tax | VERIFIED by re-add. |
+The earlier proposal to cut the spare 32GB microSD (27.99) and the USB soundbar (25.99) is withdrawn: both are in the BOM again as of 2026-11-24. API credits for DeepSeek and Bocha (40.00) were added. The soundbar is not modelled in the R5 CAD yet.
 
 ### 2.3 Fundable parts
 
@@ -663,7 +656,7 @@ Fri Dec 4 is also the Hack Club Harvest deadline, 11:59pm EST, for RAINBOUND PRO
 | Voice | 120.97 | Buttons, LEDs, kill switch, agents |
 | Mini screen | 83.94 | Buttons, LEDs, kill switch, agents |
 
-Core after all cuts: 640.40 CAD before tax, 717.25 CAD with tax, without the two proposed cuts. With both proposed cuts applied, the core is 612.41 CAD before tax, 685.90 CAD with tax. Warning: the voice cut of 120.97 CAD and the proposed cuts both include the soundbar at 25.99 CAD. Do not count it twice. The lit-button cut no longer exists. The ULN2003 stays in the design. That still misses the 400 CAD target by 240.40 CAD before tax without the proposed cuts, or by 212.41 CAD with them.
+Core after the voice and mini screen cuts: 646.22 CAD before tax, 723.77 CAD with tax. The voice cut of 120.97 CAD includes the soundbar at 25.99 CAD. The lit-button cut no longer exists. The ULN2003 stays in the design. That still misses the 400 CAD target by 246.22 CAD before tax.
 
 If a stage fails twice, cut the feature in the cut order above. If the core still fails, stop and ask Jayden. He is the decision maker for a scope cut.
 
@@ -722,7 +715,7 @@ Same demo, in Chinese. Same time marks. Flip the GPIO24 toggle to ZH, or say the
 | What if the internet fails in Shenzhen. | The console switches to recorded agent runs automatically. The demo continues on replay data. No live price feed is needed. |
 | Can voice approve. | No. Voice proposes only. Voice never executes. Voice never approves. That is a hard rule. |
 | Is this real money. | No. Paper money only. 100000 paper dollars. No real money is connected. |
-| How much did it cost. | Fundable parts 845.31 CAD before tax, 946.75 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1090.38 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is ASSUMED 40 to 60 CAD extra. DEMO_SCRIPT.md section 3 was updated to these Rev R2.1 numbers on 2026-11-23. |
+| How much did it cost. | Fundable parts and API credits 851.13 CAD before tax, 953.27 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1096.90 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is ASSUMED 40 to 60 CAD extra. |
 | What is the hardest part. | Voice in a loud hall, and heat in a closed case. Both are tested. See TEST_PLAN.md T2 and T6. If voice fails, buttons and text still work. |
 
 ### 11.5 Recorded fallback path, when internet or DeepSeek fails
@@ -753,7 +746,7 @@ Do not: let a visitor press kill without warning them first. Run the demo with t
 | Risk | Impact | Fix or mitigation | Status |
 |---|---|---|---|
 | Laser timing | Files sent Fri Nov 27 finish Dec 7 to 9, too late for Dec 8 | Send files Mon Nov 23, before Fallen approval, or use drop-in if the age rule allows | Open. See Q21. |
-| Grant cap unknown | Fundable total 845.31 CAD before tax is over the 400 CAD target by 445.31 CAD, and over the 800 CAD team limit by 45.31 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen. Both proposed cuts bring it to 791.33 CAD before tax. | Open. See Q22. |
+| Grant cap unknown | Fundable total 851.13 CAD before tax is over the 400 CAD target by 451.13 CAD, and over the 800 CAD team limit by 51.13 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen, which gives 646.22 CAD before tax. | Open. See Q22. |
 | Shenzhen offline demo | No internet kills the live demo. Recorded fallback format is undefined. No file exists, no code exists. | Define the recorded run format, record at least one full run at home with live DeepSeek, store it on the microSD, test the automatic switch with Wi-Fi off. | Open. See Q3. |
 | Voice in a loud booth | Chinese STT is weakest. SenseVoice Small is UNVERIFIED on Pi 5 ARM64. Whisper Base Chinese CER 15.99 percent is clean speech only, LIKELY. | Test STT on Dec 2, with noise. If it fails, cut voice from the booth demo and run on buttons and text only. Text input must exist in v1. | Open. See Q10, Q32. |
 | Power, heat, ULN2003 together | Old USB headroom was 0.10A. Acrylic insulates. ULN2003 at 3.3V is test first, not guaranteed. | Rev R2.1 fixes the power headroom: about 1.0A, ASSUMED, with the mini screen and monitor on their own chargers. Case fan added. Bench test the ULN2003 at 3.3V before soldering. Heat test T6 decides. | Partly fixed. USB currents still ASSUMED until measured. |

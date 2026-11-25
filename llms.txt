@@ -19,7 +19,7 @@
 - [docs/GPIO_PIN_MAP.md](docs/GPIO_PIN_MAP.md): the only GPIO map: pins, grounds, ULN2003 wiring and resistor math
 
 ## Bill of materials
-- [bom/BOM.csv](bom/BOM.csv): the only current BOM, Rev R2.1 with both cuts, 791.33 CAD fundable
+- [bom/BOM.csv](bom/BOM.csv): the only current BOM, Rev R5, 851.13 CAD fundable before tax
 - [bom/BOM_NOTES.md](bom/BOM_NOTES.md): totals and the cuts applied
 
 ## CAD, Rev R5 (open frame, parametric, current)
