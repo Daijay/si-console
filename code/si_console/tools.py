@@ -14,6 +14,8 @@
 
 from __future__ import annotations
 
+import math
+import posixpath
 from dataclasses import dataclass, field
 
 from si_console import config
@@ -300,9 +302,15 @@ def tag_for_write(path: str) -> str:
     do not. The LLM cannot change this. The path decides, not the
     caller. This is the rule from ARCHITECTURE.md section 5.1.
     """
-    if "/tasks/" in path or "/portfolio/" in path:
+    # Fail closed: only a path that is clearly a research or log note
+    # is SAFE. "tasks/x.md" with no leading slash, "./tasks/x.md", or
+    # an odd path all need approval.
+    parts = [p for p in posixpath.normpath(str(path).replace("\\", "/")).split("/") if p]
+    if "tasks" in parts or "portfolio" in parts or ".." in parts:
         return NEEDS_APPROVAL
-    return SAFE
+    if "research" in parts or "log" in parts:
+        return SAFE
+    return NEEDS_APPROVAL
 
 
 def tag_for_status(task_type: str, new_status: str) -> str:
@@ -314,6 +322,29 @@ def tag_for_status(task_type: str, new_status: str) -> str:
     if task_type == "order" and new_status == "done":
         return NEEDS_APPROVAL
     return SAFE
+
+
+def effective_tag(name: str, args: dict) -> str:
+    """The tag GUARD must use for one concrete call.
+
+    The registry tag is the floor: a NEEDS APPROVAL tool never drops
+    to SAFE. update_task_status is SAFE in the registry, but done on
+    an order task needs approval (tag_for_status). The order type is
+    read from the target task note, not from the caller. If the note
+    cannot be read, fail closed and ask for approval.
+    """
+    tool = TOOLS[name]
+    if tool.tag == NEEDS_APPROVAL:
+        return NEEDS_APPROVAL
+    if name == "update_task_status":
+        from si_console.vault import read_note  # local: vault imports config only
+
+        try:
+            target_type = read_note(args.get("task_id", "")).type
+        except Exception:
+            return NEEDS_APPROVAL
+        return tag_for_status(target_type, args.get("status", ""))
+    return tool.tag
 
 
 def tool_names_for_role(role: str) -> set[str]:
@@ -356,6 +387,26 @@ def validate_tool_call(name: str, args: dict) -> None:
                 "BAD_SCHEMA",
                 f"Tool {name} is missing required field: {field_name}.",
             )
+    properties = tool.schema.get("properties", {})
+    if tool.schema.get("additionalProperties") is False:
+        extra = sorted(set(args) - set(properties))
+        if extra:
+            raise ToolError(
+                "BAD_SCHEMA", f"Tool {name} got unknown field(s): {', '.join(extra)}."
+            )
+    # The amount check runs before the generic type check so a bad
+    # amount keeps its own reason code, BAD_AMOUNT.
+    if "amount" in args and args["amount"] is not None:
+        amount = args["amount"]
+        if (
+            isinstance(amount, bool)
+            or not isinstance(amount, (int, float))
+            or not math.isfinite(amount)
+            or amount < 0
+        ):
+            raise ToolError("BAD_AMOUNT", "Amount must be a finite number, zero or more.")
+    for field_name, value in args.items():
+        _check_field(name, field_name, value, properties.get(field_name, {}))
     if "ticker" in args and args["ticker"]:
         if args["ticker"] not in config.ALLOWED_TICKERS:
             raise ToolError(
@@ -363,12 +414,64 @@ def validate_tool_call(name: str, args: dict) -> None:
                 f"Ticker is not on the allow list: {args['ticker']}.",
                 remedy=f"Use one of: {sorted(config.ALLOWED_TICKERS)}.",
             )
-    if "amount" in args and args["amount"] is not None:
-        if not isinstance(args["amount"], (int, float)) or args["amount"] < 0:
-            raise ToolError("BAD_AMOUNT", "Amount must be a number, zero or more.")
     if "output_path" in args and args["output_path"]:
-        if not args["output_path"].startswith("vault/si-console/slides/"):
+        if not is_slide_path(args["output_path"]):
             raise ToolError(
                 "BAD_SCHEMA",
                 "Slide output must be under vault/si-console/slides/.",
             )
+
+
+SLIDES_PREFIX = "vault/si-console/slides/"
+
+
+def is_slide_path(path: str) -> bool:
+    """True when `path` stays inside vault/si-console/slides/ after
+    normalising. A plain prefix check lets slides/../../x escape."""
+    if not isinstance(path, str) or "\\" in path or not path.startswith(SLIDES_PREFIX):
+        return False
+    normal = posixpath.normpath(path)
+    return normal.startswith(SLIDES_PREFIX) and normal != SLIDES_PREFIX.rstrip("/")
+
+
+_JSON_TYPES = {
+    "string": (str,),
+    "integer": (int,),
+    "number": (int, float),
+    "array": (list,),
+    "object": (dict,),
+    "boolean": (bool,),
+}
+
+
+def _check_field(tool_name: str, field_name: str, value, spec: dict) -> None:
+    """Check one argument against its schema entry: type, enum, and
+    the min and max bounds the registry declares. Raises BAD_SCHEMA."""
+
+    def bad(why: str) -> ToolError:
+        return ToolError("BAD_SCHEMA", f"Tool {tool_name} field {field_name}: {why}.")
+
+    kind = spec.get("type")
+    if kind:
+        allowed = _JSON_TYPES.get(kind, (object,))
+        # bool is an int in Python, but never a valid JSON number here.
+        if (isinstance(value, bool) and kind != "boolean") or not isinstance(value, allowed):
+            raise bad(f"must be {kind}")
+    if "enum" in spec and value not in spec["enum"]:
+        raise bad(f"must be one of {spec['enum']}")
+    if isinstance(value, str):
+        if "minLength" in spec and len(value) < spec["minLength"]:
+            raise bad(f"shorter than {spec['minLength']}")
+        if "maxLength" in spec and len(value) > spec["maxLength"]:
+            raise bad(f"longer than {spec['maxLength']}")
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if "minimum" in spec and value < spec["minimum"]:
+            raise bad(f"below {spec['minimum']}")
+        if "maximum" in spec and value > spec["maximum"]:
+            raise bad(f"above {spec['maximum']}")
+    if isinstance(value, list):
+        if "maxItems" in spec and len(value) > spec["maxItems"]:
+            raise bad(f"more than {spec['maxItems']} items")
+        item_spec = spec.get("items") or {}
+        for item in value:
+            _check_field(tool_name, field_name + "[]", item, item_spec)

@@ -50,7 +50,7 @@
 - [code/si_console/coordinator.py](code/si_console/coordinator.py): agent loop
 - [code/si_console/bridge.py](code/si_console/bridge.py): vault watcher, buttons, LEDs
 - [code/si_console/gpio_map.py](code/si_console/gpio_map.py): GPIO constants (code side)
-- [code/tests/](code/tests/): 89 mocked tests, no Pi needed
+- [code/tests/](code/tests/): 163 mocked tests, no Pi needed
 
 ## Optional (older, superseded)
 - [research/README.md](research/README.md): index of older material

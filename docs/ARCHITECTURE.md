@@ -27,8 +27,10 @@ results. The hard thinking is delegated to workers.
 
 The authoritative v1 flow above names two tiers (FAST|THINK). The four-tier
 roster in `docs/MODEL_TIERS.md` is **ACCEPTED** as of 2026-11-25. It records
-model selection for the runtime and the booth arena; it is not yet implemented
-in the v1 skeleton and does not alter the v1 spec's DeepSeek-only runtime.
+model selection for the runtime and the booth arena. Implemented in `code/` on 2026-11-24 (mocked tests only, no live call yet):
+`config.py` tier chains and pane settings, `chat_client.py`, `models.py`,
+`router.py`, `judge.py`, `telemetry.py`. The PROVIDERS text below still says
+DeepSeek only; updating it is the owners' call.
 
 | Tier | Job | Call volume | Quality need | Latency | Cost tolerance |
 |---|---|---|---|---|---|
@@ -54,7 +56,7 @@ benchmarked (KingBench 4: 33.2, 7/19, top open model); the earlier interim note
 is CLOSED and GLM 5.3 Flash is permanently culled. Operators can pin any T0
 model per orchestrator pane and restrict each pane's T2 worker pool — see
 `docs/MODEL_TIERS.md` §"Configurable model selection". All placements are
-decisions, not code: `code/si_console/models.py` still routes to DeepSeek only.
+implemented in `code/si_console/models.py` and `router.py` (2026-11-24).
 
 ## SAFETY (merged)
 
@@ -106,14 +108,14 @@ above. This list is for planning. It does not change the authoritative spec.
 | 120 s approval timeout treated as reject | Approval pause in `coordinator._run_one_tool_call` only logs and waits; no timeout | Needs the wait loop reading note `approved_by`, green/red, and a 120 s clock. Owner: Jayden. |
 | Hardware kill poll at 100 ms | Bridge GPIO debounce 0.05 s; coordinator reads `state.json` once per 1 s loop iteration | Tighten poll to 0.1 s at the GPIO layer. Pin map remains R2/R3 as stated. Owner: Jayden. |
 | Ctrl+K text intake | Only `voice_intents.py` (fixed EN/ZH phrase matcher) | Text intake with its own fixed vocabulary not implemented. Owner: Jayden. |
-| Rules-only ROUTER -> tier (v1 FAST/THINK; accepted T0/T1/T2/T3 2026-11-25) | `models.py` tier router maps coordinator/worker/narration/premium tiers to DeepSeek only | No skill/keyword/length router; worker model is not selected per task tier; no per-tier providers; per-pane pinning not implemented. Owner: Christopher. |
+| Rules-only ROUTER -> tier (v1 FAST/THINK; accepted T0/T1/T2/T3 2026-11-25) | 2026-11-24: `router.py` rules (skill, keywords, length) with Jev tie-break; `models.py` T0-T3 chains across DeepSeek, Hunyuan, GLM, Bailian/Qwen, MiMo with fallback, pane pins, T2 allowlists, T1 off | Coordinator has no worker-dispatch action in the fixed menu yet, so `router.dispatch` is not called from the loop; arena contest runner and UI not built. Owner: Christopher. |
 | Default-deny policy, allowlisted read-only tools auto-run | `tools.py` tags each tool `SAFE` or `NEEDS APPROVAL`; SAFE runs immediately in `coordinator._run_one_tool_call` | Permissive tag list must be replaced with default-deny and a read-only allow list. Owner: Christopher. |
 | Injection guard tainting web/file content | Bocha results clipped in `context.py`; vault search notes require citations | No taint tracking; no rule blocking tainted text from becoming tool arguments. Owner: Christopher. |
 | Exact command shown on screen at approval time | `request_approval()` sets `approval_pending` and task id; screen shows proposal note | Command/args are not rendered verbatim from the tool call. Owner: Christopher. |
 | EXECUTE in own process group with timeout, VERIFY RESULT | `guard.check_shell_command()` allow list; `shell_run` tool body is a skeleton | No process group, timeout, or empty-output/step-limit verification. Owner: Christopher. |
 | `escalate_to_human` action name | `_escalate()` writes a `*-escalate` note with status `blocked`; reason code `ROUND_LIMIT` | Fixed menu has no `escalate_to_human` action; escalation is internal only. Owner: Christopher. |
-| One escalation on worker failure (v1: pro; accepted: T1 Qwen4 Max -> escalate_to_human) | `models.py` premium tier maps to `deepseek-v4-pro` if configured | No automatic one-time worker escalation path; accepted tier chain is not implemented. Owner: Christopher. |
-| Telemetry to SQLite (route, model, tokens, latency, cost) | No telemetry store; `LoopResult` and vault logs hold free-text lines | SQLite schema and writer not implemented. No secrets or personal data in telemetry. Owner: Christopher. |
+| One escalation on worker failure (v1: pro; accepted: T1 Qwen4 Max -> escalate_to_human) | 2026-11-24: T1 = Qwen4 Max; exhausted or denied T1 raises `EscalationNeeded`, `router.dispatch` returns `escalate=True` | Screen and vault note for ESCALATE TO HUMAN from a worker not wired. Owner: Christopher. |
+| Telemetry to SQLite (route, model, tokens, latency, cost) | 2026-11-24: `telemetry.py` writes every chat attempt, judge call and route to SQLite (no prompt text, no keys) | Dashboard view of telemetry not built. Owner: Christopher. |
 | Every live run recorded; automatic offline replay | No recording mode; `deepseek_client.py` makes live calls only | Need a recorder in the client layer and a replay player feeding the same validation/GUARD path. Owner: Jayden. |
 | External agents off in booth, claim research/narration only | Bridge API has `_check_home_mode()`, 10/min rate limit, `CLAIMABLE_TYPES = {research, narration}` | Already aligned. Claim TTL/heartbeat present in `state_store.py`. Owner: Jayden. |
 | Pin map is repo R2/R3 only | `docs/GPIO_PIN_MAP.md` now has a dated R4.1 section (white AGENT 1 LED resistor, cable hole) | Spec says R2/R3 only; R4.1 doc section was added by the CAD work. Reconcile before implementation. Owners: Jayden + Christopher. |

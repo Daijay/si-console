@@ -51,6 +51,7 @@ class SectorScore:
     momentum: float
     relative_strength_vs_spy: float
     weight: float = 0.0
+    has_data: bool = True
 
 
 def _read_prices(ticker: str, replay_date: date) -> list[tuple[date, float]]:
@@ -78,6 +79,11 @@ def _read_prices(ticker: str, replay_date: date) -> list[tuple[date, float]]:
     return rows
 
 
+def _has_history(rows: list[tuple[date, float]]) -> bool:
+    """Enough rows for a momentum number, with a usable start price."""
+    return len(rows) >= LOOKBACK_DAYS + 1 and rows[-LOOKBACK_DAYS - 1][1] != 0
+
+
 def _momentum(rows: list[tuple[date, float]]) -> float:
     """Simple momentum: close now divided by close LOOKBACK_DAYS ago.
 
@@ -103,6 +109,7 @@ def rank_sectors(replay_date: date) -> dict:
     """
     spy_rows = _read_prices("SPY", replay_date)
     spy_momentum = _momentum(spy_rows)
+    spy_has_data = _has_history(spy_rows)
     scored: list[SectorScore] = []
     for ticker in SECTOR_TICKERS:
         rows = _read_prices(ticker, replay_date)
@@ -112,10 +119,19 @@ def rank_sectors(replay_date: date) -> dict:
                 ticker=ticker,
                 momentum=mom,
                 relative_strength_vs_spy=mom - spy_momentum,
+                has_data=_has_history(rows),
             )
         )
-    scored.sort(key=lambda s: s.relative_strength_vs_spy, reverse=True)
-    top = [s for s in scored[:MAX_SECTORS] if s.relative_strength_vs_spy > 0]
+    # A sector with no price history has momentum 0, which would beat
+    # SPY in any falling market and get bought on no data at all. No
+    # history, no signal: rank it last and never propose it. With no
+    # SPY history there is no benchmark, so hold cash.
+    scored.sort(key=lambda s: (s.has_data, s.relative_strength_vs_spy), reverse=True)
+    top = [
+        s
+        for s in scored[:MAX_SECTORS]
+        if spy_has_data and s.has_data and s.relative_strength_vs_spy > 0
+    ]
     investable = 1.0 - CASH_RESERVE
     weight = investable / len(top) if top else 0.0
     for sector in top:
@@ -123,12 +139,14 @@ def rank_sectors(replay_date: date) -> dict:
     return {
         "replay_date": replay_date.isoformat(),
         "spy_momentum": round(spy_momentum, 4),
+        "spy_has_data": spy_has_data,
         "ranked": [
             {
                 "ticker": s.ticker,
                 "momentum": round(s.momentum, 4),
                 "relative_strength_vs_spy": round(s.relative_strength_vs_spy, 4),
                 "weight": round(s.weight, 4),
+                "has_data": s.has_data,
             }
             for s in scored
         ],
@@ -165,7 +183,11 @@ def main() -> None:
     if len(sys.argv) != 2:
         print("Usage: python3 rules_engine.py YYYY-MM-DD")
         raise SystemExit(2)
-    replay_date = date.fromisoformat(sys.argv[1])
+    try:
+        replay_date = date.fromisoformat(sys.argv[1])
+    except ValueError:
+        print("Bad date. Usage: python3 rules_engine.py YYYY-MM-DD")
+        raise SystemExit(2) from None
     print(json.dumps(rank_sectors(replay_date), indent=2))
 
 

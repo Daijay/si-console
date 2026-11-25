@@ -32,9 +32,9 @@ flowchart TB
 
     subgraph A["AGENT RUNTIME ( Christopher + Jayden )"]
         IN["Intake<br/>(reject if KILLED or busy)"]
-        ROUTER["ROUTER (rules only)<br/>skill / keywords / length<br/>v1: FAST | THINK<br/>proposed: T0 | T1 | T2 | T3"]
+        ROUTER["ROUTER (rules only)<br/>skill / keywords / length<br/>v1: FAST | THINK<br/>accepted 2026-11-25: T0 | T1 | T2 | T3"]
         COORD["COORDINATOR / T0<br/>DeepSeek flash, fixed JSON menu<br/>max 3 rounds, writes worker prompts"]
-        WORK["WORKERS (proposed)<br/>T1 heavy / T2 medium / T3 small"]
+        WORK["WORKERS (accepted, implemented in code)<br/>T1 heavy / T2 medium / T3 small"]
         POLICY["POLICY CHECK<br/>default deny"]
         GUARD["GUARD<br/>deterministic code"]
         EXEC["EXECUTE<br/>own process group + timeout"]
@@ -48,7 +48,7 @@ flowchart TB
         SQLITE[("SQLite<br/>how it ran")]
     end
 
-    subgraph P["PROVIDERS + OFFLINE (proposed tiers shown)"]
+    subgraph P["PROVIDERS + OFFLINE (accepted tiers, implemented in code)"]
         DS["T0: DeepSeek / Hy4 / GLM 5.4<br/>T1: Qwen4 Max<br/>T2: Hy4 / DeepSeek / GLM 5.4<br/>T3: MiMo 2.6 Flash + $0 paths<br/>Judge: Jev 1.14 (ACCEPTED 2026-11-25)"]
         BOCHA["Bocha search"]
         REC[("Recorded runs<br/>in the vault")]
@@ -93,9 +93,12 @@ Bocha are **DONE**; offline recording/replay is **GAP**. External-agent API is
 **DONE / aligned** (home-mode, rate limit, claim types).
 
 The four-tier worker roster is **ACCEPTED 2026-11-25** (see
-`docs/MODEL_TIERS.md`) but not implemented; the v1 spec still names FAST/THINK
-and DeepSeek-only. Spec sections: STATE
-MACHINE, FLOW, SAFETY, MEMORY AND STATE, PROVIDERS, OFFLINE, EXTERNAL AGENTS.
+`docs/MODEL_TIERS.md`) and the chains, pane pins, Jev tie-break and SQLite
+telemetry are **implemented in `code/` (2026-11-24, mocked tests only)**;
+the coordinator's worker-dispatch action and the arena runner/UI are still
+GAP. The v1 spec text still names FAST/THINK and DeepSeek-only — updating it
+is the owners' call. Spec sections: STATE MACHINE, FLOW, SAFETY, MEMORY AND
+STATE, PROVIDERS, OFFLINE, EXTERNAL AGENTS.
 
 ---
 
@@ -247,15 +250,19 @@ flowchart TB
 ```
 
 **Legend:** all four tier chains are **ACCEPTED 2026-11-25** (recorded in
-`docs/MODEL_TIERS.md`) and are **NOT implemented** — `models.py` +
-`deepseek_client.py` are DeepSeek-only today (router fails closed to DeepSeek;
-no Anthropic client, deliberately, because the booth is in Shenzhen). Bocha is
-**DONE** as a best-effort search that never blocks and never changes a ranking.
-The **rules-based tier router**, the **one-time escalation**, and **per-pane
-pinning / T2 allowlists** are **GAP**; today tiers are chosen by caller name
-(coordinator/worker/narration/premium). Jev 1.14 is the accepted **judge** —
-typed decisions in ~100ms, output free — not the old optional home-only shadow
-advisor (Inkling was culled). GLM 5.4 is benchmarked (KingBench 4) and the
+`docs/MODEL_TIERS.md`) and are **implemented in `code/` (2026-11-24)**:
+`config.py` chains + pane pins, `chat_client.py` (one OpenAI-compatible client
+for DeepSeek, Hunyuan/Hy4, GLM, Bailian/Qwen, MiMo), `models.py` chain walk with
+fallback and T1 `EscalationNeeded`, `router.py` rules with Jev tie-break,
+`judge.py` (OpenRouter Decisions API) and `telemetry.py` (SQLite). **163 mocked
+tests pass; no live provider call has been made** — wire shapes are LIKELY from
+docs and model ids go in `code/.env`. Still GAP: a worker-dispatch action in the
+coordinator's fixed menu and live verification per provider. No Anthropic
+client, deliberately, because the booth is in Shenzhen. Bocha is **DONE** as a
+best-effort search that never blocks and never changes a ranking. Jev 1.14 is
+the accepted **judge** — typed decisions in ~100ms, output free — not the old
+optional home-only shadow advisor (Inkling was culled). GLM 5.4 is benchmarked
+(KingBench 4) and the
 5.3 Flash interim note is CLOSED. Spec section: PROVIDERS.
 
 ---
@@ -348,7 +355,7 @@ for the two owners to reconcile.
 
 ---
 
-## 10. Booth arena demo (ACCEPTED 2026-11-25, not implemented)
+## 10. Booth arena demo (ACCEPTED 2026-11-25, runner/UI not built)
 
 ```mermaid
 flowchart TB
@@ -379,14 +386,16 @@ flowchart TB
     PI["Pi 5: console state machine,<br/>dashboard render, API calls"] --> MON
 ```
 
-**Legend:** this whole diagram is **GAP (not implemented)** — it is the accepted
-2026-11-25 booth demo design recorded in `docs/MODEL_TIERS.md` §"Booth arena".
-The Pi renders the dashboard and makes API calls; generated code runs only in
-an isolated sandbox, never on the GPIO/bridge path. Green/red/kill remain the
-physical gate. Each column keeps 2 main subagents on stage with extra agents as
-tab chips; clicking a chip promotes it into a main pane. Operators can pin each
-orchestrator's model and restrict its T2 worker pool. Spec sections: PROVIDERS,
-SAFETY (sandbox is outside GUARD's physical-action scope by design).
+**Legend:** this is the accepted 2026-11-25 booth demo design recorded in
+`docs/MODEL_TIERS.md` §"Booth arena". The **route/model layer is implemented**
+(2026-11-24): per-pane pins, T2 allowlists, T1 on/off, Jev tie-break, SQLite
+telemetry, 163 mocked tests. The **arena contest runner, the 3-column UI, the
+tab-chip promotion flow and the isolated sandbox are GAP** — not built. When
+built, the Pi will render the dashboard and make API calls; generated code will
+run only in the sandbox, never on the GPIO/bridge path. Green/red/kill remain
+the physical gate. Each column keeps 2 main subagents on stage with extra
+agents as tab chips. Spec sections: PROVIDERS, SAFETY (sandbox is outside
+GUARD's physical-action scope by design).
 
 ---
 
@@ -399,11 +408,11 @@ SAFETY (sandbox is outside GUARD's physical-action scope by design).
 | 3. End-to-end flow | FLOW, SAFETY | PARTIAL |
 | 4. Safety stack | SAFETY | mixed (GUARD DONE, others GAP/PARTIAL) |
 | 5. Memory and state | MEMORY AND STATE, OFFLINE | PARTIAL / GAP |
-| 6. Providers and routing | PROVIDERS | PARTIAL / GAP (4 tiers ACCEPTED 2026-11-25, not implemented) |
+| 6. Providers and routing | PROVIDERS | DONE in code (4 tiers + Jev, 163 mocked tests); live calls unverified |
 | 7. Offline fallback | OFFLINE | GAP (rules engine DONE) |
 | 8. External agents | EXTERNAL AGENTS | DONE / aligned |
 | 9. Ownership map | OWNERSHIP | informational |
-| 10. Booth arena demo | PROVIDERS, SAFETY | GAP (ACCEPTED design, not implemented) |
+| 10. Booth arena demo | PROVIDERS, SAFETY | route/model layer DONE (mocked); runner/UI/sandbox GAP |
 
 Rendering notes: Mermaid should be supported by GitHub natively. If a viewer
 does not render `stateDiagram-v2` or `<br/>` labels, the equivalent text is in
