@@ -2,3 +2,7 @@
 *.stl filter=lfs diff=lfs merge=lfs -text
 *.step filter=lfs diff=lfs merge=lfs -text
 *.stp filter=lfs diff=lfs merge=lfs -text
+# Files run or read on the Pi must keep LF endings, even from Windows.
+*.sh text eol=lf
+*.service text eol=lf
+.env.example text eol=lf

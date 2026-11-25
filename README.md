@@ -34,7 +34,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4 and R5.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
-- Code tests: last run 2026-11-24, **163 passed** (134 before the roster router, 89 before the 2026-11-24 bug pass, 79 before the R3 bug fixes; mocked providers and GPIO, no Pi, no API keys). Not tested on the Pi.
+- Code tests: last run 2026-11-24, **174 passed** (163 before the smoke check, 134 before the roster router, 89 before the 2026-11-24 bug pass, 79 before the R3 bug fixes; mocked providers and GPIO, no Pi, no API keys). Not tested on the Pi.
 - Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Implemented in `code/` 2026-11-24 with fallback chains, pane pinning, Jev routing tie-break and SQLite telemetry; mocked tests only, no live provider call yet. Keys and model ids go in `code/.env` (see `code/.env.example`).
 - **Booth API cost (2 days, Dec 12–13):** ~$43–77 USD at packed traffic (100 contests/day), ~$21–38 at typical traffic (50/day). Worst case dominated by Qwen4 Max ~$36, Hy4 ~$21.6, DeepSeek ~$15.4, GLM 5.4 ~$4, Jev ~$0.05. Full breakdown in `docs/MODEL_TIERS.md`.
 

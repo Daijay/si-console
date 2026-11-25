@@ -46,6 +46,20 @@ python3 -m venv .venv
 .venv/bin/python3 -m pytest tests/ -v
 Last run 2026-11-23 on Windows: 79 passed.
 
+## Deploy to the Pi
+1. On the Pi: `git clone` the repo (then `git lfs pull` if you need the CAD files).
+2. Copy your filled `.env` from the laptop (it is not in git):
+   `scp code/.env <you>@<pi>:~/si-console/code/.env`
+3. `bash ~/si-console/code/deploy/install_pi.sh` installs packages and the venv,
+   makes the vault folders, locks `.env` (chmod 600, LF endings), checks the
+   clock, writes the systemd units for your user and path, then runs the free
+   smoke check. It sends no paid API call.
+4. `cd ~/si-console/code && .venv/bin/python -m si_console.smoke --live` sends one
+   tiny call per model (cost shown first, asks before sending).
+5. `bash ~/si-console/code/deploy/install_pi.sh --enable` starts the services
+   (refuses if the smoke check fails).
+Run the smoke check again in Shenzhen before the booth opens.
+
 ## What is NOT here
 No API keys. No Gmail. No OAuth. No Windows autostart. No local LLM.
 No DeepSeek model name hard coded. The model is pinned in .env at

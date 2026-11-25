@@ -300,5 +300,5 @@ def roster_status() -> dict:
             "key_set": bool(chat_client.provider_key(slot_info(slot)["provider"])),
         }
         for slot in config.MODEL_SLOTS
-    } | {"jev": {"provider": "openrouter", "model_pinned": bool(config.JEV_MODEL),
-                 "key_set": bool(config.OPENROUTER_API_KEY)}}
+    } | {"jev": {"provider": config.JEV_PROVIDER, "model_pinned": bool(config.JEV_MODEL),
+                 "key_set": bool(config.JEV_API_KEY)}}

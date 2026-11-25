@@ -102,7 +102,7 @@ Judge           : Jev 1.14 (typed decisions, output free)
 
 | # | Model | In/Out $/M | Benchmark | Reason |
 |---|---|---|---|---|
-| 1 | **Qwen4 Max** | 1.50 / 4.50 | AA 43 / Agent Arena **#14** (top Chinese model) | Sole heavy worker. Flagship agentic: parallel tool calls, ~2k calls/session, structured output, 1M context; Alibaba Singapore endpoint is China-accessible. Failure goes straight to `escalate_to_human`. |
+| 1 | **Qwen4 Max** | 1.50 / 4.50 | AA 43 / Agent Arena **#14** (top Chinese model) | Sole heavy worker. Flagship agentic: parallel tool calls, ~2k calls/session, structured output, 1M context; Alibaba Singapore endpoint is China-accessible (the team's key is a Hong Kong region key, so `code/` defaults to the Hong Kong endpoint; 2026-11-24). Failure goes straight to `escalate_to_human`. |
 
 Kimi K3.1 Pro was removed: at $10/M output it consumed 64% of arena spend for
 marginal visible gain over Qwen4 Max on a tool-calling console.
@@ -288,9 +288,14 @@ provider yet):
   rules, T1 -> `EscalationNeeded`, T3 -> `ZeroPathNeeded`.
 - `router.py`: rules-only routing (skill, keywords, length), Jev tie-break
   restricted to the pane's allowed tiers, `dispatch()`.
-- `judge.py`: Jev through the OpenRouter Decisions API (`choice` questions);
+- `judge.py`: Jev direct from TypeSafe (`POST https://api.typesafe.ai/v1/systemone`,
+  model `jev-1.14.0`; OpenRouter's Decisions API is the alternate route) (`choice` questions);
   an answer outside the offered options is rejected.
 - `telemetry.py`: SQLite rows for every attempt, judge call and route.
+
+Check before the booth: `python -m si_console.smoke` (free: config, DNS, clock,
+keys and model ids) and `--live` (one tiny call per model). Pi setup:
+`code/deploy/install_pi.sh`.
 
 Still open: live calls per provider (wire shapes are LIKELY from docs), Qwen
 thinking (T1 runs with thinking off until tested), a worker-dispatch action in
