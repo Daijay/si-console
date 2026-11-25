@@ -19,6 +19,10 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+# runtime state and telemetry (never commit)
+telemetry.sqlite
+code/state.json
+code/claims.json
 # local scratch
 *.log
 *.tmp

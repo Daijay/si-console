@@ -109,7 +109,7 @@ def validate_action(action: dict, task: TaskNote) -> None:
             )
 
 
-def run_task(task_id: str, guard_state: GuardState) -> LoopResult:
+def run_task(task_id: str, guard_state: GuardState, pane: str | None = None) -> LoopResult:
     """Run one task through the coordinator loop. Max 3 rounds.
 
     Step 1. Read the task. If kill is active, do not pick it up.
@@ -120,7 +120,11 @@ def run_task(task_id: str, guard_state: GuardState) -> LoopResult:
     at once. NEEDS APPROVAL tools pause for the green or red button.
     Step 6. Write a log line. Step 7. Count one round. Done, or loop,
     or block at 3 rounds with ROUND_LIMIT and an escalation note.
+    The model comes from the T0 chain for `pane` (arena pane A, B or
+    C; default SI_COORDINATOR_PANE). The router falls back inside the
+    chain, so a ModelError here means every T0 model failed.
     """
+    pane = pane or config.COORDINATOR_PANE
     if guard_state.kill_active:
         return LoopResult(task_id, False, 0, "KILL_SWITCH")
     task = read_note(task_id)
@@ -147,6 +151,8 @@ def run_task(task_id: str, guard_state: GuardState) -> LoopResult:
                 messages,
                 system=SYSTEM_PROMPT,
                 tools=tools_for_role(task.agent),
+                pane=pane,
+                route_reason=f"orchestrator task {task_id}",
             )
         except ModelError as exc:
             # One retry, then block. Do not retry forever. In booth
