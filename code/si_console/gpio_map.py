@@ -39,7 +39,7 @@ LANG_TOGGLE = 24    # physical pin 18, EN / ZH toggle
 # --- Status LEDs, outputs to ULN2003 inputs -----------------------------
 # Rev R2 names and pins. All 6 LEDs run through the ULN2003.
 LED_COORD = 5       # physical pin 29, green, 150 ohm, ULN2003 Ch1
-LED_AGENT1 = 6      # physical pin 31, red, 220 ohm, ULN2003 Ch2
+LED_AGENT1 = 6      # physical pin 31, white, 100 ohm (R4.1), ULN2003 Ch2
 LED_AGENT2 = 13     # physical pin 33, blue, 100 ohm, ULN2003 Ch3
 LED_GUARD = 19      # physical pin 35, yellow, 220 ohm, ULN2003 Ch4
 
@@ -90,7 +90,7 @@ BUTTON_LEDS = {
 # in resistor, do not add another one. Check the part before wiring.
 LED_RESISTORS_OHM = {
     "COORD": 150,
-    "AGENT 1": 220,
+    "AGENT 1": 100,  # white LED, closed in R4.1 (docs/GPIO_PIN_MAP.md)
     "AGENT 2": 100,
     "GUARD": 220,
 }

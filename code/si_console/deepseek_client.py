@@ -138,6 +138,15 @@ def complete(
             remedy="Retry once, then mark the task blocked with API_TIMEOUT.",
             status=504,
         ) from None
+    except httpx.HTTPError as exc:
+        # Protocol, read, write or proxy errors. Without this they leave
+        # as raw httpx errors, miss the coordinator's ModelError handler,
+        # and crash the loop instead of blocking one task.
+        raise ModelError(
+            f"DeepSeek request failed: {type(exc).__name__}.",
+            remedy="Retry once, then mark the task blocked with API_ERROR.",
+            status=502,
+        ) from None
 
     if response.status_code == 401:
         raise ModelError(

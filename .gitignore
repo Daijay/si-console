@@ -1,6 +1,8 @@
 # secrets
 .env
 .env.*
+# The example holds variable names only, never values. Keep it tracked.
+!.env.example
 *.pem
 *.key
 secrets*

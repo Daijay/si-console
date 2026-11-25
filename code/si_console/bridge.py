@@ -31,6 +31,7 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import time
 from pathlib import Path
 from typing import Optional
@@ -54,6 +55,10 @@ from si_console.vault import (
 # owns task state. state.json is a cache for the screens. If state
 # and the vault disagree, the vault wins on the next scan.
 kill_active = False
+# Set when the kill switch is pressed. KILLED exits only via switch
+# reset plus one green press (ARCHITECTURE.md state machine), so a
+# released switch alone never resumes work.
+resume_required = False
 approval_pending = False
 approval_task_id = ""
 rate_hits: list[float] = []
@@ -85,12 +90,13 @@ def _check_token(authorization: Optional[str]) -> None:
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing token.")
     token = authorization[len("Bearer ") :]
-    if not config.BRIDGE_API_TOKEN or token != config.BRIDGE_API_TOKEN:
+    expected = config.BRIDGE_API_TOKEN
+    if not expected or not hmac.compare_digest(token.encode(), expected.encode()):
         raise HTTPException(status_code=401, detail="Bad token.")
 
 
 def _check_not_killed() -> None:
-    if kill_active:
+    if kill_active or resume_required:
         raise HTTPException(status_code=423, detail="KILL_ACTIVE_WRITE_DENY")
 
 
@@ -155,6 +161,7 @@ class VaultWatcher:
             current_agent=current.agent if current else "",
             current_status=current.status if current else "",
             kill_active=kill_active,
+            resume_required=resume_required,
             mode=config.MODE,
             approval_pending=approval_pending,
             lang=config.LANG,
@@ -176,14 +183,21 @@ def on_green_press() -> dict:
     task exists, green means approve. The screen must label the
     buttons in both states. See ARCHITECTURE.md section 6.2.
     """
-    global approval_pending, kill_active
+    global approval_pending, approval_task_id, resume_required
     if kill_active:
-        # Resume path: the kill switch must already be off. GPIO22
-        # reads LOW. The GPIO layer checks that before calling here.
-        # Never auto resume. Turn the kill switch off, then press
-        # green once to resume. Old blocked tasks stay blocked.
-        kill_active = False
-        state_store.update(kill_active=False, last_error="")
+        # The kill switch is still latched on. Green does nothing.
+        # Turn the switch off first, then press green once.
+        return {"status": "ignored", "note": "KILL ACTIVE"}
+    if resume_required:
+        # Resume path: the switch is already off (on_kill(False) ran).
+        # Never auto resume. Old blocked tasks stay blocked, and no
+        # proposal from before the kill can be approved by this press.
+        resume_required = False
+        approval_pending = False
+        approval_task_id = ""
+        state_store.update(
+            kill_active=False, resume_required=False, approval_pending=False, last_error=""
+        )
         return {"status": "resumed", "note": "New signal task will be created."}
     if not approval_pending or not approval_task_id:
         return {"status": "ignored", "note": "NO PROPOSAL READY"}
@@ -194,6 +208,13 @@ def on_green_press() -> dict:
         return {"status": "ignored", "note": "Task is gone."}
     if task.risk_check == "fail":
         return {"status": "ignored", "note": f"RISK BLOCKED {task.risk_reason}"}
+    if task.status in ("blocked", "done"):
+        # A task blocked by kill, timeout or watchdog, or already done,
+        # is no longer a live proposal. Never revive it with green.
+        approval_pending = False
+        approval_task_id = ""
+        state_store.update(approval_pending=False)
+        return {"status": "ignored", "note": f"TASK {task.status.upper()}"}
     update_status(task.id, "working", approved_by="human")
     approval_pending = False
     state_store.update(approval_pending=False)
@@ -205,13 +226,18 @@ def on_red_press() -> dict:
     scenario on the start screen. It does not execute anything. It
     does not change the portfolio. The coordinator routes work back
     to signal for a new proposal."""
-    global approval_pending
+    global approval_pending, approval_task_id
     if not approval_pending or not approval_task_id:
         return {"status": "ignored", "note": "NO PROPOSAL READY"}
-    update_status(approval_task_id, "blocked", "HUMAN_REJECT")
+    task_id = approval_task_id
     approval_pending = False
+    approval_task_id = ""
     state_store.update(approval_pending=False)
-    return {"status": "rejected", "task_id": approval_task_id}
+    try:
+        update_status(task_id, "blocked", "HUMAN_REJECT")
+    except VaultError:
+        return {"status": "ignored", "note": "Task is gone."}
+    return {"status": "rejected", "task_id": task_id}
 
 
 def on_kill(active: bool) -> dict:
@@ -219,18 +245,24 @@ def on_kill(active: bool) -> dict:
     bridge must: set kill active, block all working tasks with
     KILL_SWITCH, stop execution, stop voice, set the kill LED
     pattern, show KILL ACTIVE, and log it. Claims are cancelled."""
-    global kill_active
+    global kill_active, resume_required, approval_pending, approval_task_id
     kill_active = active
     if active:
+        # Drop the pending proposal in memory too, not only in
+        # state.json, or green could approve it after a resume.
+        approval_pending = False
+        approval_task_id = ""
+        resume_required = True
         claim_store.release_all()
         for task in list_tasks(status="working"):
             try:
                 update_status(task.id, "blocked", "KILL_SWITCH")
             except VaultError:
                 continue
-        state_store.update(kill_active=True, approval_pending=False)
+        state_store.update(kill_active=True, resume_required=True, approval_pending=False)
         return {"status": "killed"}
-    state_store.update(kill_active=False)
+    # Switch released. Still frozen until one green press resumes.
+    state_store.update(kill_active=False, resume_required=resume_required)
     return {"status": "kill released, press green to resume"}
 
 
@@ -238,7 +270,12 @@ def request_approval(task_id: str) -> dict:
     """Mark a task as waiting for the green button. The bridge lights
     the green button LED solid and shows the proposal on screen."""
     global approval_pending, approval_task_id
+    if kill_active or resume_required:
+        # Fail closed: no proposal is offered while frozen.
+        return {"status": "ignored", "note": "KILL ACTIVE"}
     task = read_note(task_id)
+    if task.status in ("blocked", "done"):
+        return {"status": "ignored", "note": f"TASK {task.status.upper()}"}
     approval_pending = True
     approval_task_id = task.id
     state_store.update(approval_pending=True, current_task_id=task.id)

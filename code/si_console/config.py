@@ -33,13 +33,15 @@ VAULT_IGNORE_DIRS = {".obsidian", ".trash", ".git", "node_modules", ".venv"}
 
 # State file for the screens. Outside the vault. The dashboard reads it.
 # The vault wins if state.json and the vault ever disagree.
-STATE_PATH = Path(os.getenv("SI_STATE_PATH", PROJECT_ROOT / "state.json"))
+# "or" and not a getenv default: an empty SI_STATE_PATH= line in .env
+# must fall back to the default, not become Path("") (the cwd).
+STATE_PATH = Path(os.getenv("SI_STATE_PATH", "").strip() or PROJECT_ROOT / "state.json")
 
 # Claims file for external agents. Outside the vault. See bridge.py.
-CLAIMS_PATH = Path(os.getenv("SI_CLAIMS_PATH", PROJECT_ROOT / "claims.json"))
+CLAIMS_PATH = Path(os.getenv("SI_CLAIMS_PATH", "").strip() or PROJECT_ROOT / "claims.json")
 
 # Price data lives outside the vault, so the bridge never parses big files.
-DATA_DIR = Path(os.getenv("SI_DATA_DIR", PROJECT_ROOT / "data" / "market"))
+DATA_DIR = Path(os.getenv("SI_DATA_DIR", "").strip() or PROJECT_ROOT / "data" / "market")
 
 # --- DeepSeek ------------------------------------------------------------
 # Secret. From .env only. Never logged or returned.
@@ -140,7 +142,7 @@ CLAUDE_ENABLED = os.getenv("SI_CLAUDE_ENABLED", "false").strip().lower() == "tru
 # is too expensive for any tier here. VERIFIED on Anthropic docs
 # 2026-11-23: claude-opus-5-5 is 4 USD input and 20 USD output per
 # 1M tokens, claude-fable-5-2 is 8 and 40 USD.
-CLAUDE_MODEL_PREMIUM = os.getenv("SI_CLAUDE_MODEL_PREMIUM", "claude-opus-5-5").strip()
+CLAUDE_MODEL_PREMIUM = os.getenv("SI_CLAUDE_MODEL_PREMIUM", "").strip() or "claude-opus-5-5"
 LIGHT = "light"
 COORDINATOR = "coordinator"
 WORKER = "worker"

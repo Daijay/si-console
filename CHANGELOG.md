@@ -2,6 +2,23 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-24, Code bug pass (fail-closed holes)
+Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py`; 134 pass (was 89).
+- GUARD shell allow list: a prefix match let `ls; rm -rf ~`, `df && curl … | sh`, pipes, redirects and `$(…)` through. Shell control characters are now refused.
+- Approval tags: `tag_for_status` existed but the coordinator used the static SAFE tag, so an agent could mark an **order** task done with no green press. New `tools.effective_tag()` reads the target task (fails closed if unreadable). `tag_for_write` now fails closed for paths like `tasks/x.md`.
+- `validate_tool_call` claimed to check enums but did not: enums, types, min/max, unknown fields, bool/NaN/inf amounts and `slides/../..` traversal are now rejected.
+- Kill/resume (ARCHITECTURE.md state machine: exit KILLED only by switch reset + one green press): releasing the switch auto-resumed the coordinator, and the in-memory pending approval survived a kill so green could approve a stale pre-kill proposal. Added a `resume_required` latch in the bridge and `state.json`; kill clears pending approvals; `request_approval` refuses while frozen; green ignores a still-latched switch and never revives a blocked or done task.
+- Coordinator re-reads kill state before every round (a kill mid-task used to wait for the next task) and `serve_forever` survives an unexpected task error (blocks that task, ESCALATE) instead of crash-looping under systemd.
+- DeepSeek and Bocha: httpx transport errors other than connect and timeout now become ModelError or an error dict instead of crashing the loop.
+- `fetch_url` SSRF: the substring blocklist missed 169.254.169.254, 172.16/12, IPv6 loopback, 0.0.0.0, hosts resolving to private IPs and redirects, and wrongly blocked public URLs containing `10.`. Every hop is now resolved and must be a global address.
+- Voice intents: negations were case-sensitive, so STT text "Don't buy XLK" or "Never buy XLE" became a buy proposal. Reject phrases ("do not approve", "不要这个") were unreachable behind the negation check.
+- Rules engine: a sector with no price file got momentum 0 and was proposed in any falling market. No history now means no signal; no SPY history means hold cash.
+- Vault: a UTF-8 BOM made a note vanish from `list_tasks`; `depends_on` ids and research `task_id` are validated against the id rule.
+- GPIO map: AGENT 1 resistor 220 → 100 ohm (white LED, closed in R4.1 per `docs/GPIO_PIN_MAP.md`).
+- `.env.example` was documented but never committed (`.gitignore` `.env.*` swallowed it); added with names only. Empty path variables in `.env` no longer resolve to the working directory.
+- Removed a duplicate `tier_config` in `models.py`.
+- Known, not fixed: no real wait for green inside the coordinator (skeleton logs the pause), DNS rebinding between the `fetch_url` check and connect, `SI_DEEPSEEK_DAILY_CAP_USD` is read but not enforced, claims.json has no file lock.
+
 ## 2026-11-25, Model tiers accepted and architecture synced
 - `docs/MODEL_TIERS.md`: final roster ACCEPTED. T0 DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4; T1 Qwen4 Max -> escalate_to_human; T2 Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4; T3 MiMo 2.6 Flash -> $0 paths; Jev 1.14 as judge ($0.042/M in, output free). Kimi K3.1 Pro, GLM 5.3 Flash, Agnes, Gemini 4 Neon, Qwen 3.8 27B and Inkling 2 Small culled. GLM 5.4 / 5.3 interim note CLOSED (5.4 benchmarked on KingBench 4: 33.2, 7/19, top open model).
 - Added configurable model selection: per-orchestrator pinning (any T0 model or auto) and per-pane T2 worker allowlists. Added booth arena design (3 orchestrator columns, 2 main subagent panes + tab chips, touchpad, isolated sandbox) and cost model (~$0.21–0.39/contest; ~$43–77 for 200 contests over two days; cheapest pinned config ~$5–6).

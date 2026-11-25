@@ -30,7 +30,7 @@ from si_console.guard import GuardState, check_tool
 from si_console.state_store import StateStore
 from si_console.tools import (
     FIXED_MENU,
-    TOOLS,
+    effective_tag,
     tool_names_for_role,
     tools_for_role,
     validate_tool_call,
@@ -131,6 +131,14 @@ def run_task(task_id: str, guard_state: GuardState) -> LoopResult:
     log_lines: list[str] = []
 
     while rounds < config.ROUND_LIMIT:
+        # A round can take 30 s or more. Re-read kill state before
+        # every round so a kill pressed mid-task stops the next model
+        # call and the next tool call, not only the next task.
+        if _killed_in_store():
+            guard_state.kill_active = True
+        if guard_state.kill_active:
+            log_lines.append(f"round {rounds + 1} skipped: KILL_SWITCH")
+            return LoopResult(task_id, False, rounds, "KILL_SWITCH", log_lines)
         rounds += 1
         task.round = rounds
         try:
@@ -208,16 +216,18 @@ def _run_one_tool_call(call: dict, task: TaskNote, state: GuardState, log: list)
     except json.JSONDecodeError:
         raise ToolError("BAD_JSON", "Tool arguments are not valid JSON.") from None
     validate_tool_call(name, args)
-    tool = TOOLS[name]
+    # The tag depends on the call, not only the tool: done on an order
+    # task needs approval even though update_task_status is SAFE.
+    tag = effective_tag(name, args)
     # GUARD checks the tool name against the tools this role may
     # call. tool_names_for_role returns tool names. Do not pass
     # tool.roles here: that set holds role names, and a tool name
     # is never in it, so every call would be blocked.
-    check_tool(name, tool.tag, task.agent, tool_names_for_role(task.agent), state, task)
+    check_tool(name, tag, task.agent, tool_names_for_role(task.agent), state, task)
     # SAFE tools run at once. NEEDS APPROVAL tools pause here in the
     # real build and wait for the bridge. This skeleton logs the pause
     # instead of wiring the full wait, so the team can see the gate.
-    if tool.tag == "NEEDS APPROVAL":
+    if tag == "NEEDS APPROVAL":
         log.append(f"approval needed for {name}, waiting for green or red")
         append_log(task, f"approval requested for {name}")
         write_note(task)
@@ -261,6 +271,17 @@ def _escalate(task: TaskNote, rounds: int, reason: str, log_lines: list) -> Loop
     return LoopResult(task.id, False, rounds, reason, log_lines)
 
 
+def _killed_in_store() -> bool:
+    """True when state.json says the console is frozen: the kill
+    switch is on, or it was released but no green press resumed yet.
+    An unreadable state.json counts as killed (fail closed)."""
+    try:
+        state = state_store.read()
+    except Exception:
+        return True
+    return bool(state.get("kill_active", False) or state.get("resume_required", False))
+
+
 def serve_forever() -> None:
     """Run the coordinator as a service. Pick up the next queued
     task, run it, wait 1 second, repeat. If kill is active, wait
@@ -272,21 +293,34 @@ def serve_forever() -> None:
         # Refresh every iteration so a kill reaches this loop. The
         # vault and state.json are the source of truth, not a copy
         # held here since startup.
-        try:
-            state.kill_active = bool(state_store.read().get("kill_active", False))
-        except Exception:
-            # If state.json is unreadable, fail closed: treat it as
-            # killed until the next scan can read it.
-            state.kill_active = True
+        # If state.json is unreadable, fail closed: treat it as killed
+        # until the next scan can read it. A released kill switch still
+        # counts as killed until a green press resumes (resume_required).
+        state.kill_active = _killed_in_store()
         if state.kill_active:
             time.sleep(1)
             continue
-        task = pick_next_task()
+        task = None
+        try:
+            task = pick_next_task()
+        except Exception as exc:  # noqa: BLE001 - vault unreadable: wait, retry
+            print(f"coordinator: could not list tasks: {getattr(exc, 'code', type(exc).__name__)}")
         if task is None:
             time.sleep(1)
             continue
-        update_status(task.id, "working")
-        run_task(task.id, state)
+        try:
+            update_status(task.id, "working")
+            run_task(task.id, state)
+        except Exception as exc:  # noqa: BLE001 - the service must not die
+            # One bad note, a vault hiccup, or an unexpected client error
+            # must not crash the service into a systemd restart loop.
+            # Block the task so the queue does not pick it up again.
+            code = getattr(exc, "code", "") or type(exc).__name__
+            try:
+                update_status(task.id, "blocked", "ESCALATE")
+            except Exception:
+                pass
+            print(f"coordinator: task {task.id} failed: {code}")
         time.sleep(1)
 
 
