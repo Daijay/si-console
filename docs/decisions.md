@@ -1,6 +1,6 @@
 # Decisions
 
-STATUS: DRAFT. Figures come from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`. "Final choice" stays blank until the team decides. Rev R4 (2026-11-23) built the CAD around the defaults below and closed or narrowed the R3 review items; those lines are marked "R4".
+Figures come from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`. "Final choice" stays blank until the team decides. Rev R4 (2026-11-23) built the CAD around the defaults below and closed or narrowed the R3 review items; those lines are marked "R4".
 
 ## A. From the overnight run (recommendations, awaiting confirmation)
 

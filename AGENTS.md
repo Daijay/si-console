@@ -1,6 +1,6 @@
 # AGENTS.md
 
-For AI agents (Claude Code, Muse, Hermes). Status: DRAFT.
+For AI agents (Claude Code, Muse, Hermes).
 
 ## Project
 SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 inch HDMI mini screen, 4 agent LEDs (COORD, AGENT 1, AGENT 2, GUARD) driven by a ULN2003, green approve, red reject, latching kill switch, push to talk, EN/ZH toggle. Laser-cut acrylic case. Design rule: voice proposes, a physical button executes, fail closed. Budget: team limit about 800 CAD, hard max 900 CAD.

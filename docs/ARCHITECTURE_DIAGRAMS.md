@@ -1,6 +1,6 @@
 # SI Console — Architecture Visualizations
 
-Status: DRAFT companion to `docs/ARCHITECTURE.md` (the authoritative v1 spec).
+Companion to `docs/ARCHITECTURE.md` (the authoritative v1 spec).
 Date 2026-11-23, tier diagrams updated 2026-11-25. This document only
 visualizes; it does not change the spec. The four-tier roster shown in diagrams
 1, 3 and 6 is ACCEPTED (2026-11-25) in `docs/MODEL_TIERS.md`, but is not yet
