@@ -1,26 +1,24 @@
 # DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton systemd unit. Reference only. Not for Fallen submission.
-# Autumn used Windows autostart. That is dropped. The Pi uses systemd.
-# One unit per process: bridge, coordinator, dashboard. Restart on failure.
-# The bridge must be up before the coordinator writes a task, or the
-# coordinator waits and retries. Install with:
-# sudo cp bridge.service /etc/systemd/system/
-# sudo systemctl enable --now bridge.service
+# SI Console bridge unit. TEMPLATE: @USER@ and @CODE_DIR@ are filled in
+# by deploy/install_pi.sh, which writes the result to
+# /etc/systemd/system/bridge.service. Do not copy this file by hand.
+# @CODE_DIR@ is the repo's code/ folder (the one holding si_console/
+# and .env), e.g. /home/<you>/si-console/code. Restart on failure.
 [Unit]
 Description=SI Console bridge
-After=network.target
-Wants=network.target
+After=network-online.target time-sync.target
+Wants=network-online.target
 
 [Service]
 Type=simple
-User=pi
-WorkingDirectory=/home/pi/si-console
-ExecStart=/home/pi/si-console/.venv/bin/uvicorn si_console.bridge:app --host 127.0.0.1 --port 8001
+User=@USER@
+WorkingDirectory=@CODE_DIR@
+ExecStart=@CODE_DIR@/.venv/bin/uvicorn si_console.bridge:app --host 127.0.0.1 --port 8001
 Restart=on-failure
 RestartSec=5
 # On stop, set all GPIO outputs low, so the LEDs go to a safe state.
-# The stop script is a test item. See TEST_PLAN.md.
-ExecStop=/home/pi/si-console/.venv/bin/python3 -c "from gpiozero import LED; [LED(p).off() for p in (5, 6, 13, 19, 20, 21)]"
+# The pins come from gpio_map.py, the single source of truth.
+ExecStop=@CODE_DIR@/.venv/bin/python3 -c "from gpiozero import LED; from si_console import gpio_map as g; [LED(p).off() for p in list(g.STATUS_LEDS.values()) + list(g.BUTTON_LEDS.values())]"
 
 [Install]
 WantedBy=multi-user.target

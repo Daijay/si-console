@@ -1,21 +1,22 @@
 # DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton systemd unit. Reference only. Not for Fallen submission.
-# The coordinator runs the agent loop. It does not touch GPIO. It does
-# not touch state.json directly. It writes the vault, and the bridge
-# follows. The coordinator waits for the bridge to be up first.
-# Install with:
-# sudo cp coordinator.service /etc/systemd/system/
-# sudo systemctl enable --now coordinator.service
+# SI Console coordinator unit. TEMPLATE: @USER@ and @CODE_DIR@ are
+# filled in by deploy/install_pi.sh. The coordinator runs the agent
+# loop for one arena pane (SI_COORDINATOR_PANE in .env). It does not
+# touch GPIO. It writes the vault, and the bridge follows.
+# It starts after the network and the clock are up, because every
+# model provider is reached over HTTPS, and HTTPS fails on a wrong
+# clock (the Pi has no RTC battery by default).
 [Unit]
 Description=SI Console coordinator
-After=bridge.service
+After=bridge.service network-online.target time-sync.target
+Wants=network-online.target
 Requires=bridge.service
 
 [Service]
 Type=simple
-User=pi
-WorkingDirectory=/home/pi/si-console
-ExecStart=/home/pi/si-console/.venv/bin/python3 -m si_console.coordinator
+User=@USER@
+WorkingDirectory=@CODE_DIR@
+ExecStart=@CODE_DIR@/.venv/bin/python3 -m si_console.coordinator
 Restart=on-failure
 RestartSec=5
 

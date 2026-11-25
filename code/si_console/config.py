@@ -19,7 +19,9 @@ from dotenv import load_dotenv
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-load_dotenv(PROJECT_ROOT / ".env")
+# SI_ENV_FILE points at another .env, e.g. to run the smoke check from
+# a second checkout. Default: code/.env next to si_console/.
+load_dotenv(os.getenv("SI_ENV_FILE", "").strip() or PROJECT_ROOT / ".env")
 
 # --- Vault ---------------------------------------------------------------
 # The vault is the single source of truth for tasks. It lives on the Pi.
@@ -137,13 +139,16 @@ GLM_BASE_URL = os.getenv("GLM_BASE_URL", "").strip() or "https://open.bigmodel.c
 GLM_MODEL = os.getenv("GLM_MODEL", "").strip()
 
 # Alibaba Cloud Model Studio (Bailian / DashScope), Qwen4 Max. T1, the
-# only heavy worker. Singapore (international) endpoint by default, as
-# MODEL_TIERS.md picks it for China reachability. Beijing is
-# https://dashscope.aliyuncs.com/compatible-mode/v1 (separate key).
+# only heavy worker. Hong Kong endpoint by default, because the team's
+# key is a Hong Kong region key. Keys are regional: a key from one
+# region gets 401 on another region's URL. Other regions: Singapore
+# https://dashscope-intl.aliyuncs.com/compatible-mode/v1, Beijing
+# https://dashscope.aliyuncs.com/compatible-mode/v1. Set
+# DASHSCOPE_BASE_URL in .env to change.
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "").strip()
 DASHSCOPE_BASE_URL = (
     os.getenv("DASHSCOPE_BASE_URL", "").strip()
-    or "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+    or "https://cn-hongkong.dashscope.aliyuncs.com/compatible-mode/v1"
 )
 QWEN_MODEL = os.getenv("QWEN_MODEL", "").strip()
 
@@ -156,8 +161,24 @@ MIMO_MODEL = os.getenv("MIMO_MODEL", "").strip()
 # Typed decisions only: ambiguous routing, winner pick, tab promotion.
 # Never a worker, never bypasses GUARD. The URL is configurable so the
 # judge can be moved to another decisions endpoint without code edits.
+# Direct TypeSafe key by default (POST https://api.typesafe.ai/v1/systemone,
+# model ids like jev-1.14.0 or jev-latest, docs.typesafe.ai). An
+# OpenRouter key also works: leave TYPESAFE_API_KEY empty and the judge
+# uses OpenRouter's Decisions API with ids like typesafe/jev-1.14.
+# Request and answer shapes are the same on both routes.
+TYPESAFE_API_KEY = os.getenv("TYPESAFE_API_KEY", "").strip()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
-JEV_URL = os.getenv("JEV_URL", "").strip() or "https://openrouter.ai/api/alpha/decisions"
+TYPESAFE_JEV_URL = "https://api.typesafe.ai/v1/systemone"
+OPENROUTER_JEV_URL = "https://openrouter.ai/api/alpha/decisions"
+_jev_url = os.getenv("JEV_URL", "").strip()
+if TYPESAFE_API_KEY or not OPENROUTER_API_KEY:
+    JEV_PROVIDER = "typesafe"
+    JEV_API_KEY = TYPESAFE_API_KEY
+    JEV_URL = _jev_url or TYPESAFE_JEV_URL
+else:
+    JEV_PROVIDER = "openrouter"
+    JEV_API_KEY = OPENROUTER_API_KEY
+    JEV_URL = _jev_url or OPENROUTER_JEV_URL
 JEV_MODEL = os.getenv("JEV_MODEL", "").strip()
 JEV_TIMEOUT_SECONDS = int(os.getenv("SI_JEV_TIMEOUT_SECONDS", "5"))
 

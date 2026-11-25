@@ -90,6 +90,76 @@ def provider_key(provider: str) -> str:
     return getattr(config, provider_spec(provider)["key_attr"], "") or ""
 
 
+def redact(text: str, *secrets: str) -> str:
+    """Remove every secret from a string before it is shown or logged."""
+    for secret in secrets:
+        if secret:
+            text = text.replace(secret, "[REDACTED]")
+    return text
+
+
+def error_detail(response, *secrets: str, limit: int = 240) -> str:
+    """The provider's own error message, short and with keys removed.
+    Returns "" when the body has nothing useful."""
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = None
+    message = ""
+    if isinstance(payload, dict):
+        err = payload.get("error", payload)
+        if isinstance(err, dict):
+            message = str(err.get("message") or err.get("msg") or err.get("detail")
+                          or err.get("code") or "")
+        elif err:
+            message = str(err)
+        if not message:
+            message = str(payload.get("message") or payload.get("msg") or "")
+    if not message:
+        message = (getattr(response, "text", "") or "").strip()
+    message = " ".join(redact(message, *secrets).split())[:limit]
+    return f" Provider says: {message}" if message else ""
+
+
+def base_url(provider: str) -> str:
+    return str(getattr(config, provider_spec(provider)["url_attr"])).rstrip("/")
+
+
+def auth_headers(provider: str) -> dict:
+    """Request headers for one provider. Holds the key: never log it."""
+    spec = provider_spec(provider)
+    key = provider_key(provider)
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+    if spec.get("key_header"):
+        headers[spec["key_header"]] = key
+    return headers
+
+
+def list_models(provider: str, timeout: float = 10) -> dict:
+    """GET {base}/models. Free on every OpenAI-compatible API that has
+    it, so it checks the key and the pinned model id without spending.
+    Returns {"status": int, "models": [ids] or None, "detail": str}.
+    Never raises for HTTP errors; raises ModelError for transport."""
+    url = base_url(provider) + "/models"
+    try:
+        response = httpx.get(url, headers=auth_headers(provider), timeout=timeout)
+    except httpx.HTTPError as exc:
+        raise ModelError(
+            f"{provider_spec(provider)['label']} not reachable: {type(exc).__name__}.",
+            status=503,
+        ) from None
+    models = None
+    if response.status_code == 200:
+        try:
+            data = response.json().get("data")
+            if isinstance(data, list):
+                models = [str(m.get("id")) for m in data if isinstance(m, dict) and m.get("id")]
+        except (ValueError, AttributeError):
+            models = None
+    detail = "" if response.status_code == 200 else error_detail(response, provider_key(provider))
+    return {"status": response.status_code, "models": models, "detail": detail}
+
+
 def _thinking_fields(style: str, thinking: str) -> dict:
     if style == "deepseek":
         if thinking == "disabled":
@@ -168,10 +238,8 @@ def complete(
         # described in the prompt; validation happens in the caller.
         body["response_format"] = {"type": "json_object"}
 
-    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    if spec.get("key_header"):
-        headers[spec["key_header"]] = key
-    url = str(getattr(config, spec["url_attr"])).rstrip("/") + "/chat/completions"
+    headers = auth_headers(provider)
+    url = base_url(provider) + "/chat/completions"
     timeout = getattr(config, spec["timeout_attr"], 30)
     try:
         response = httpx.post(url, headers=headers, json=body, timeout=timeout)
@@ -199,22 +267,25 @@ def complete(
 
     if response.status_code == 401:
         raise ModelError(
-            f"{label} rejected the API key.",
+            f"{label} rejected the API key.{error_detail(response, key)}",
             remedy=f"Check {spec['key_attr']} in .env is current.",
             status=401,
         )
     if response.status_code == 429:
         retry = response.headers.get("retry-after", "60")
         raise ModelError(
-            f"Rate limited by {label}. Retry after {retry}s.",
+            f"Rate limited by {label}. Retry after {retry}s.{error_detail(response, key)}",
             remedy="Wait and try again, or slow the request rate.",
             status=429,
         )
     if response.status_code >= 400:
+        # 400 usually means a field this provider does not accept (a
+        # thinking shape, a model id). The provider's own message says
+        # which, so keep it, with the key redacted.
         raise ModelError(
-            f"{label} API error {response.status_code}.",
-            remedy="Log the status code, not the key. Retry once.",
-            status=502,
+            f"{label} API error {response.status_code}.{error_detail(response, key)}",
+            remedy="Read the provider message. Check the model id and the thinking fields.",
+            status=400 if response.status_code == 400 else 502,
         )
     try:
         payload = response.json()

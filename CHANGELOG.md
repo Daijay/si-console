@@ -2,6 +2,15 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-24, Provider smoke check, Pi installer, TypeSafe and Hong Kong endpoints
+- `si_console/smoke.py`: `python -m si_console.smoke` checks config, panes, DNS, clock skew, and each key and model id through the providers' free `/models` (and TypeSafe `/v1/models`) endpoints. No paid call. `--live` sends one tiny call per model and thinking setting, with tool calling for T0 models, using the same request the router sends. It shows a cost ceiling and asks first. Keys are redacted from all output. Exit 1 if T0 or T2 has no working model.
+- Provider errors now include the provider's own message, with keys redacted, so a rejected field or model id is visible.
+- Jev goes direct to TypeSafe by default: `TYPESAFE_API_KEY`, `POST https://api.typesafe.ai/v1/systemone`, `JEV_MODEL=jev-1.14.0` (docs.typesafe.ai). OpenRouter remains an alternate route.
+- Qwen4 Max defaults to the Hong Kong endpoint (`https://cn-hongkong.dashscope.aliyuncs.com/compatible-mode/v1`), matching the team's Hong Kong region key.
+- `code/deploy/install_pi.sh`: apt packages (incl. python3-lgpio), a venv with system site packages, the vault folders, `.env` locked (chmod 600, CRLF/BOM stripped), NTP, and systemd units rendered for the real user and `code/` path. It then runs the free smoke check; `--enable` starts the services only if it passes. The systemd files are now templates; the old ones pointed at the wrong folder and assumed a `pi` user.
+- `.gitattributes`: `*.sh`, `*.service` and `.env.example` keep LF endings.
+- 174 tests pass (was 163).
+
 ## 2026-11-24, BOM: soundbar, spare card, API credits
 - Restored the USB soundbar (25.99) and the spare microSD 32GB (27.99); added DeepSeek and Bocha API credits (40.00).
 - Fundable total 851.13 CAD before tax (was 757.15; the printed wedge removal had taken it from 767.15 to 757.15), 953.27 with tax. Over the 800 CAD team limit by 51.13.

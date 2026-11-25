@@ -35,8 +35,10 @@ def _all_configured(monkeypatch):
     for key_attr, model_attr, model in PROVIDER_ATTRS.values():
         monkeypatch.setattr(config, key_attr, "test-key")
         monkeypatch.setattr(config, model_attr, model)
-    monkeypatch.setattr(config, "OPENROUTER_API_KEY", "test-key")
-    monkeypatch.setattr(config, "JEV_MODEL", "typesafe/jev-1.14")
+    monkeypatch.setattr(config, "JEV_PROVIDER", "typesafe")
+    monkeypatch.setattr(config, "JEV_API_KEY", "test-key")
+    monkeypatch.setattr(config, "JEV_URL", config.TYPESAFE_JEV_URL)
+    monkeypatch.setattr(config, "JEV_MODEL", "jev-1.14.0")
     panes = {
         "A": {"pin": "auto", "t2": "all", "t1": "on", "fallback": "yes"},
         "B": {"pin": "hy4", "t2": "all", "t1": "on", "fallback": "yes"},
@@ -84,7 +86,7 @@ HOSTS = {
     "deepseek": "api.deepseek.com",
     "hunyuan": "api.hunyuan.cloud.tencent.com",
     "glm": "open.bigmodel.cn",
-    "dashscope": "dashscope-intl.aliyuncs.com",
+    "dashscope": "cn-hongkong.dashscope.aliyuncs.com",
     "mimo": "api.xiaomimimo.com",
 }
 
@@ -305,8 +307,9 @@ def test_judge_request_shape(monkeypatch):
     decision = judge.decide_choice("Pick one.", {"x": "first", "y": "second"}, {"a": 1})
     assert decision.choice == "x"
     body = seen[0]["json"]
-    assert seen[0]["url"] == "https://openrouter.ai/api/alpha/decisions"
-    assert body["model"] == "typesafe/jev-1.14"
+    assert seen[0]["url"] == "https://api.typesafe.ai/v1/systemone"
+    assert seen[0]["headers"]["Authorization"] == "Bearer test-key"
+    assert body["model"] == "jev-1.14.0"
     assert body["questions"]["pick"] == {"type": "choice", "instructions": "Pick one.",
                                          "criteria": {"x": "first", "y": "second"}}
 
@@ -348,7 +351,7 @@ def test_conflict_uses_judge_within_allowlist(monkeypatch):
 
 
 def test_judge_failure_defaults_to_t2(monkeypatch):
-    monkeypatch.setattr(config, "OPENROUTER_API_KEY", "")
+    monkeypatch.setattr(config, "JEV_API_KEY", "")
     decision = router.route("Summarize and debug this " + "x" * 300)
     assert decision.tier == "t2" and decision.reason.endswith("->default")
 
@@ -375,3 +378,26 @@ def test_roster_status_has_no_keys():
     status = models.roster_status()
     assert set(status) == set(config.MODEL_SLOTS) | {"jev"}
     assert "test-key" not in json.dumps(status)
+
+
+# --- Region and route defaults -----------------------------------------
+
+def test_qwen_defaults_to_hong_kong_endpoint():
+    assert config.DASHSCOPE_BASE_URL == "https://cn-hongkong.dashscope.aliyuncs.com/compatible-mode/v1"
+
+
+def test_jev_defaults_to_typesafe_direct():
+    assert config.TYPESAFE_JEV_URL == "https://api.typesafe.ai/v1/systemone"
+
+
+def test_jev_typesafe_error_detail_is_shown_without_key(monkeypatch):
+    def fake(url, headers=None, json=None, timeout=None):
+        return httpx.Response(422, json={"detail": [{"loc": ["body", "model"],
+                                                     "msg": "bad model test-key"}]},
+                              request=httpx.Request("POST", url))
+
+    monkeypatch.setattr(httpx, "post", fake)
+    with pytest.raises(judge.JudgeError) as exc:
+        judge.decide_choice("Pick.", {"a": "a"}, "s")
+    assert "422" in exc.value.message
+    assert "test-key" not in exc.value.message

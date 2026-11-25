@@ -1,21 +1,28 @@
 # DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
 # SI Console skeleton code. Reference only. Not for Fallen submission.
-# Jev 1.14 judge (TypeSafe), per docs/MODEL_TIERS.md. A decision model,
+# Jev 1.14 judge (TypeSafe), per docs/MODEL_TIERS.md. Default route is
+# TypeSafe's own API with a TypeSafe key; OpenRouter is the alternate
+# (config.JEV_PROVIDER). Both take the same body and answer shape. A decision model,
 # not a worker: it returns typed, calibrated decisions in ~100 ms and
 # cannot write code. Used for ambiguous routing, winner pick and tab
 # promotion. GUARD stays the final authority for physical actions; the
 # judge never approves, executes or bypasses anything.
-# Wire contract, read from OpenRouter's Jev guide and Decisions API
-# reference on 2026-11-24 (LIKELY, no live call yet):
-#   POST https://openrouter.ai/api/alpha/decisions
-#   Authorization: Bearer <OPENROUTER_API_KEY>
-#   {"model": "typesafe/jev-1.14", "state": <string|object>,
+# Wire contract, read from docs.typesafe.ai (System One reference,
+# primitives/choice, models) and OpenRouter's Decisions API reference
+# on 2026-11-24 (LIKELY, no live call yet):
+#   POST https://api.typesafe.ai/v1/systemone   (TypeSafe key, model
+#        jev-1.14.0 or jev-latest)
+#   or POST https://openrouter.ai/api/alpha/decisions  (OpenRouter key,
+#        model typesafe/jev-1.14)
+#   Authorization: Bearer <key>
+#   {"model": "<id>", "state": <string|object|array>,
 #    "questions": {"<id>": {"type": "choice", "instructions": "...",
 #                           "criteria": {"<option>": "<description>"}}}}
 #   -> {"answers": {"<id>": {"type": "choice", "choice": "<option>",
 #                            "probabilities": {...}, "confidence": 0..1}},
 #       "usage": {"input_tokens": n, "output_tokens": n, "cost": usd}}
-#   A declined question comes back as {"type": "refusal"}.
+#   OpenRouter may answer {"type": "refusal"}; TypeSafe documents no
+#   refusal type. Errors: {"detail": ...} on TypeSafe.
 # The question id is not shown to the model, so the meaning lives in
 # the instructions and criteria. Output tokens are free.
 # Every answer is checked against the options this code offered. A
@@ -50,7 +57,7 @@ class Decision:
 
 
 def configured() -> bool:
-    return bool(config.OPENROUTER_API_KEY and config.JEV_MODEL)
+    return bool(config.JEV_API_KEY and config.JEV_MODEL)
 
 
 def decide_choice(
@@ -73,7 +80,7 @@ def decide_choice(
     if not configured():
         raise JudgeError(
             "Jev judge is not configured.",
-            remedy="Set OPENROUTER_API_KEY and JEV_MODEL in .env.",
+            remedy="Set TYPESAFE_API_KEY and JEV_MODEL (e.g. jev-1.14.0) in .env.",
             status=503,
         )
     body = {
@@ -95,7 +102,7 @@ def decide_choice(
             response = httpx.post(
                 config.JEV_URL,
                 headers={
-                    "Authorization": f"Bearer {config.OPENROUTER_API_KEY}",
+                    "Authorization": f"Bearer {config.JEV_API_KEY}",
                     "Content-Type": "application/json",
                 },
                 json=body,
@@ -106,7 +113,12 @@ def decide_choice(
             raise JudgeError(f"Jev request failed: {error}.") from None
         if response.status_code != 200:
             error = f"HTTP_{response.status_code}"
-            raise JudgeError(f"Jev returned HTTP {response.status_code}.")
+            from si_console.chat_client import error_detail
+
+            raise JudgeError(
+                f"Jev returned HTTP {response.status_code}."
+                f"{error_detail(response, config.JEV_API_KEY)}"
+            )
         try:
             payload = response.json()
             usage = payload.get("usage") or {}
@@ -134,7 +146,7 @@ def decide_choice(
             kind="judge",
             pane=pane,
             slot="jev",
-            provider="openrouter",
+            provider=config.JEV_PROVIDER,
             model=config.JEV_MODEL,
             route_reason=purpose,
             input_tokens=int(usage.get("input_tokens", 0) or 0),
