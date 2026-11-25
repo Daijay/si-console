@@ -89,7 +89,7 @@ Decision: the console is redesigned as an open-frame "cyberdeck" with no enclosu
 - Main monitor: behind the base on its own kickstand, assembly only.
 - Removed: fan, side walls, lid, back panel, finger joints, the top-panel screen window and its bezel switch. No printed parts.
 - Wiring is drawn as colour-coded tubes that follow the wiring table, so the renders show it.
-- 2 laser sheets (was 4). BOM: fan and 2 acrylic sheets removed, fundable total 767.15 CAD (was 791.33).
+- 2 laser sheets (was 4). BOM: fan and 2 acrylic sheets removed, fundable total 767.15 CAD (was 791.33). (Later changed, current total 851.13: see section H.)
 
 Effect on the R3 review items: OPEN 1 (screen cutout) no longer applies, the screen is no longer in a panel. OPEN 2 stays decided (no soundbar, no grille). OPEN 3 stays as in R4: the Pi is rotated 180 degrees, power and HDMI face the back, and now the cables leave straight off the back edge of the open base. OPEN 5: R5 supplies candidate DXFs; Hasan reviews them before cutting.
 
@@ -103,4 +103,18 @@ Final, and the same in `docs/GPIO_PIN_MAP.md`, `code/si_console/gpio_map.py` and
 - Button LEDs: green GPIO20 pin 38 to IN5, red GPIO21 pin 40 to IN6, from 5V through their built-in resistors, no extra resistor. IN7 tied to GND.
 - Kill switch, push to talk and EN/ZH toggle grounds go to the common GND bus on the perfboard, fed from Pi GND pins 6, 9 and 14. Green button ground stays on pin 14, red button ground on pin 20.
 - Still to do on the bench: measure each LED forward voltage and current, and confirm the delivered buttons have built-in resistors.
+
+## H. Soundbar, spare card and API credits (2026-11-24, Jayden)
+
+Jayden chose to add three things to the BOM:
+
+- The USB soundbar (Best Buy, 25.99 CAD). It sits on the base plate behind the control strip. Not modelled in the R5 CAD yet: add after design approval, and check it against the clear space behind the buttons and kill switch. Test its volume against the monitor speakers.
+- The spare microSD card (32GB, 27.99 CAD), in case the main card fails at the booth.
+- API credits for DeepSeek and Bocha search, 40 CAD. Required for the live demo: the agents run on paid model APIs, so without credits the console cannot show live orchestration.
+
+This replaces the earlier soundbar and spare card cuts for the BOM (OPEN 2 and the R4 and R5 notes above still describe the CAD and drawings, which have no soundbar yet).
+
+Fundable total: **851.13 CAD** before tax (was 757.15), 953.27 with 12 percent tax. That is 51.13 over the 800 CAD team limit before tax, and 53.27 over the 900 CAD hard max if tax counts.
+
+Not verified: the DeepSeek and Bocha pages open but require sign-in, so payment methods, minimum top-up and whether 40 CAD covers the booth are unconfirmed. `docs/MODEL_TIERS.md` estimates about 43 to 77 USD of API spend for a packed two-day booth across its multi-provider roster.
 

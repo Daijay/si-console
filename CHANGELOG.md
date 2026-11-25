@@ -2,6 +2,11 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-24, BOM: soundbar, spare card, API credits
+- Restored the USB soundbar (25.99) and the spare microSD 32GB (27.99); added DeepSeek and Bocha API credits (40.00).
+- Fundable total 851.13 CAD before tax (was 757.15; the printed wedge removal had taken it from 767.15 to 757.15), 953.27 with tax. Over the 800 CAD team limit by 51.13.
+- The soundbar is not in the R5 CAD or wiring diagram yet.
+
 ## 2026-11-24, resistor, pin and ground reconciliation
 - Final values everywhere: COORD green 150 ohm, AGENT 1 white 100 ohm, AGENT 2 blue 100 ohm, GUARD yellow 220 ohm; button LEDs on 5V through built-in resistors.
 - `gpio_map.py`, `gpio_test.py`, tests, `GPIO_PIN_MAP.md` (rewritten around one table), Detailed, Overview, Onshape notes, ARCHITECTURE gap rows, BOM notes and the R5 wiring diagram now agree.
@@ -54,7 +59,7 @@ Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py
 - Wires modelled as colour-coded tubes following the wiring table; cable-tie slot pairs in the base along the routes.
 - Parametric CadQuery rebuilt in `cad/` (same `params.py` / `build.py` / checks setup). Checks: no collisions, holes with 5 mm margins, every part fits a 305 x 406 mm sheet, tabs and slots mate, 50 mm and 75 mm clearances against the base, wire and cable lengths, 15 mm margins on the base. All pass.
 - Outputs in `blueprints/R5/`: STEP per part and `si_console_assembly_R5.step`, DXF per laser part and 2 nested sheets, dimensioned drawings (SVG, PDF), renders (hero, front, top, exploded).
-- BOM: 5V case fan removed, acrylic buy cut from 6 sheets to a 4-pack (2 needed, 2 spare). Fundable total 767.15 CAD (was 791.33).
+- BOM: 5V case fan removed, acrylic buy cut from 6 sheets to a 4-pack (2 needed, 2 spare). Fundable total 767.15 CAD (was 791.33; current total 851.13, see 2026-11-24).
 - R4.2 (boxed case) moved to `research/R4.2-boxed/` with its source; git tag `r4.2-boxed`. `blueprints/R4.2/` removed from `blueprints/`.
 
 ## 2026-11-23, Architecture visualizations
@@ -91,7 +96,7 @@ Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py
 
 ## 2026-11-23, R3 review (repo created)
 - R3 drawings (case panels, schematic, wiring, power, connection) and renders are REFERENCE ONLY. The laser cut file must come from Hasan's Fusion model.
-- BOM Rev R2.1 finalised with both cuts: no spare microSD, no USB soundbar (monitor speakers over HDMI). Fundable total 791.33 CAD before tax.
+- BOM Rev R2.1 finalised with both cuts: no spare microSD, no USB soundbar (monitor speakers over HDMI). Fundable total 791.33 CAD before tax (superseded; current total 851.13).
 - R3 review notes logged as OPEN items in `docs/decisions.md`.
 - Second drop added: 24 STEP, 6 STL, render, 5 R3 SVGs, code with tests (79 passed), Overview, Detailed, ONSHAPE_IMPORT.
 

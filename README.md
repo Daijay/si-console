@@ -30,7 +30,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 ## Current status (2026-11-25)
 
 - **Rev R5 CAD is built**: open-frame "cyberdeck" (no enclosure) as a parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, laser DXF (2 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R5/`. All automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF. The boxed design (R4.2) is the alternative in `research/R4.2-boxed/`.
-- BOM: 767.15 CAD fundable before tax after the R5 changes (fan and 2 acrylic sheets removed; 791.33 before), under the 800 CAD team limit. See `bom/BOM_NOTES.md`.
+- BOM: 851.13 CAD fundable before tax (953.27 with 12 percent tax), including the soundbar, a spare microSD and 40 CAD of API credits. Over the 800 CAD team limit by 51.13. See `bom/BOM_NOTES.md`.
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4 and R5.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
@@ -43,12 +43,12 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - Case: clear acrylic now (recommended, final choice pending).
 - Mini screen: 5 inch HDMI (recommended, pending).
 - Model router: four-tier provider roster with Jev judge **accepted 2026-11-25** (`docs/MODEL_TIERS.md`), implemented in `code/` 2026-11-24 (mocked tests).
-- Both BOM cuts applied: no spare microSD, no USB soundbar (monitor speakers over HDMI).
+- The earlier soundbar and spare microSD cuts were reversed on 2026-11-24: both are in the BOM again. Sound from the monitor over HDMI stays the default in the CAD until the soundbar is modelled.
 
 ## Open decisions (R3 review, see `docs/decisions.md`; R4 and R5 outcomes noted there)
 
 1. Mini screen cutout: no longer applies in R5, the screen sits on an angled stand instead of in a panel.
-2. Soundbar cut: no soundbar and no grille in R4 or R5. Done in CAD.
+2. Soundbar: back in the BOM since 2026-11-24, not in the R5 CAD yet.
 3. Pi 5 port side: the Pi is rotated 180 degrees so power and HDMI face the back and the cables leave off the back edge. Dry fit the cables.
 4. AGENT 1 LED is white with a 100 ohm resistor (closed in R4.1; bench-measure the white Vf).
 5. Laser cut file: R5 supplies a candidate DXF. Hasan reviews it before anything is cut.
