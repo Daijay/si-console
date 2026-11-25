@@ -9,6 +9,10 @@ Dated log of decisions and revisions. Newest first.
 - UI skills added under `.claude/skills/`.
 - Not wired to the console; no change under `code/si_console/`. Missing bridge work is listed in `docs/UI_SPEC.md` section 7.
 
+## 2026-11-25, custom PCB
+- Added `pcb/` (SI Console HAT, KiCad 9). Perfboard is the fallback.
+- BOM adds 34.68 CAD; fundable total 885.81 CAD before tax.
+
 ## 2026-11-24, BOM: soundbar, spare card, API credits
 - Restored the USB soundbar (25.99) and the spare microSD 32GB (27.99); added DeepSeek and Bocha API credits (40.00).
 - Fundable total 851.13 CAD before tax (was 757.15; the printed wedge removal had taken it from 767.15 to 757.15), 953.27 with tax. Over the 800 CAD team limit by 51.13.

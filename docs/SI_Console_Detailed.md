@@ -40,20 +40,20 @@ Totals updated 2026-11-24 from `bom/BOM.csv`. All prices in CAD. Tax is 12 perce
 
 | Line | Amount CAD | Status |
 |---|---|---|
-| Fundable, before tax | 851.13 | Re-added from BOM.csv |
-| Fundable, tax 12 percent | 102.14 | Tax on every line is ASSUMED |
-| Fundable, with tax | 953.27 | Computed |
+| Fundable, before tax | 885.81 | Re-added from BOM.csv |
+| Fundable, tax 12 percent | 106.30 | Tax on every line is ASSUMED |
+| Fundable, with tax | 992.11 | Computed |
 | Self-funded, before tax | 128.24 | From the R2.1 summary |
 | Self-funded, with tax | 143.63 | From the R2.1 summary |
-| All-in, with tax, before shipping and laser | 1096.90 | Computed |
+| All-in, with tax, before shipping and laser | 1135.74 | Computed |
 | All-in, with laser, shipping, tools | About 1246.90 to 1336.90 | ASSUMED |
 | Core after voice cut (120.97) and mini screen cut (83.94), before tax | 646.22 | Computed |
 | Same, with tax | 723.77 | Computed |
-| Team limit | About 800 | VERIFIED from the brief. Exceeded by 51.13 before tax |
-| Hard max | 900 | VERIFIED from the brief. Exceeded by 53.27 with tax |
+| Team limit | About 800 | VERIFIED from the brief. Exceeded by 85.81 before tax |
+| Hard max | 900 | VERIFIED from the brief. Exceeded by 92.11 with tax |
 | 400 CAD target, missed by | 246.22 before tax, even after both cuts | Computed |
 
-Status mix of the fundable total: VERIFIED 474.30, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified.
+Status mix of the fundable total: VERIFIED 508.98, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified.
 
 ### 2.2 Spare card, soundbar and API credits
 
@@ -714,7 +714,7 @@ Same demo, in Chinese. Same time marks. Flip the GPIO24 toggle to ZH, or say the
 | What if the internet fails in Shenzhen. | The console switches to recorded agent runs automatically. The demo continues on replay data. No live price feed is needed. |
 | Can voice approve. | No. Voice proposes only. Voice never executes. Voice never approves. That is a hard rule. |
 | Is this real money. | No. Paper money only. 100000 paper dollars. No real money is connected. |
-| How much did it cost. | Fundable parts and API credits 851.13 CAD before tax, 953.27 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1096.90 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is ASSUMED 40 to 60 CAD extra. |
+| How much did it cost. | Fundable parts and API credits 885.81 CAD before tax, 992.11 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1135.74 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is ASSUMED 40 to 60 CAD extra. |
 | What is the hardest part. | Voice in a loud hall, and heat in a closed case. Both are tested. See TEST_PLAN.md T2 and T6. If voice fails, buttons and text still work. |
 
 ### 11.5 Recorded fallback path, when internet or DeepSeek fails
@@ -745,7 +745,7 @@ Do not: let a visitor press kill without warning them first. Run the demo with t
 | Risk | Impact | Fix or mitigation | Status |
 |---|---|---|---|
 | Laser timing | Files sent Fri Nov 27 finish Dec 7 to 9, too late for Dec 8 | Send files Mon Nov 23, before Fallen approval, or use drop-in if the age rule allows | Open. See Q21. |
-| Grant cap unknown | Fundable total 851.13 CAD before tax is over the 400 CAD target by 451.13 CAD, and over the 800 CAD team limit by 51.13 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen, which gives 646.22 CAD before tax. | Open. See Q22. |
+| Grant cap unknown | Fundable total 885.81 CAD before tax is over the 400 CAD target by 485.81 CAD, and over the 800 CAD team limit by 85.81 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen, which gives 646.22 CAD before tax. | Open. See Q22. |
 | Shenzhen offline demo | No internet kills the live demo. Recorded fallback format is undefined. No file exists, no code exists. | Define the recorded run format, record at least one full run at home with live DeepSeek, store it on the microSD, test the automatic switch with Wi-Fi off. | Open. See Q3. |
 | Voice in a loud booth | Chinese STT is weakest. SenseVoice Small is UNVERIFIED on Pi 5 ARM64. Whisper Base Chinese CER 15.99 percent is clean speech only, LIKELY. | Test STT on Dec 2, with noise. If it fails, cut voice from the booth demo and run on buttons and text only. Text input must exist in v1. | Open. See Q10, Q32. |
 | Power, heat, ULN2003 together | Old USB headroom was 0.10A. Acrylic insulates. ULN2003 at 3.3V is test first, not guaranteed. | Rev R2.1 fixes the power headroom: about 1.0A, ASSUMED, with the mini screen and monitor on their own chargers. Case fan added. Bench test the ULN2003 at 3.3V before soldering. Heat test T6 decides. | Partly fixed. USB currents still ASSUMED until measured. |

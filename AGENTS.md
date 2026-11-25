@@ -7,7 +7,7 @@ SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 in
 
 ## Folder map
 - `docs/`: ARCHITECTURE (authoritative agent runtime spec), decisions, GPIO map, Overview, Detailed, ONSHAPE_IMPORT.
-- `bom/`: `BOM.csv` (Rev R5, 851.13 CAD fundable), `BOM_NOTES.md`.
+- `bom/`: `BOM.csv` (Rev R5, 885.81 CAD fundable), `BOM_NOTES.md`.
 - `cad/`: Rev R5 (open frame) parametric CadQuery model (`params.py`, `build.py`, `README.md`). Regenerate with `python build.py`; do not hand-edit `cad/output/` or `blueprints/R5/`.
 - `blueprints/R5/`: R5 finals (STEP, DXF, drawings, renders) copied from `cad/output/`.
 - `research/R4.2-boxed/`: the boxed alternative (R4.2), historical; do not edit.

@@ -15,8 +15,11 @@ I wanted agents that can't just run wild. Most AI agents live in a window on you
 ![Wiring diagram](blueprints/R5/wiring_diagram_R5.png)
 
 - Raspberry Pi 5 8GB, ULN2003 driver for the LEDs, GPIO buttons, 5 inch HDMI status screen, MSI portable monitor
-- Open frame on clear laser-cut acrylic, 2 sheets. No PCB, the circuit is on perfboard.
+- Open frame on clear laser-cut acrylic, 2 sheets. The circuit is on a custom PCB, with perfboard as a backup.
 - Pin map: docs/GPIO_PIN_MAP.md
+![PCB](docs/images/pcb_3d.png)
+![Schematic](docs/images/schematic.png)
+- PCB source: pcb/
 
 ## Files
 - CAD assembly (STEP): blueprints/R5/si_console_assembly_R5.step

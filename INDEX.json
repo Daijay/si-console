@@ -90,7 +90,7 @@
   {
     "path": "bom/BOM.csv",
     "type": "data",
-    "description": "Only current BOM, Rev R5, 851.13 CAD fundable before tax (soundbar, spare microSD and API credits included)",
+    "description": "Only current BOM, Rev R5, 885.81 CAD fundable before tax (soundbar, spare microSD and API credits included)",
     "status": "LIKELY",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -98,7 +98,7 @@
   {
     "path": "bom/BOM_NOTES.md",
     "type": "doc",
-    "description": "BOM totals (851.13 CAD fundable), limits and history",
+    "description": "BOM totals (885.81 CAD fundable), limits and history",
     "status": "VERIFIED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
