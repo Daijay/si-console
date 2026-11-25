@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The scheduler is Autumn's server.py lifespan and briefing scheduler,
 # rewired for SI Console. What stayed: APScheduler AsyncIOScheduler
 # with CronTrigger, misfire grace 1 hour, coalesce true, max

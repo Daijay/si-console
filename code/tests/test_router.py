@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # Tests for the accepted multi-provider roster (docs/MODEL_TIERS.md):
 # tier chains and fallback, arena pane pinning and allowlists, T1
 # escalation, the T3 $0 path, per-provider wire shapes, the Jev judge,

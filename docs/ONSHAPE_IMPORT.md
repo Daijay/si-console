@@ -1,6 +1,6 @@
 # SI Console 3D import guide
 
-Rev R3. Date 2026-11-23. Status: DRAFT REFERENCE, NOT FOR SUBMISSION.
+Rev R3. Date 2026-11-23.
 This guide covers the shared 3D workspace only. The docs will live in the private GitHub repo si-console once Jayden creates it, not in Onshape. The repo does not exist yet.
 Model files: ~/workspace/si-console-research-2/blueprints-R3/cad/.
 
@@ -86,7 +86,7 @@ Hasan uses Fusion 360. The same STEP files work there.
 
 ## 3. What is ASSUMED, and what Hasan must check in CAD
 
-This model is reference only. It is not Fallen submission material. Check every ASSUMED number against the real part before cutting or printing.
+Check every ASSUMED number against the real part before cutting or printing.
 
 - Back panel cable cutouts moved in R3. R2 put them at Y 20 from the top of the panel, Z about 112 to 117. That is wrong for a bottom-mounted Pi. The Pi ports sit at Z about 12 to 16. R3 moves the cutouts to port height, Z centred 14. One shared slot for both micro-HDMI ports, X 61 to 90, because the two ports are only 13 mm apart at the centres and two separate 15 mm slots would overlap. USB-C slot X 46 to 56. The 2D R3 drawings match this. Confirm the exact X in CAD from the Pi mount position.
 - Kill switch body is 78.3 mm deep. That is 3.3 mm more than the 75 mm clear zone behind the front panel in R2. Nothing sits in that 3.3 mm in this model. Check the layout in CAD before cutting the case.

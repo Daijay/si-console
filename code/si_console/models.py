@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # Model tier router for the accepted roster in docs/MODEL_TIERS.md
 # (2026-11-25). Callers ask for a tier, never a model. Each tier is an
 # ordered chain of model slots; the router walks it, skips any slot

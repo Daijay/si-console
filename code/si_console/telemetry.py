@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # Telemetry to SQLite, per ARCHITECTURE.md "Memory and state" and
 # MODEL_TIERS.md selection rule 5: every model selection is logged with
 # route, pane, tier, slot, model, tokens, latency, cost and error code.

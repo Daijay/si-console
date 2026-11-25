@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The tool registry is new code. Autumn had no tool calling at all.
 # Its claude.py says "No tools and no conversation history yet".
 # This file is the single place where tools are defined, tagged, and

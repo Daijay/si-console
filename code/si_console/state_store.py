@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file is Autumn's autumn/chats.py, rewired for SI Console state.
 # What stayed: one JSON file per record, atomic write with temp file
 # then os.replace, path guard on ids, and the rule that a corrupt

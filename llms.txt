@@ -1,6 +1,6 @@
 # SI Console
 
-> Private project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). All content is DRAFT; the R3 drawings are reference only; Rev R5 (open-frame) CAD is in `cad/` and `blueprints/R5/`; the boxed R4.2 is in `research/R4.2-boxed/`.
+> Project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). The R3 drawings are superseded; Rev R5 (open-frame) CAD is in `cad/` and `blueprints/R5/`; the boxed R4.2 is in `research/R4.2-boxed/`.
 
 ## Start here
 - [README.md](README.md): human front page, team, status, open decisions
@@ -48,7 +48,7 @@
 - [blueprints/3d/render-top-R3.png](blueprints/3d/render-top-R3.png): top view
 
 ## Code
-- [code/README.md](code/README.md): DRAFT REFERENCE layout and test command
+- [code/README.md](code/README.md): what is built, what is planned, and the test command
 - [code/si_console/coordinator.py](code/si_console/coordinator.py): agent loop
 - [code/si_console/bridge.py](code/si_console/bridge.py): vault watcher, buttons, LEDs
 - [code/si_console/gpio_map.py](code/si_console/gpio_map.py): GPIO constants (code side)

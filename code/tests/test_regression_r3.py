@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # Regression tests for five R3 bugs found in review:
 # 1. The coordinator's __main__ block sat before pick_next_task and
 #    stuck_watchdog, so python -m si_console.coordinator crashed in a
