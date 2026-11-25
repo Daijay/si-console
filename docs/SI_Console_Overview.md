@@ -1,6 +1,7 @@
 # SI Console Overview
 
 Rev R3. Date 2026-11-23. Status: DRAFT REFERENCE, NOT FOR SUBMISSION.
+Model note: the router options below are the 2026-11-23 two-option decision. The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25).
 Team: Jayden (overall, hardware, integration), Hasan (CAD, Fusion 360), Christopher (software architecture, model router).
 Build deadline Dec 8, 2026. Booth at Maker Faire Shenzhen, Dec 12-13, 2026.
 

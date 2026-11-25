@@ -4,7 +4,7 @@
     "type": "doc",
     "description": "Human front page",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -20,7 +20,7 @@
     "type": "index",
     "description": "Short file index",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -28,7 +28,7 @@
     "type": "doc",
     "description": "Dated revision log",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -36,23 +36,31 @@
     "type": "doc",
     "description": "Authoritative merged v1 agent runtime spec (Jayden + Christopher) with implementation gaps",
     "status": "AUTHORITATIVE",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-25",
     "owner": "Jayden, Christopher"
   },
   {
     "path": "docs/ARCHITECTURE_DIAGRAMS.md",
     "type": "doc",
-    "description": "9 Mermaid visualizations of the merged v1 architecture with per-part implementation status",
+    "description": "10 Mermaid visualizations of the merged v1 architecture and the accepted 2026-11-25 model tiers, with per-part implementation status",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-25",
+    "owner": "Jayden, Christopher"
+  },
+  {
+    "path": "docs/MODEL_TIERS.md",
+    "type": "doc",
+    "description": "ACCEPTED 2026-11-25 final model roster: four tier chains, Jev 1.14 judge, final culls, per-orchestrator pinning, T2 worker allowlists, booth arena design and API cost model. Accepted for model selection, not yet implemented in code.",
+    "status": "ACCEPTED",
+    "last_updated": "2026-11-25",
     "owner": "Jayden, Christopher"
   },
   {
     "path": "docs/decisions.md",
     "type": "doc",
-    "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes and the R5 open-frame decision",
+    "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes, R5 open-frame, and the accepted 2026-11-25 model router decision (see MODEL_TIERS.md)",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -282,7 +290,7 @@
   {
     "path": "code/tests/",
     "type": "tests",
-    "description": "79 mocked tests, passed 2026-11-23",
+    "description": "89 mocked tests, passed 2026-11-23",
     "status": "VERIFIED",
     "last_updated": "2026-11-23",
     "owner": "Christopher"

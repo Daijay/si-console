@@ -17,8 +17,8 @@ STATUS: DRAFT. Figures come from `research/overnight-notes/MORNING_SUMMARY_2026-
 
 ### 3. Model router
 - Options: DeepSeek only at the booth, or add Claude (claude-fable-5-2, 8 USD input / 40 USD output per 1M tokens, about 27x DeepSeek flash). Anthropic policy does not support use by persons physically in mainland China. The router stub falls back to DeepSeek only.
-- Recommendation: DeepSeek only, premium tier maps to deepseek-v4-pro.
-- Final choice: _pending_
+- Recommendation (2026-11-23): DeepSeek only, premium tier maps to deepseek-v4-pro.
+- **Final choice (2026-11-25): four-tier roster ACCEPTED in `docs/MODEL_TIERS.md`.** T0 DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4; T1 Qwen4 Max -> escalate_to_human; T2 Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4; T3 MiMo 2.6 Flash -> $0 paths; Jev 1.14 as judge. Claude stays off the critical path and is never called from the booth build. Per-orchestrator model pinning and T2 worker allowlists are part of the accepted design. The roster is accepted for model selection but not yet implemented; `code/si_console/models.py` still routes to DeepSeek only.
 
 ## B. R3 review notes, OPEN for the team
 

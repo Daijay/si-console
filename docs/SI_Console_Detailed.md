@@ -3,6 +3,7 @@
 Date: 2026-11-23.
 Status: DRAFT REFERENCE. Not for Fallen submission. Not Jayden's README.
 Rev: R2.1 for BOM and power. Rev R2 for wiring and GPIO map. Rev R3 for the case drawings, power diagram, and 3D model, in blueprints-R3/. The R3 drawings supersede the R2 drawings. In the repo, the R3 drawings live in blueprints/ and the 3D files in cad/.
+Model note: the model-router sections below describe the 2026-11-23 two-option decision (DeepSeek plus Claude vs DeepSeek only). The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25) and supersedes those options for model selection.
 Source folder: ~/workspace/si-console-research-2/
 Rule: plain words, short sentences, no em dashes.
 Status words: VERIFIED means a worker opened the page or source and saw it. LIKELY means a search result or secondhand claim only. ASSUMED means an estimate. Never treat ASSUMED as fact.

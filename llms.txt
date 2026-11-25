@@ -10,8 +10,9 @@
 
 ## Docs
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): authoritative merged v1 agent runtime spec (Jayden + Christopher) plus implementation gaps
-- [docs/ARCHITECTURE_DIAGRAMS.md](docs/ARCHITECTURE_DIAGRAMS.md): 9 Mermaid diagrams of the whole architecture, with per-part status legends
-- [docs/decisions.md](docs/decisions.md): case, mini screen, model router decisions and the 5 open R3 review items
+- [docs/ARCHITECTURE_DIAGRAMS.md](docs/ARCHITECTURE_DIAGRAMS.md): 10 Mermaid diagrams of the whole architecture, with per-part status legends
+- [docs/MODEL_TIERS.md](docs/MODEL_TIERS.md): ACCEPTED 2026-11-25 final model roster, tier chains, Jev judge, final culls, per-orchestrator pinning, T2 worker allowlists, booth arena design and cost
+- [docs/decisions.md](docs/decisions.md): case, mini screen, model router (accepted 2026-11-25, see MODEL_TIERS.md) and the 5 open R3 review items
 - [docs/SI_Console_Overview.md](docs/SI_Console_Overview.md): 2 page overview, connection diagram, parts table, 3 decisions
 - [docs/SI_Console_Detailed.md](docs/SI_Console_Detailed.md): full 13 section compiled document
 - [docs/ONSHAPE_IMPORT.md](docs/ONSHAPE_IMPORT.md): how to import the STEP files into Onshape or Fusion 360
@@ -49,7 +50,7 @@
 - [code/si_console/coordinator.py](code/si_console/coordinator.py): agent loop
 - [code/si_console/bridge.py](code/si_console/bridge.py): vault watcher, buttons, LEDs
 - [code/si_console/gpio_map.py](code/si_console/gpio_map.py): GPIO constants (code side)
-- [code/tests/](code/tests/): 79 mocked tests, no Pi needed
+- [code/tests/](code/tests/): 89 mocked tests, no Pi needed
 
 ## Optional (older, superseded)
 - [research/README.md](research/README.md): index of older material

@@ -27,7 +27,7 @@ gh api -X PUT repos/Daijay/si-console/collaborators/<HASAN_USERNAME> -f permissi
 
 Because the repo uses Git LFS, collaborators need `git lfs install` before cloning.
 
-## Current status (2026-11-23)
+## Current status (2026-11-25)
 
 - **Rev R5 CAD is built**: open-frame "cyberdeck" (no enclosure) as a parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, laser DXF (2 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R5/`. All automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF. The boxed design (R4.2) is the alternative in `research/R4.2-boxed/`.
 - BOM: 767.15 CAD fundable before tax after the R5 changes (fan and 2 acrylic sheets removed; 791.33 before), under the 800 CAD team limit. See `bom/BOM_NOTES.md`.
@@ -35,12 +35,13 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
 - Code tests: run once on 2026-11-23, **89 passed** (79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
+- Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Accepted for model selection, not yet implemented — `code/` still routes to DeepSeek only.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
 
 - Case: clear acrylic now (recommended, final choice pending).
 - Mini screen: 5 inch HDMI (recommended, pending).
-- Model router: DeepSeek only at the booth (recommended, pending).
+- Model router: v1 runtime is DeepSeek only. Four-tier provider roster with Jev judge **accepted 2026-11-25** (`docs/MODEL_TIERS.md`), pending implementation.
 - Both BOM cuts applied: no spare microSD, no USB soundbar (monitor speakers over HDMI).
 
 ## Open decisions (R3 review, see `docs/decisions.md`; R4 and R5 outcomes noted there)
@@ -57,7 +58,8 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 | --- | --- |
 | Decisions and open items | `docs/decisions.md` |
 | Agent runtime spec (authoritative v1) and gaps | `docs/ARCHITECTURE.md` |
-| Architecture visualizations (9 Mermaid diagrams) | `docs/ARCHITECTURE_DIAGRAMS.md` |
+| Architecture visualizations (10 Mermaid diagrams) | `docs/ARCHITECTURE_DIAGRAMS.md` |
+| Model tiers (accepted roster, selection rules, arena cost) | `docs/MODEL_TIERS.md` |
 | GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
 | BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
 | R5 CAD (parametric, open frame), outputs and checks | `cad/`, `blueprints/R5/` |

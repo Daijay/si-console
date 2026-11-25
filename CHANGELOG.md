@@ -2,6 +2,14 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-25, Model tiers accepted and architecture synced
+- `docs/MODEL_TIERS.md`: final roster ACCEPTED. T0 DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4; T1 Qwen4 Max -> escalate_to_human; T2 Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4; T3 MiMo 2.6 Flash -> $0 paths; Jev 1.14 as judge ($0.042/M in, output free). Kimi K3.1 Pro, GLM 5.3 Flash, Agnes, Gemini 4 Neon, Qwen 3.8 27B and Inkling 2 Small culled. GLM 5.4 / 5.3 interim note CLOSED (5.4 benchmarked on KingBench 4: 33.2, 7/19, top open model).
+- Added configurable model selection: per-orchestrator pinning (any T0 model or auto) and per-pane T2 worker allowlists. Added booth arena design (3 orchestrator columns, 2 main subagent panes + tab chips, touchpad, isolated sandbox) and cost model (~$0.21–0.39/contest; ~$43–77 for 200 contests over two days; cheapest pinned config ~$5–6).
+- Synced `docs/ARCHITECTURE.md` and `docs/ARCHITECTURE_DIAGRAMS.md`: removed stale Kimi/Agnes/GLM 5.3 references, updated all four tier chains and Mermaid diagrams, added Jev judge role. No runtime code changed.
+
+## 2026-11-24, Model tier research (proposed)
+- `docs/MODEL_TIERS.md` added as PROPOSED with benchmark data (Artificial Analysis Intelligence Index v5, Arena Agent Arena, KingBench 4) and cull reasoning. Pointer added to `docs/ARCHITECTURE.md`. Superseded by the 2026-11-25 accepted roster.
+
 ## 2026-11-23, R5 (open frame)
 - Redesign: open-frame cyberdeck, no enclosure. Base plate 330 x 220 mm with the Pi 5, perfboard with ULN2003 and the GPIO breakout exposed on standoffs; separate 300 x 70 mm control strip at a 20 degree slope on two laser-cut brackets; mini screen on a small angled laser-cut stand; monitor behind on its own kickstand. No fan, side walls, lid or back panel.
 - Wires modelled as colour-coded tubes following the wiring table; cable-tie slot pairs in the base along the routes.

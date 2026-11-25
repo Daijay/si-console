@@ -1,9 +1,10 @@
 # SI Console — Architecture Visualizations
 
-Status: DRAFT companion to `docs/ARCHITECTURE.md` (the authoritative spec).
-Date 2026-11-23, tier diagrams updated 2026-11-24. This document only
-visualizes; it does not change the spec. The four-tier model shown in diagrams
-1, 3 and 6 is PROPOSED in `docs/MODEL_TIERS.md`.
+Status: DRAFT companion to `docs/ARCHITECTURE.md` (the authoritative v1 spec).
+Date 2026-11-23, tier diagrams updated 2026-11-25. This document only
+visualizes; it does not change the spec. The four-tier roster shown in diagrams
+1, 3 and 6 is ACCEPTED (2026-11-25) in `docs/MODEL_TIERS.md`, but is not yet
+implemented in the v1 skeleton.
 
 Each diagram is Mermaid, so it renders on GitHub and in most Markdown viewers.
 A legend after each diagram maps the parts to the spec section and to the
@@ -48,7 +49,7 @@ flowchart TB
     end
 
     subgraph P["PROVIDERS + OFFLINE (proposed tiers shown)"]
-        DS["T0/T2: DeepSeek V4.1 Flash<br/>T1: Qwen4 Max, Kimi K3.1 Pro<br/>T2: Hy4, Agnes, MiMo · T3: GLM 5.4<br/>(all PROPOSED — see MODEL_TIERS.md)"]
+        DS["T0: DeepSeek / Hy4 / GLM 5.4<br/>T1: Qwen4 Max<br/>T2: Hy4 / DeepSeek / GLM 5.4<br/>T3: MiMo 2.6 Flash + $0 paths<br/>Judge: Jev 1.14 (ACCEPTED 2026-11-25)"]
         BOCHA["Bocha search"]
         REC[("Recorded runs<br/>in the vault")]
     end
@@ -91,8 +92,9 @@ truth with `state.json` rebuilt from it; SQLite telemetry is **GAP**. DeepSeek +
 Bocha are **DONE**; offline recording/replay is **GAP**. External-agent API is
 **DONE / aligned** (home-mode, rate limit, claim types).
 
-The four-tier worker expansion is **PROPOSED** (see `docs/MODEL_TIERS.md`);
-the v1 spec still names FAST/THINK and DeepSeek-only. Spec sections: STATE
+The four-tier worker roster is **ACCEPTED 2026-11-25** (see
+`docs/MODEL_TIERS.md`) but not implemented; the v1 spec still names FAST/THINK
+and DeepSeek-only. Spec sections: STATE
 MACHINE, FLOW, SAFETY, MEMORY AND STATE, PROVIDERS, OFFLINE, EXTERNAL AGENTS.
 
 ---
@@ -142,11 +144,11 @@ flowchart TD
     O --> MENU["Fixed JSON action menu<br/>max 3 rounds"]
     MENU -->|3 rounds used| ESC["escalate_to_human"]
     MENU -->|task prompt| R2{{"ROUTER (rules only)<br/>per-task tier pick"}}
-    R2 -->|T3 small| W3["GLM 5.4 → MiMo → $0 paths"]
-    R2 -->|T2 medium| W2["Hy4 → DeepSeek Flash<br/>→ Agnes(trial) → MiMo(bg)"]
-    R2 -->|T1 heavy| W1["Qwen4 Max → Kimi K3.1 Pro"]
+    R2 -->|T3 small| W3["MiMo 2.6 Flash → $0 paths"]
+    R2 -->|T2 medium| W2["Hy4 → DeepSeek V4.1 Flash → GLM 5.4"]
+    R2 -->|T1 heavy| W1["Qwen4 Max → escalate_to_human"]
     W1 & W2 & W3 -->|result| O
-    W1 -->|failure| PRO["one escalation<br/>Qwen4 Max → Kimi<br/>→ escalate_to_human"]
+    W1 -->|failure| PRO["escalate_to_human"]
     PRO --> TOOL["TOOL CALL"]
 
     TOOL --> POLICY{"POLICY CHECK<br/>default deny"}
@@ -164,9 +166,10 @@ flowchart TD
 **Legend:** the coordinator skeleton has the **PARTIAL** pieces (fixed
 12-action menu, 3-round limit → escalation note, validation, GUARD check, an
 approval *pause* that only logs). Router, tiered workers (the T1/T2/T3 chains
-shown are **PROPOSED** — see `docs/MODEL_TIERS.md`), one-escalation, default-deny
-policy, exact-command display, process-group execution and result verification
-are **GAP**. Spec sections: FLOW, SAFETY, STATE MACHINE.
+shown are **ACCEPTED 2026-11-25** — see `docs/MODEL_TIERS.md` — but not
+implemented), one-escalation, default-deny policy, exact-command display,
+process-group execution and result verification are **GAP**. Spec sections:
+FLOW, SAFETY, STATE MACHINE.
 
 ---
 
@@ -227,30 +230,33 @@ STATE, OFFLINE.
 
 ```mermaid
 flowchart TB
-    R{"ROUTER (rules only) — runs TWICE<br/>1. intake → T0 orchestrator<br/>2. per task → worker tier + model"}
+    R{"ROUTER (rules only) — runs TWICE<br/>1. intake → T0 orchestrator<br/>2. per task → worker tier + model<br/>Slots may be PINNED per pane (see MODEL_TIERS.md)"}
 
-    R -->|intake| T0["T0 ORCHESTRATOR<br/>DeepSeek V4.1 Flash → Hy4 → GLM 5.4*"]
+    R -->|intake| T0["T0 ORCHESTRATOR<br/>DeepSeek V4.1 Flash → Hy4 → GLM 5.4<br/>(per-pane pin: any of the 3, or auto)"]
 
-    R -->|T3 small| T3["GLM 5.4* → MiMo → $0 paths"]
-    R -->|T2 medium| T2["Hy4 → DeepSeek Flash<br/>→ Agnes(trial) → MiMo(bg)"]
-    R -->|T1 heavy| T1["Qwen4 Max → Kimi K3.1 Pro<br/>→ escalate_to_human"]
+    R -->|T3 small| T3["MiMo 2.6 Flash → $0 paths"]
+    R -->|T2 medium| T2["Hy4 → DeepSeek V4.1 Flash → GLM 5.4<br/>(per-pane worker allowlist)"]
+    R -->|T1 heavy| T1["Qwen4 Max → escalate_to_human"]
 
     T1 & T2 & T3 -->|result| T0
     T0 --> B["Bocha search<br/>best-effort, never blocks"]
-    R -.->|"optional, HOME ONLY,<br/>0.8 s limit, ignored on timeout"| J["Jev shadow advisor<br/>(no candidate: Inkling culled)"]
-    CULL["Culled: Qwen 3.8 27B · GLM 5.3 Flash**<br/>· Gemini 4 Neon (booth, GFW) · Inkling 2 Small"]
-    NOTE["* GLM 5.4 provisional on price only —<br/>** GLM 5.3 Flash is designated revert<br/>until 5.4 benches (see MODEL_TIERS.md)"]
+    J{{"JEV 1.14 — JUDGE<br/>$0.042/M in, output free, ~100ms<br/>winner pick · tab promotion · ambiguous routing<br/>GUARD keeps final authority"}}
+    T0 -.-> J
+    T1 & T2 & T3 -.-> J
+    CULL["Culled (2026-11-25): Kimi K3.1 Pro · GLM 5.3 Flash<br/>· Agnes 2.5 Pro Theta · Gemini 4 Neon (GFW)<br/>· Qwen 3.8 27B · Inkling 2 Small"]
 ```
 
-**Legend:** all four tier chains are **PROPOSED** (recorded in
+**Legend:** all four tier chains are **ACCEPTED 2026-11-25** (recorded in
 `docs/MODEL_TIERS.md`) and are **NOT implemented** — `models.py` +
 `deepseek_client.py` are DeepSeek-only today (router fails closed to DeepSeek;
 no Anthropic client, deliberately, because the booth is in Shenzhen). Bocha is
 **DONE** as a best-effort search that never blocks and never changes a ranking.
-The **rules-based tier router** and the **one-time escalation** are **GAP**;
-today tiers are chosen by caller name (coordinator/worker/narration/premium).
-Jev shadow advisor is **GAP / optional** and now has no candidate (Inkling was
-culled). Spec section: PROVIDERS.
+The **rules-based tier router**, the **one-time escalation**, and **per-pane
+pinning / T2 allowlists** are **GAP**; today tiers are chosen by caller name
+(coordinator/worker/narration/premium). Jev 1.14 is the accepted **judge** —
+typed decisions in ~100ms, output free — not the old optional home-only shadow
+advisor (Inkling was culled). GLM 5.4 is benchmarked (KingBench 4) and the
+5.3 Flash interim note is CLOSED. Spec section: PROVIDERS.
 
 ---
 
@@ -342,6 +348,48 @@ for the two owners to reconcile.
 
 ---
 
+## 10. Booth arena demo (ACCEPTED 2026-11-25, not implemented)
+
+```mermaid
+flowchart TB
+    subgraph MON["LARGE MONITOR — 3 orchestrator columns"]
+        direction LR
+        subgraph A["A — DeepSeek Flash (pinnable)"]
+            A1["sub 1<br/>product + launch/test"]
+            A2["sub 2<br/>product + launch/test"]
+            AT["tabs: [3][4][5] +"]
+        end
+        subgraph B["B — Hy4 (pinnable)"]
+            B1["sub 1<br/>product + launch/test"]
+            B2["sub 2<br/>product + launch/test"]
+            BT["tabs: [3][4] +"]
+        end
+        subgraph C["C — GLM 5.4 (pinnable)"]
+            C1["sub 1<br/>product + launch/test"]
+            C2["sub 2<br/>product + launch/test"]
+            CT["tabs: [3][4][5] +"]
+        end
+    end
+    TP["Small touchpad<br/>by the Pi: select pane + chip"] --> MON
+    BTN["Green / red buttons + kill switch<br/>physical gate, unchanged"] --> MON
+    MON --> SAND["Isolated sandbox<br/>generated code runs here<br/>never on GPIO / bridge / keys"]
+    SAND --> J{{"Jev 1.14 judge<br/>winner pick · tab promotion"}}
+    J --> MON
+    MON --> TEL[("SQLite telemetry<br/>pane · model · tokens · latency · cost")]
+    PI["Pi 5: console state machine,<br/>dashboard render, API calls"] --> MON
+```
+
+**Legend:** this whole diagram is **GAP (not implemented)** — it is the accepted
+2026-11-25 booth demo design recorded in `docs/MODEL_TIERS.md` §"Booth arena".
+The Pi renders the dashboard and makes API calls; generated code runs only in
+an isolated sandbox, never on the GPIO/bridge path. Green/red/kill remain the
+physical gate. Each column keeps 2 main subagents on stage with extra agents as
+tab chips; clicking a chip promotes it into a main pane. Operators can pin each
+orchestrator's model and restrict its T2 worker pool. Spec sections: PROVIDERS,
+SAFETY (sandbox is outside GUARD's physical-action scope by design).
+
+---
+
 ## Cross-reference index
 
 | Diagram | Spec section | Implementation status |
@@ -351,10 +399,11 @@ for the two owners to reconcile.
 | 3. End-to-end flow | FLOW, SAFETY | PARTIAL |
 | 4. Safety stack | SAFETY | mixed (GUARD DONE, others GAP/PARTIAL) |
 | 5. Memory and state | MEMORY AND STATE, OFFLINE | PARTIAL / GAP |
-| 6. Providers and routing | PROVIDERS | PARTIAL / GAP (4 tiers PROPOSED) |
+| 6. Providers and routing | PROVIDERS | PARTIAL / GAP (4 tiers ACCEPTED 2026-11-25, not implemented) |
 | 7. Offline fallback | OFFLINE | GAP (rules engine DONE) |
 | 8. External agents | EXTERNAL AGENTS | DONE / aligned |
 | 9. Ownership map | OWNERSHIP | informational |
+| 10. Booth arena demo | PROVIDERS, SAFETY | GAP (ACCEPTED design, not implemented) |
 
 Rendering notes: Mermaid should be supported by GitHub natively. If a viewer
 does not render `stateDiagram-v2` or `<br/>` labels, the equivalent text is in

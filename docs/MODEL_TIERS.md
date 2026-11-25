@@ -1,168 +1,250 @@
-# Model Tiers — Candidate Roster and Routing Decisions
+# Model Tiers — Final Roster, Selection Rules, and Arena Cost
 
-Status: PROPOSED. This document records the model-tier decision for the agent
-runtime. It does **not** change `docs/ARCHITECTURE.md`, which remains the
-authoritative spec. The authoritative spec currently says "v1 runtime is
-DeepSeek only"; this document proposes the future multi-provider tier table.
-Implementation (changes to `code/si_console/models.py`) requires approval from
-Jayden and Christopher.
+Status: ACCEPTED roster (2026-11-25). This document records the model-tier
+decision for the agent runtime and the booth arena demo. It does **not** change
+`docs/ARCHITECTURE.md`, which remains the authoritative spec. The authoritative
+spec still says "v1 runtime is DeepSeek only"; this document defines the planned
+multi-provider table and the demo configuration. Implementation (changes to
+`code/si_console/models.py`) requires approval from Jayden and Christopher.
 
-Date: 2026-11-24.
+Date: 2026-11-25. Supersedes the 2026-11-24 PROPOSED draft.
 
 ## Sources
 
-Benchmark data was checked on 2026-11-24 against:
+Benchmark data checked 2026-11-24/25:
 
 - Artificial Analysis Intelligence Index v5 (Nov 2026)
 - Arena Agent Arena leaderboard (Nov 22, 2026), via `arena.ai/leaderboard`
-- Pricing from provider pages gathered earlier in this review
+- KingBench 4 coding leaderboard (AICodeKing community run, Nov 2026)
+- Provider pricing pages and TypeSafe docs for Jev
 
 Where a model has no independent benchmark entry, that is stated explicitly —
 marketing claims are not treated as data.
 
-## Division of labor (important for reading the tiers)
-
-There are three distinct jobs. Confusing them leads to wrong tier assignments:
+## Division of labor
 
 ```
 Input -> Router (rules) -> Orchestrator (T0 model) -> task prompt
                                                          |
                                                          v
-                                              Router (rules) -> Agent (T1/T2/T3)
+                                              Router (rules) -> Worker (T1/T2/T3)
                                                          |
                                                          v
                                               result back to Orchestrator
 ```
 
 1. **Router** — deterministic rules only (skill, keywords, length). It runs
-   twice: once to pick the orchestrator from the entry signal, and again per
-   task to pick the worker tier/model. It is the **only** component that selects
-   a model. The tier table in `models.py` is therefore load-bearing.
-2. **Orchestrator (T0)** — decomposes the job, writes the worker prompts, picks
-   from a fixed 12-action JSON menu, reads results, synthesizes the final
-   output. It does **not** decide which model runs. Its core skill is reliable
-   tool calling and clear prompt-writing, not raw reasoning — the hard thinking
-   is delegated.
-3. **Workers (T1/T2/T3)** — do the actual thinking on the prompts they are
-   given.
+   twice: once at intake to pick the orchestrator, and again per task to pick
+   the worker tier/model. It is the only component that selects a model by
+   default. The tier table in `models.py` is load-bearing.
+2. **Orchestrator (T0)** — decomposes the job, writes worker prompts, picks from
+   a fixed 12-action JSON menu, reads results, synthesizes output. It does not
+   do the hard thinking — that is delegated. Core skill: reliable tool calling
+   and clear prompt-writing.
+3. **Workers (T1/T2/T3)** — do the actual thinking on the prompts they receive.
+4. **Judge (Jev)** — a decision model, not a worker. Returns typed, calibrated
+   decisions in ~100ms. Used for winner selection, tab promotion, and ambiguous
+   routing. Cannot write code.
 
-Note: the authoritative spec's flow uses `FAST | THINK` and a rules-only router.
-This document proposes four tiers (`T0 | T1 | T2 | T3`) and a router that maps
-skill/keywords/length to one of them. That is a spec change to approve, not a
-current implementation.
+Note: the authoritative spec's flow uses `FAST | THINK`. This document defines
+four tiers (`T0 | T1 | T2 | T3`) plus a judge. That is a spec change to approve.
 
-## Tier definitions
+## Final tier chains
 
-| Tier | Job | Call volume | Quality need | Latency | Cost tolerance |
-|---|---|---|---|---|---|
-| **T0 Orchestrator** | plan, write worker prompts, 12-action menu | Highest (up to 3 rounds/task) | Tool-call discipline, JSON reliability | Strict (human at button) | Low — cheapest reliable model wins |
-| **T1 Heavy** | hard reasoning, escalations | Low | Frontier | Loose | High — rare calls justify $2–10/M |
-| **T2 Medium** | synthesis, slide drafts, multi-step chains | Medium | Solid reasoning + tool use | Moderate | Mid — $0.10–2.50/M |
-| **T3 Small** | summaries, formatting, voice hints, search queries | High | Minimal | Fast | Rock bottom, or $0 |
-
-## The roster
+```
+T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4
+T1 heavy        : Qwen4 Max -> escalate_to_human
+T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4
+T3 small        : MiMo 2.6 Flash -> $0 code paths
+Judge           : Jev 1.14 (typed decisions, output free)
+```
 
 ### T0 — Orchestrator (fallback chain)
 
-| # | Model | In/Out $/M | AA / Arena | Reason |
+| # | Model | In/Out $/M | Benchmark | Reason |
 |---|---|---|---|---|
-| 1 | **DeepSeek V4.1 Flash 1017** | 0.15–0.30 / 0.60–1.20 | 33 / #30 | Primary. Cheapest verified tool-caller; already integrated and tested (89 tests pass); spec-named fail-closed provider; off-peak and cached-input pricing make the 3-round loop nearly free. |
-| 2 | **Hy4** (Tencent) | ~0.83 / 2.50 (CN ¥6/¥18) | 34.6 / #19 | Backup #1. Only backup with real benchmark scores and proven tool calling, native China endpoint. Costs 3–5x DeepSeek, but a backup only fires when the primary is already down, so volume is low. |
-| 3 | **GLM 5.4** | ~0.09 / 0.33 | no data | Backup #3, demoted. Cheapest credible model but released 2026-11-23 with no independent benchmark entry. See interim note below. |
+| 1 | **DeepSeek V4.1 Flash 1017** | 0.15–0.30 / 0.60–1.20 | AA 33 / Arena #30 | Primary. Cheapest verified tool-caller; already integrated and tested (89 tests pass); spec-named fail-closed provider; off-peak + cached-input pricing make the 3-round loop nearly free. |
+| 2 | **Hy4** (Tencent) | ~0.83 / 2.50 (CN ¥6/¥18) | AA 34.6 / Arena #19 | Backup #1. Only backup with real benchmark scores and proven tool calling, native China endpoint. 3–5x DeepSeek, but a backup only fires when the primary is down. |
+| 3 | **GLM 5.4** | ~0.09 / 0.33 | KingBench 33.2 (7/19, top open) | Backup #3. Cheapest credible tool-caller; capable but unlisted on AA and slow at max effort — third-string only, effort capped at `high`. |
 
-*Deliberately excluded from T0:* frontier models (Kimi, Qwen4 Max). The
-orchestrator picks from a fixed 12-action menu and does not do the hard
-reasoning; at booth volume a frontier orchestrator is affordable (~$0.48–0.80
-per day at 100 rounds) but buys little for this narrow job. Revisit via the
-promotion trigger in Revisions.
+### T1 — Heavy workers
 
-### T1 — Heavy workers (frontier, low volume)
-
-| # | Model | In/Out $/M | AA / Arena | Reason |
+| # | Model | In/Out $/M | Benchmark | Reason |
 |---|---|---|---|---|
-| 1 | **Qwen4 Max** | 1.50 / 4.50 | 43 / **#14** (top Chinese model on Agent Arena) | First escalation. Flagship agentic: parallel tool calls, ~2k tool calls/session, structured output, 1M context; Alibaba Singapore endpoint is China-accessible. |
-| 2 | **Kimi K3.1 Pro** | 2.00 / 10.00 | **46** (top open-weights) / #21 | Final escalation before `escalate_to_human`. Frontier reasoning, 1M context, multimodal, Moonshot is China-reachable; rare calls justify the price. Non-permissive open-weight license is irrelevant for API-only use. |
-| — | **DeepSeek V4 Pro** | unknown | — | Flagged candidate: the authoritative spec names `deepseek-v4-pro` as the THINK model. It was not in the original candidate list; pricing and reachability check pending before placement. |
+| 1 | **Qwen4 Max** | 1.50 / 4.50 | AA 43 / Agent Arena **#14** (top Chinese model) | Sole heavy worker. Flagship agentic: parallel tool calls, ~2k calls/session, structured output, 1M context; Alibaba Singapore endpoint is China-accessible. Failure goes straight to `escalate_to_human`. |
 
-Escalation order is Qwen4 Max first, Kimi last. This matches the agentic data
-(Qwen #14 vs Kimi #21 on Agent Arena) better than the raw intelligence data
-(Kimi 46 vs Qwen 43) — for a tool-calling console, agentic success rate is the
-more relevant signal.
+Kimi K3.1 Pro was removed: at $10/M output it consumed 64% of arena spend for
+marginal visible gain over Qwen4 Max on a tool-calling console.
 
 ### T2 — Medium workers
 
-| # | Model | In/Out $/M | AA | Reason |
+| # | Model | In/Out $/M | Benchmark | Reason |
 |---|---|---|---|---|
-| 1 | **Hy4** | ~0.83 / 2.50 | 34.6 | Primary. True reasoning model at mid pricing, 1M context, tool calling, vision, structured output. Deliberate double-duty with T0 backup — one integration, two slots. |
-| 2 | **DeepSeek V4.1 Flash** | 0.15–0.30 / 0.60–1.20 | 33 | Secondary. Nearly ties Hy4 on capability at ~1/5 the price, and already tested. As secondary it does not create a new provider failure domain: a DeepSeek outage degrades T0-primary and T2-secondary, while T0 falls to Hy4 and T2 still has Hy4/MiMo/Agnes. |
-| 3 | **Agnes 2.5 Pro Theta** | 0.10 / 0.30 | 24.5 | Trial. 188B open weights at tiny prices, potentially the best $/capability here. Unproven (PublicAI agents #25/298, no reliability data): ~20 tool-call tests required before real work. If it passes, may replace Hy4 as primary on price. |
-| 4 | **MiMo 2.6 Flash** | 0.14 / 0.28 | 26.7 (46th pct) | Background only. Near-free cached input ($0.0028) for repeated prompts, full multimodal. Excluded from interactive use on latency: ~30 tok/s, 2.5 s TTFT — a visitor at a button would notice; a batch slide-draft job would not. |
+| 1 | **Hy4** | ~0.83 / 2.50 | AA 34.6 / Arena #19 | Primary. True reasoning model at mid pricing, 1M context, tool calling, vision, structured output. Double-duty with T0 backup — one integration, two slots. |
+| 2 | **DeepSeek V4.1 Flash** | 0.15–0.30 / 0.60–1.20 | AA 33 | Secondary. Nearly ties Hy4 at ~1/5 price and already tested. As secondary it does not create a new provider failure domain. |
+| 3 | **GLM 5.4** (effort=`high`) | ~0.09 / 0.33 | KingBench 33.2 (7/19, top open) | Third. Capability justifies a medium slot; **effort must stay at `high`, never `max`** (max burns ~1.04M reasoning tokens and 431 min on KingBench). |
 
 ### T3 — Small tasks
 
 | # | Model | In/Out $/M | Reason |
 |---|---|---|---|
-| 1 | **GLM 5.4** | ~0.09 / 0.33 | Primary on price. Cheapest credible call on the list; shares the T0-backup integration. See interim note below. |
-| 2 | **MiMo 2.6 Flash** | 0.14 / 0.28 | Secondary. Slow is acceptable for non-blocking small tasks. |
-| 3 | **$0 code paths** | 0 | `voice_intents.py` fixed EN/ZH matcher and prewritten narration sentences handle some small tasks with no model call. Exhaust these before spending anything. |
+| 1 | **MiMo 2.6 Flash** | 0.14 / 0.28 | Sole small model. Near-free cached input ($0.0028) for repeated prompts; full multimodal. Slow (~30 tok/s, 2.5 s TTFT) is acceptable because small tasks are non-blocking. |
+| 2 | **$0 code paths** | 0 | `voice_intents.py` fixed EN/ZH matcher + prewritten narration handle some small tasks with no model call. Exhaust before spending anything. |
 
-## Interim note: GLM 5.4 vs GLM 5.3 Flash
+## Judge — Jev 1.14
 
-> ⚠️ **GLM 5.4 is in the roster on price alone.** It released 2026-11-23 and, as
-> of this review, has **zero independent benchmark data** — no Artificial
-> Analysis page, no Vals score, no Arena entry. A social post claiming "#3 on
-> AA Intelligence Index" is unverified marketing and is not treated as data.
->
-> Its price ($0.09/$0.33) makes it the cheapest credible option for T3 (shallow
-> work, low risk of visible harm) and an acceptable third-string T0 backup.
-> But **T0 backup requires proven tool calling**, which 5.4 does not yet have.
->
-> **GLM 5.3 Flash is culled only conditionally.** At $0.15/$0.50 it has real
-> benchmark pedigree — it topped the Artificial Analysis Cyber Index as an
-> open-source model — and is the designated revert for 5.4 in the two slots
-> where 5.4 is currently unproven (T0 backup #3 and T3 primary).
->
-> **Until 5.4 benches:** treat the 5.4 assignments as provisional. Run ~20
-> tool-call reliability tests against it. If AA/Arena scores land poorly, or
-> the tool-call tests fail, reinstate **GLM 5.3 Flash** as T0 backup #3 and T3
-> primary immediately (Revision R2). If 5.4 scores well, remove this note and
-> make the 5.3 cull permanent.
+| Property | Value |
+|---|---|
+| Price | **$0.042 / M input, output FREE** (OpenRouter `jev-1.13`/`1.14`, TypeSafe docs) |
+| Latency | ~100ms, typed calibrated decisions |
+| Cost per decision | $0.000015–0.000030 (364–724 input tokens) |
+| Context | 32K |
+| Role | Winner pick, tab promotion, ambiguous router fallback, approval pre-check |
+
+Jev is a **decision model**, not a worker — it cannot write code. It is not in
+T0–T3; it sits beside GUARD as a deterministic-adjacent judgment layer. GUARD
+remains final authority for physical actions; Jev never bypasses it.
 
 ## Culled
 
-| Model | In/Out $/M | Reason | Revert condition |
-|---|---|---|---|
-| **Qwen 3.8 27B** | 0.43 / 1.88–2.55 | Dominated in every tier: more expensive than GLM 5.4 and MiMo in T3, loses to Qwen4 Max in T1/T2; AA index 10.0 (~7th percentile), the worst score in the exercise. Redundant with Qwen4 Max for Qwen-family behavior. | None. |
-| **GLM 5.3 Flash** | 0.15 / 0.50 | Superseded on price by 5.4 — *but 5.4 is unbenchmarked and 5.3 has pedigree*. | **Yes** — see interim note above. |
-| **Gemini 4 Neon** | 3.00 / 15.00 | Culled for the booth, not for capability: AA ~61, the strongest model in this whole exercise. The decisive reason is mainland-China reachability (GFW) from a Shenzhen convention center — on-site wifi does not fix that. Also 10–20x DeepSeek and output-billed thinking tokens are unpredictable against a $5/day cap. | Home-only use is fine; keep as a home T1 experiment model. |
-| **Inkling 2 Small** | 0.30 / 1.00 | Unproven tool-call reliability and no benchmark score; its shadow-advisor (Jev) slot is optional in the spec. | None. Note: the Jev shadow-advisor slot now has no candidate — leave unfilled (spec allows) or trial Agnes there. |
-
-## Provider diversity at a glance
-
-```
-T0 primary = DeepSeek    T1 primary = Qwen4 Max    T2 primary = Hy4    T3 primary = GLM 5.4
-```
-
-Each tier's **primary** is a different provider, so no single API outage kills
-two primaries. Dual-role models (Hy4 in T0+T2, DeepSeek in T0+T2, GLM in T0+T3)
-are permitted as backups/secondaries only.
-
-Cost ladder: $0 small-task code paths → ~$0.09/M small tasks → $0.15–0.83/M
-orchestration and medium → $1.50–2/M heavy.
-
-## Revisions log
-
-| # | Change | Reason |
+| Model | In/Out $/M | Reason |
 |---|---|---|
-| R1 | T0 fallback chain: DeepSeek → **Hy4** → GLM 5.4 | Only Hy4 has real benchmark scores and proven tool calling among backups; GLM 5.4 is unbenchmarked. |
-| R2 | GLM 5.3 Flash cull becomes conditional | 5.4 is unscored; 5.3 has benchmark pedigree. See interim note. |
-| R3a | T2: Hy4 → **DeepSeek Flash** → Agnes (trial) → MiMo (bg) | Benchmarks show DeepSeek ≈ Hy4 capability at ~1/5 price and it is already tested; earlier "overflow only" note underweighted this. |
-| R3b | T0 stays DeepSeek-for-now with a promotion trigger | At booth volume a frontier orchestrator is affordable; but tool-calling is wired/tested only for DeepSeek and the spec names it. Rehearse both: if DeepSeek wastes rounds or escalates noticeably more than Qwen4 Max, promote Qwen4 Max to T0 primary. |
-| R3c | Flag DeepSeek V4 Pro as a T1 candidate | The authoritative spec names it as the THINK model; it was absent from the original candidate list. |
+| **Kimi K3.1 Pro** | 2.00 / 10.00 | 64% of arena cost for marginal visible gain; removed from T1. |
+| **GLM 5.3 Flash** | 0.15 / 0.50 | Superseded by 5.4; interim revert note now CLOSED (see below). |
+| **Agnes 2.5 Pro Theta** | 0.10 / 0.30 | Unproven trial slot removed; no reliability data. |
+| **Gemini 4 Neon** | 3.00 / 15.00 | Culled for booth on mainland-China reachability (GFW), not capability (AA ~61, strongest in exercise). Home-only. |
+| **Qwen 3.8 27B** | 0.43 / 2.55 | Dominated everywhere; AA 10.0 (7th percentile). |
+| **Inkling 2 Small** | 0.30 / 1.00 | Unproven tool calling, no scores; Jev now fills the decision slot. |
+
+## GLM 5.4 / 5.3 Flash — interim note CLOSED
+
+The earlier note made 5.3 Flash a conditional revert while 5.4 was unbenchmarked.
+That is resolved: 5.4 now has an independent result (KingBench 4: 33.2/60, 7th
+of 19, top open model, +5.7 over 5.3's 27.5), so the capability case for 5.4 is
+established. 5.4 is fixed in T0 backup #3 and T2 #3 with effort capped at
+`high`. 5.3 Flash is permanently culled. **No revert condition remains.**
+
+## Configurable model selection (booth arena)
+
+The arena gives operators explicit control over which model fills each slot.
+The router still decides tiers by default, but every slot can be **pinned**:
+
+### Per-orchestrator selection
+
+Three orchestrator panes; each can be pinned to **any T0 model** or left on
+`auto` (fallback chain order):
+
+| Pane | Default (auto) | Operator can pin to |
+|---|---|---|
+| Orchestrator A | DeepSeek V4.1 Flash | DeepSeek / Hy4 / GLM 5.4 / auto |
+| Orchestrator B | Hy4 | DeepSeek / Hy4 / GLM 5.4 / auto |
+| Orchestrator C | GLM 5.4 | DeepSeek / Hy4 / GLM 5.4 / auto |
+
+Pinning is a config value per pane (e.g. `SI_ORCH_A=deepseek-v4.1-flash`,
+`SI_ORCH_B=hy4`, `SI_ORCH_C=glm-5.4`, or `auto`). `auto` follows the T0 fallback
+chain; a pinned model does NOT fall back outside its own chain unless the
+operator also enables `allow_fallback=yes`.
+
+### Per-orchestrator worker allowlist
+
+Each orchestrator can be restricted to a **subset of T2 models** for its
+subagents — so one orchestrator may use only GLM 5.4, another only DeepSeek
+Flash, another only Hy4:
+
+| Pane | Default worker pool | Configurable to |
+|---|---|---|
+| Orchestrator A | all T2 (Hy4, DeepSeek, GLM 5.4) | any non-empty subset, e.g. `glm-5.4` only |
+| Orchestrator B | all T2 | e.g. `deepseek-v4.1-flash` only |
+| Orchestrator C | all T2 | e.g. `hy4` only |
+
+Config keys (proposed): `SI_ORCH_A_T2=glm-5.4`, `SI_ORCH_B_T2=deepseek-v4.1-flash`,
+`SI_ORCH_C_T2=hy4`. T1 (Qwen4 Max) stays global unless an orchestrator is
+explicitly denied it (`SI_ORCH_A_T1=off`).
+
+### Selection rules
+
+1. `auto` = follow tier fallback chain in order.
+2. A pinned model is used until it fails; then fall back **within that tier's
+   chain** from the pinned position, or stop if `allow_fallback=no`.
+3. T2 allowlists are per-orchestrator. An empty allowlist means "no medium
+   workers" — tasks that need T2 go straight to T1 or $0 paths.
+4. Jev decides ambiguous routing and tab promotion; it cannot pick a model
+   outside the operator's allowlist.
+5. All selections are logged to SQLite telemetry (route, model, tokens,
+   latency, cost) with the orchestrator pane id.
+
+## Provider diversity
+
+```
+T0 primary = DeepSeek    T1 primary = Qwen4 Max    T2 primary = Hy4    T3 primary = MiMo
+```
+
+Four different primaries — no single API outage kills two primaries. Dual-role
+models (Hy4 T0/T2, DeepSeek T0/T2, GLM 5.4 T0/T2) appear only as backups or
+secondaries, never as two different primaries.
+
+Cost ladder: $0 code paths → $0.14/M (MiMo) → $0.09/M (GLM 5.4) →
+$0.15–0.83/M (DeepSeek/Hy4) → $1.50/M (Qwen4 Max) → $0.042/M judge (Jev).
+
+## Booth arena — layout and cost
+
+### Layout
+
+Large monitor split into 3 orchestrator columns. Each column shows:
+- **2 main subagent panes** with status + live product launch/test area
+- a **tab strip** (`[3][4][5] ▸ +`) for additional subagents; clicking a chip
+  swaps it into a main pane
+- the orchestrator's model label and pinned worker pool
+
+Small touchpad next to the Pi selects a column and a chip. Green/red buttons
+and the kill switch remain the physical gate. Generated code runs in an
+isolated sandbox, never on the Pi's GPIO/bridge path.
+
+### Cost model — one contest
+
+One contest = 3 orchestrators racing; 3 rounds each (2k in / 400 out), 6 main
+subagents × 4 iterations (3k in / 1.5k–4k out), 12 tab subagents × 2 iterations
+(2k in / 1k out, split 12 calls DeepSeek + 12 calls GLM 5.4), ~10 Jev decisions
+× 600 tok in. Rates are the accepted chains' $/M in/out; Hy4 is both an
+orchestrator and the T2 primary, DeepSeek is both the T0 primary and a T2
+backup, so their costs are summed across those roles.
+
+| Model | Role | Calls | 1.5k-out cost | 4k-out cost |
+|---|---|---|---|---|
+| DeepSeek Flash | T0 orch (9) + T2 backup (8) + tabs (12) | 29 | $0.0529 | $0.0769 |
+| Hy4 | T0 orch (3) + T2 primary (8) | 11 | $0.0579 | $0.1079 |
+| GLM 5.4 | T0 orch (3) + T2 #3 (8) + tabs (12) | 23 | $0.0132 | $0.0198 |
+| Qwen4 Max | sole heavy racer (6 main subs × 4 iters) | 8 | $0.0900 | $0.1800 |
+| Jev | judge (10 × 600 tok in, output free) | 10 | $0.00025 | $0.00025 |
+| **Total / contest** | | **81** | **~$0.214** | **~$0.385** |
+
+### Two-day totals (no cap, 200 contests packed)
+
+| Scenario | Cost |
+|---|---|
+| 1.5k output tokens/iteration | **~$42.84** |
+| 4k output tokens/iteration | **~$76.96** |
+
+The earlier ~$110 estimate assumed Kimi as a second frontier racer; with Kimi
+culled, Qwen4 Max is the only heavy cost driver but Hy4 as both orchestrator and
+T2 primary is the second largest. Per-model share at 4k output: Qwen4 Max
+~$36 (47%), Hy4 ~$21.6 (28%), DeepSeek ~$15.4 (20%), GLM 5.4 ~$4.0 (5%), Jev
+~$0.05.
+
+At a more typical 50 contests/day (100 over two days): **~$21 (1.5k out) to
+~$38 (4k out)**. The $5/day cap only works with the cheapest configuration
+below; the default arena assumes no cap.
+
+### Cheapest configuration
+
+Pin all three orchestrators to DeepSeek, set all T2 pools to GLM 5.4 only, and
+turn T1 off (no Qwen4 Max). Contest cost drops to ~$0.02–0.03, two-day packed
+~$5–6 — near the old $5/day cap but loses the frontier race. Default
+configuration keeps Qwen4 Max for the spectacle.
 
 ## Implementation status
 
-All seven surviving models are **decisions, not code**. `code/si_console/models.py`
-currently maps tiers to DeepSeek only. Adding the other providers requires new
-API clients and tier-table entries, plus regression tests — outside the scope
-of this document.
+All placements are decisions, not code. `code/si_console/models.py` still maps
+tiers to DeepSeek only. The per-pane pinning/allowlist config and the Jev
+client are not implemented — they need new API clients, config keys, and
+regression tests. Owner: Christopher (router/config), Jayden (integration).

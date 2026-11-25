@@ -23,34 +23,38 @@ and model. The COORDINATOR never selects models — it decomposes the job, write
 worker prompts, picks from the fixed 12-action JSON menu, and synthesizes
 results. The hard thinking is delegated to workers.
 
-### MODEL TIERS (proposed — see `docs/MODEL_TIERS.md`)
+### MODEL TIERS (accepted 2026-11-25 — see `docs/MODEL_TIERS.md`)
 
-The authoritative v1 flow above names two tiers (FAST|THINK). A proposed
-four-tier expansion, recorded in full in `docs/MODEL_TIERS.md`, is under review
-by Jayden and Christopher. It does not change the v1 spec until approved.
+The authoritative v1 flow above names two tiers (FAST|THINK). The four-tier
+roster in `docs/MODEL_TIERS.md` is **ACCEPTED** as of 2026-11-25. It records
+model selection for the runtime and the booth arena; it is not yet implemented
+in the v1 skeleton and does not alter the v1 spec's DeepSeek-only runtime.
 
 | Tier | Job | Call volume | Quality need | Latency | Cost tolerance |
 |---|---|---|---|---|---|
 | T0 Orchestrator | plan, write worker prompts, 12-action menu | highest (up to 3 rounds/task) | tool-call discipline, JSON reliability | strict (human at button) | low — cheapest reliable model wins |
-| T1 Heavy workers | hard reasoning, escalations | low | frontier | loose | high — rare calls justify $2–10/M |
-| T2 Medium workers | synthesis, slide drafts, multi-step chains | medium | solid reasoning + tool use | moderate | mid — $0.10–2.50/M |
+| T1 Heavy workers | hard reasoning, escalations | low | frontier | loose | high — rare calls justify $1.50–4.50/M |
+| T2 Medium workers | synthesis, slide drafts, multi-step chains | medium | solid reasoning + tool use | moderate | mid — $0.09–2.50/M |
 | T3 Small tasks | summaries, formatting, voice hints, search queries | high | minimal | fast | rock bottom, or $0 |
 
-Proposed placement (fallback chains, in order) — all China-reachable:
+Accepted placement (fallback chains, in order) — all China-reachable:
 
 ```
-T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4 (unbenchmarked, provisional)
-T1 heavy        : Qwen4 Max -> Kimi K3.1 Pro -> escalate_to_human
-T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> Agnes 2.5 Pro Theta (trial) -> MiMo 2.6 Flash (background)
-T3 small        : GLM 5.4 -> MiMo 2.6 Flash -> $0 code paths (voice_intents.py + prewritten narration)
+T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4
+T1 heavy        : Qwen4 Max -> escalate_to_human
+T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4
+T3 small        : MiMo 2.6 Flash -> $0 code paths (voice_intents.py + prewritten narration)
+Judge           : Jev 1.14 (typed decisions; ~100ms; not a worker)
 ```
 
-Each tier's primary is a different provider, so no single API outage kills two
-primaries. Dual-role models (Hy4 T0/T2, DeepSeek T0/T2, GLM T0/T3) appear only
-as backups or secondaries. GLM 5.4 is provisional pending benchmarks; GLM 5.3
-Flash is the designated revert — see the interim note in `docs/MODEL_TIERS.md`.
-All placements are decisions, not code: `code/si_console/models.py` still routes
-to DeepSeek only.
+Each tier's primary is a different provider (DeepSeek / Qwen4 Max / Hy4 / MiMo),
+so no single API outage kills two primaries. Dual-role models (Hy4 T0/T2,
+DeepSeek T0/T2, GLM 5.4 T0/T2) appear only as backups or secondaries. GLM 5.4 is
+benchmarked (KingBench 4: 33.2, 7/19, top open model); the earlier interim note
+is CLOSED and GLM 5.3 Flash is permanently culled. Operators can pin any T0
+model per orchestrator pane and restrict each pane's T2 worker pool — see
+`docs/MODEL_TIERS.md` §"Configurable model selection". All placements are
+decisions, not code: `code/si_console/models.py` still routes to DeepSeek only.
 
 ## SAFETY (merged)
 
@@ -62,12 +66,20 @@ Obsidian-compatible markdown vault is the source of truth for tasks (one note pe
 
 ## PROVIDERS
 
-v1 runtime is DeepSeek only (flash + pro) plus Bocha search. Claude, Qwen, GLM, Kimi and Jev are NOT on the critical path. Jev may run as an optional shadow advisor to the router at home only (0.8s limit, ignored on timeout, logged for comparison). Booth assumes no Claude access and possibly no internet.
+v1 runtime is DeepSeek only (flash + pro) plus Bocha search. Claude is NOT on
+the critical path and is never called from the booth build. Booth assumes no
+Claude access and possibly no internet. The accepted 2026-11-25 roster adds
+Qwen4 Max, GLM 5.4, Hy4, MiMo 2.6 Flash as planned workers and Jev 1.14 as a
+judge (typed decisions, ~100ms — winner pick, tab promotion, ambiguous routing;
+GUARD retains final authority over physical actions). Jev is not a worker and
+never bypasses GUARD; the old optional home-only 0.8s shadow-advisor idea is
+superseded. The booth has internet; offline replay is only the failure net.
 
-The proposed multi-provider tier assignments (T0 orchestrator / T1 heavy /
-T2 medium / T3 small), benchmark data, conditional culls, and the GLM 5.4 / 5.3
-Flash interim note are recorded in `docs/MODEL_TIERS.md`. That document is
-PROPOSED and does not change this v1 spec.
+The accepted multi-provider tier assignments (T0 orchestrator / T1 heavy /
+T2 medium / T3 small), benchmark data, final culls, per-orchestrator model
+pinning, T2 worker allowlists, and the booth arena cost model are recorded in
+`docs/MODEL_TIERS.md`. That document is ACCEPTED as of 2026-11-25 for model
+selection; it does not change this v1 spec's runtime.
 
 ## OFFLINE (from Jayden)
 
@@ -94,13 +106,13 @@ above. This list is for planning. It does not change the authoritative spec.
 | 120 s approval timeout treated as reject | Approval pause in `coordinator._run_one_tool_call` only logs and waits; no timeout | Needs the wait loop reading note `approved_by`, green/red, and a 120 s clock. Owner: Jayden. |
 | Hardware kill poll at 100 ms | Bridge GPIO debounce 0.05 s; coordinator reads `state.json` once per 1 s loop iteration | Tighten poll to 0.1 s at the GPIO layer. Pin map remains R2/R3 as stated. Owner: Jayden. |
 | Ctrl+K text intake | Only `voice_intents.py` (fixed EN/ZH phrase matcher) | Text intake with its own fixed vocabulary not implemented. Owner: Jayden. |
-| Rules-only ROUTER -> tier (v1 FAST/THINK; proposed T0/T1/T2/T3) | `models.py` tier router maps coordinator/worker/narration/premium tiers to DeepSeek only | No skill/keyword/length router; worker model is not selected per task tier; no per-tier providers. Owner: Christopher. |
+| Rules-only ROUTER -> tier (v1 FAST/THINK; accepted T0/T1/T2/T3 2026-11-25) | `models.py` tier router maps coordinator/worker/narration/premium tiers to DeepSeek only | No skill/keyword/length router; worker model is not selected per task tier; no per-tier providers; per-pane pinning not implemented. Owner: Christopher. |
 | Default-deny policy, allowlisted read-only tools auto-run | `tools.py` tags each tool `SAFE` or `NEEDS APPROVAL`; SAFE runs immediately in `coordinator._run_one_tool_call` | Permissive tag list must be replaced with default-deny and a read-only allow list. Owner: Christopher. |
 | Injection guard tainting web/file content | Bocha results clipped in `context.py`; vault search notes require citations | No taint tracking; no rule blocking tainted text from becoming tool arguments. Owner: Christopher. |
 | Exact command shown on screen at approval time | `request_approval()` sets `approval_pending` and task id; screen shows proposal note | Command/args are not rendered verbatim from the tool call. Owner: Christopher. |
 | EXECUTE in own process group with timeout, VERIFY RESULT | `guard.check_shell_command()` allow list; `shell_run` tool body is a skeleton | No process group, timeout, or empty-output/step-limit verification. Owner: Christopher. |
 | `escalate_to_human` action name | `_escalate()` writes a `*-escalate` note with status `blocked`; reason code `ROUND_LIMIT` | Fixed menu has no `escalate_to_human` action; escalation is internal only. Owner: Christopher. |
-| One escalation on worker failure (v1: pro; proposed: T1 Qwen4 Max -> Kimi K3.1 Pro) | `models.py` premium tier maps to `deepseek-v4-pro` if configured | No automatic one-time worker escalation path; proposed tier chain is not implemented. Owner: Christopher. |
+| One escalation on worker failure (v1: pro; accepted: T1 Qwen4 Max -> escalate_to_human) | `models.py` premium tier maps to `deepseek-v4-pro` if configured | No automatic one-time worker escalation path; accepted tier chain is not implemented. Owner: Christopher. |
 | Telemetry to SQLite (route, model, tokens, latency, cost) | No telemetry store; `LoopResult` and vault logs hold free-text lines | SQLite schema and writer not implemented. No secrets or personal data in telemetry. Owner: Christopher. |
 | Every live run recorded; automatic offline replay | No recording mode; `deepseek_client.py` makes live calls only | Need a recorder in the client layer and a replay player feeding the same validation/GUARD path. Owner: Jayden. |
 | External agents off in booth, claim research/narration only | Bridge API has `_check_home_mode()`, 10/min rate limit, `CLAIMABLE_TYPES = {research, narration}` | Already aligned. Claim TTL/heartbeat present in `state_store.py`. Owner: Jayden. |
