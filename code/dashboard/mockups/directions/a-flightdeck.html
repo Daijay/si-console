@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Direction A: flight deck</title>
+<link rel="stylesheet" href="base.css"><style>
+body{font-family:"SI Deck","SI Sans SC",sans-serif;background:var(--bg);color:#f2f4f6}
+.bar{height:52px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:24px;border-bottom:2px solid var(--border-strong)}
+.state{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px}
+.state h1{font-size:150px;line-height:1}.state p{font-size:32px;color:#b6bec9;margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 12px 12px;height:140px}
+.t{border:3px solid var(--c);border-radius:4px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:700;font-size:26px;color:var(--c)}
+.t small{font-size:22px;font-weight:400;color:#b6bec9}
+.g{--c:#3ddc84}.w{--c:#f2f4f6}.b{--c:#4ea1ff}.y{--c:#ffd23f}
+.ask{padding:16px 24px;flex:1}.ask .who{font-size:28px;color:#4ea1ff;font-weight:700}.ask .act{font-size:62px;font-weight:700;margin-top:10px}.ask .risk{font-size:28px;margin-top:10px}
+.split{display:grid;grid-template-columns:1fr 1fr;height:230px}
+.split div{display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:34px}
+.split b{font-size:50px}.yes{background:#3ddc84;color:#04140a}.no{background:#c8161d;color:#fff}
+.mon .bar{height:84px;font-size:32px}.cols{flex:1;display:grid;grid-template-columns:560px 1fr 520px;grid-template-rows:1fr 250px;gap:2px;background:var(--border-strong)}
+.p{background:var(--bg);padding:24px;font-size:24px;overflow:hidden}.p h2{font-size:24px;color:#b6bec9;margin-bottom:16px}
+.line{border-left:6px solid var(--c,#98a1ad);padding:6px 14px;margin-bottom:14px}.line code{font-family:"SI Term",monospace;font-size:18px;color:#b6bec9}
+svg text{font-family:"SI Deck";font-weight:700}
+.card{border:3px solid #3ddc84;border-radius:6px;padding:20px}.card .act{font-size:36px;font-weight:700;margin:12px 0}
+</style></head><body>
+<section class="view mini" id="idle"><div class="bar"><span>Booth</span><span>Round 0/3</span><span>EN | 中文</span></div>
+<div class="state"><h1>Ready</h1><p>Hold the button and ask something</p></div>
+<div class="tiles"><div class="t g">COORD<small>off</small></div><div class="t w">AGENT 1<small>off</small></div><div class="t b">AGENT 2<small>off</small></div><div class="t y">GUARD<small>off</small></div></div></section>
+<section class="view mini" id="approval"><div class="bar"><span style="color:#3ddc84">Waiting for you</span><span>Round 2/3</span><span>EN | 中文</span></div>
+<div class="ask"><div class="who">AGENT 2 asks</div><div class="act">Buy $2,000 of XLK</div><div class="risk">Risk HIGH: changes the portfolio</div></div>
+<div class="split"><div class="yes">PRESS GREEN<b>TO APPROVE</b></div><div class="no">RED<b>TO REJECT</b></div></div></section>
+<section class="view mon" id="monitor"><div class="bar"><span>SI Console</span><span style="color:#3ddc84;font-weight:700">Waiting for you</span><span>Booth, round 2/3, EN | 中文</span></div>
+<div class="cols"><div class="p" style="grid-row:span 2"><h2>Transcript</h2><div class="line">Visitor: Buy XLK</div><div class="line" style="--c:#3ddc84">COORD: Check the sector ranking first.<br><code>run_rules_engine(date="2022-12-30")</code></div><div class="line" style="--c:#4ea1ff">AGENT 2: Proposing a paper order.<br><code>propose_order("XLK", 2000)</code></div><div class="line" style="--c:#ffd23f">GUARD: Needs a human. All checks passed.</div></div>
+<div class="p"><h2>Handoffs</h2><svg width="780" height="650" viewBox="0 0 780 650"><g stroke="#333a44" stroke-width="6" fill="none"><path d="M390 90V230"/><path d="M390 230L160 330"/><path d="M390 230L620 330" stroke="#4ea1ff"/><path d="M620 330L390 470" stroke="#ffd23f"/><path d="M390 470V590" stroke-dasharray="14 10"/></g><g stroke-width="5" fill="#16191e"><rect x="280" y="30" width="220" height="80" stroke="#98a1ad"/><rect x="280" y="190" width="220" height="80" stroke="#3ddc84"/><rect x="50" y="290" width="220" height="80" stroke="#f2f4f6"/><rect x="510" y="290" width="220" height="80" stroke="#4ea1ff"/><rect x="280" y="430" width="220" height="80" fill="#ffd23f" stroke="#ffd23f"/><rect x="260" y="550" width="260" height="80" stroke="#3ddc84"/></g><g fill="#f2f4f6" font-size="30" text-anchor="middle"><text x="390" y="80">Visitor</text><text x="390" y="240">COORD</text><text x="160" y="340">AGENT 1</text><text x="620" y="340">AGENT 2</text><text x="390" y="480" fill="#0e1013">GUARD</text><text x="390" y="600">Green button</text></g></svg></div>
+<div class="p" style="grid-row:span 2"><div class="card"><div>AGENT 2 asks, risk HIGH</div><div class="act">Buy $2,000 of XLK</div><p>Paper order. XLK ranks first on 3 month price.</p><p style="margin-top:12px;color:#ffd23f">GUARD: passed, human needed</p><p style="margin-top:20px;font-weight:700">Press green to approve, red to reject.</p></div><h2 style="margin-top:36px">Cost today</h2><div style="font-size:56px;font-weight:700">$0.042</div><h2 style="margin-top:28px">Judge confidence</h2><div style="font-size:56px;font-weight:700">0.86</div></div>
+<div class="p"><h2>Event log</h2><p>14:02:11 task created by COORD</p><p>14:02:14 rules engine ran</p><p>14:02:19 approval requested</p></div></div></section>
+<script>document.body.dataset.view=new URLSearchParams(location.search).get('view')||'idle'</script></body></html>

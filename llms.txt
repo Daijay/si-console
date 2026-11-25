@@ -12,6 +12,8 @@
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): authoritative merged v1 agent runtime spec (Jayden + Christopher) plus implementation gaps
 - [docs/ARCHITECTURE_DIAGRAMS.md](docs/ARCHITECTURE_DIAGRAMS.md): 10 Mermaid diagrams of the whole architecture, with per-part status legends
 - [docs/MODEL_TIERS.md](docs/MODEL_TIERS.md): ACCEPTED 2026-11-25 final model roster, tier chains, Jev judge, final culls, per-orchestrator pinning, T2 worker allowlists, booth arena design and cost
+- [docs/UI_SPEC.md](docs/UI_SPEC.md): DRAFT screen design for both displays, state table, motion spec, missing bridge endpoints; mockups in code/dashboard/mockups/
+- [docs/UI_RESEARCH.md](docs/UI_RESEARCH.md): DRAFT UI skills, references and principles
 - [docs/decisions.md](docs/decisions.md): case, mini screen, model router (accepted 2026-11-25, see MODEL_TIERS.md) and the 5 open R3 review items
 - [docs/SI_Console_Overview.md](docs/SI_Console_Overview.md): 2 page overview, connection diagram, parts table, 3 decisions
 - [docs/SI_Console_Detailed.md](docs/SI_Console_Detailed.md): full 13 section compiled document
