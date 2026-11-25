@@ -65,12 +65,8 @@ DEEPSEEK_BASE_URL = os.getenv(
 # coordinator needs tool calling with thinking disabled. See the
 # thinking flag in deepseek_client.py.
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "").strip()
-
-# Optional higher tier model, also from .env, also never hard coded.
-# VERIFIED 2026-11-23: deepseek-v4-pro is current. Empty means the
-# premium tier is off. A caller that asks for the premium tier with
-# this empty gets a loud error, not a silent downgrade. See models.py.
-DEEPSEEK_MODEL_PRO = os.getenv("DEEPSEEK_MODEL_PRO", "").strip()
+# No DeepSeek pro model: it is not in the accepted roster
+# (docs/MODEL_TIERS.md). The heavy tier T1 is Qwen4 Max.
 
 # Cost cap. ARCHITECTURE.md has no daily cap, and INTEGRATION.md flags
 # that as a gap. This is the fix: a daily cap in USD, ASSUMED at 5.
