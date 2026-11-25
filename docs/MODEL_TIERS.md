@@ -244,7 +244,25 @@ configuration keeps Qwen4 Max for the spectacle.
 
 ## Implementation status
 
-All placements are decisions, not code. `code/si_console/models.py` still maps
-tiers to DeepSeek only. The per-pane pinning/allowlist config and the Jev
-client are not implemented — they need new API clients, config keys, and
-regression tests. Owner: Christopher (router/config), Jayden (integration).
+Implemented 2026-11-24 in `code/` (mocked tests only; no live call to any
+provider yet):
+
+- `config.py`: provider keys, base URLs and pinned model ids from `.env`; the
+  four chains; `SI_ORCH_{A,B,C}` pins, `_T2` allowlists, `_T1` on/off and
+  `_FALLBACK`; `SI_COORDINATOR_PANE`.
+- `chat_client.py`: one OpenAI-compatible client for DeepSeek, Hunyuan (Hy4),
+  GLM, Bailian/DashScope (Qwen4 Max) and MiMo, with per-provider thinking
+  fields (GLM effort capped at `high`).
+- `models.py`: chain walk with fallback, unconfigured slots skipped, pane
+  rules, T1 -> `EscalationNeeded`, T3 -> `ZeroPathNeeded`.
+- `router.py`: rules-only routing (skill, keywords, length), Jev tie-break
+  restricted to the pane's allowed tiers, `dispatch()`.
+- `judge.py`: Jev through the OpenRouter Decisions API (`choice` questions);
+  an answer outside the offered options is rejected.
+- `telemetry.py`: SQLite rows for every attempt, judge call and route.
+
+Still open: live calls per provider (wire shapes are LIKELY from docs), Qwen
+thinking (T1 runs with thinking off until tested), a worker-dispatch action in
+the coordinator's fixed menu, the arena contest runner and UI, and model ids
+for each provider in `.env`. Owner: Christopher (router/config), Jayden
+(integration).

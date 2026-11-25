@@ -2,6 +2,16 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-24, Accepted model roster implemented in code
+`code/` no longer routes to DeepSeek only. Implements `docs/MODEL_TIERS.md` (requested by Christopher, router owner). 163 tests pass (was 134); every provider is mocked, and no live call has been made yet.
+- `chat_client.py`: one OpenAI-compatible client for DeepSeek, Tencent Hunyuan (Hy4), Zhipu GLM 5.4, Alibaba Bailian/DashScope (Qwen4 Max, Singapore endpoint) and Xiaomi MiMo. Per-provider thinking fields; GLM effort capped at `high`. `deepseek_client.py` is now a wrapper over it.
+- `models.py`: T0 DeepSeek -> Hy4 -> GLM; T1 Qwen4 Max -> escalate_to_human; T2 Hy4 -> DeepSeek -> GLM; T3 MiMo -> $0 paths. Unconfigured slots are skipped and failures fall back. Arena panes A/B/C: pin or auto, `_FALLBACK`, T2 allowlists (`none` sends work to T1 or $0), `_T1=off`. Old tier names are aliases.
+- `router.py`: rules-only routing by skill, keywords and length. Jev breaks ties only between the pane's allowed tiers, with a T2 default. `dispatch()` returns escalation or the $0 path as a result instead of raising.
+- `judge.py`: Jev 1.14 through the OpenRouter Decisions API (`POST /api/alpha/decisions`, `choice` questions). A choice outside the offered options, a refusal, or low confidence is rejected.
+- `telemetry.py`: SQLite rows for every chat attempt, judge call and route (pane, tier, slot, model, tokens, latency, cost). No prompt text and no keys.
+- Coordinator calls T0 through its pane (`SI_COORDINATOR_PANE`). New keys and pane settings are in `code/.env.example`. `telemetry.sqlite`, `state.json` and `claims.json` are gitignored.
+- Open: one live call per provider from Shenzhen; Qwen thinking (T1 runs with thinking off until tested); a worker-dispatch action in the fixed menu (needs a spec change); arena contest runner and UI; ARCHITECTURE.md PROVIDERS text still says DeepSeek only (owners to update).
+
 ## 2026-11-24, Code bug pass (fail-closed holes)
 Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py`; 134 pass (was 89).
 - GUARD shell allow list: a prefix match let `ls; rm -rf ~`, `df && curl … | sh`, pipes, redirects and `$(…)` through. Shell control characters are now refused.
