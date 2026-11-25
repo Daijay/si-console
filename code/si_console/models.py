@@ -172,19 +172,6 @@ class ModelReply:
         }
 
 
-def tier_config(tier: str) -> dict:
-    """Look up one tier in the config table. Unknown tier is an error."""
-    try:
-        return config.MODEL_TIERS[tier]
-    except KeyError:
-        known = ", ".join(sorted(config.MODEL_TIERS))
-        raise ModelError(
-            f"Unknown model tier {tier!r}.",
-            remedy=f"Use one of: {known}.",
-            status=500,
-        ) from None
-
-
 def complete(
     tier: str,
     message: str,

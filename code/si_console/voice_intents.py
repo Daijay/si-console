@@ -41,8 +41,11 @@ INTENTS = {
 # not a new proposal. Copied in shape from Autumn handoff.js.
 NEGATIVES_EN = [
     (re.compile(r"\?$"), "question"),
-    (re.compile(r"\b(do not|don\'t|never|not)\b"), "negated"),
-    (re.compile(r"\b(did|made|finished|already)\b"), "past"),
+    # STT often capitalises the first word ("Don't buy XLK") and may
+    # emit a curly apostrophe, so match case-insensitively and accept
+    # both apostrophes. A missed negation turns "don't buy" into buy.
+    (re.compile(r"\b(do not|don['\u2019]t|dont|never|not)\b", re.I), "negated"),
+    (re.compile(r"\b(did|made|finished|already)\b", re.I), "past"),
 ]
 NEGATIVES_ZH = [
     (re.compile(r"吗[？?]?$"), "question"),
@@ -73,6 +76,11 @@ POSITIVES = [
 
 # Sentence ids for Piper TTS. The LLM picks an id, not free text.
 # Free LLM text is never spoken. The sentences live in strings.json.
+REJECT_PHRASES = [
+    re.compile(r"\b(no,? do not|do not approve|don['\u2019]t approve)\b", re.I),
+    re.compile(r"不要这个"),
+]
+
 SENTENCE_IDS = {
     "propose_sector_move": "proposal_received",
     "ask_status": "status_ready",
@@ -94,6 +102,13 @@ def match_intent(text: str) -> dict:
     cleaned = (text or "").strip()
     if not cleaned:
         return {"intent": "unknown", "reason": "empty", "sentence_id": SENTENCE_IDS["unknown"]}
+    # Explicit reject phrases contain a negative word themselves ("do
+    # not approve", "不要这个"), so with negatives first they could never
+    # match. A voice reject only proposes a reject (red confirms), so
+    # matching it ahead of the negatives can only fail closed.
+    for pattern in REJECT_PHRASES:
+        if pattern.search(cleaned):
+            return {"intent": "reject_proposal", "sentence_id": SENTENCE_IDS["reject_proposal"]}
     for pattern, reason in NEGATIVES_EN + NEGATIVES_ZH:
         if pattern.search(cleaned):
             return {"intent": "unknown", "reason": reason, "sentence_id": SENTENCE_IDS["unknown"]}

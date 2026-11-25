@@ -21,6 +21,10 @@ from si_console import config
 from si_console.errors import GuardError
 from si_console.vault import TaskNote
 
+# Characters that let one shell command chain, pipe, redirect, or
+# substitute another. None of them is needed by an allowed command.
+_SHELL_META = (";", "&", "|", "<", ">", "`", "$", "\n", "\r", "(", ")")
+
 
 @dataclass
 class GuardState:
@@ -132,6 +136,15 @@ def check_shell_command(command: str) -> None:
     The working directory is fixed to the project folder.
     """
     first = command.strip().split(" ", 1)[0] if command.strip() else ""
+    # A prefix match alone is not enough: "ls; rm -rf ~" starts with
+    # "ls ". Refuse every shell control character before matching, so
+    # an allowed command can never chain, pipe, redirect or substitute.
+    if any(ch in command for ch in _SHELL_META):
+        raise GuardError(
+            "SHELL_DENY",
+            "Shell command contains a control character (; & | < > ` $ or newline).",
+            remedy="Run one allow listed command with plain arguments only.",
+        )
     # The allow list holds full command starts, not single words, so
     # "python3 make_slides.py" is allowed but "python3" alone is not.
     for allowed in config.ALLOWED_SHELL_COMMANDS:

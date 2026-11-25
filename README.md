@@ -34,7 +34,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4 and R5.
 - GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
 - A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
-- Code tests: run once on 2026-11-23, **89 passed** (79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
+- Code tests: last run 2026-11-24, **134 passed** (89 before the 2026-11-24 bug pass, 79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
 - Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Accepted for model selection, not yet implemented — `code/` still routes to DeepSeek only.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
