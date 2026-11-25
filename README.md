@@ -36,6 +36,7 @@ Because the repo uses Git LFS, collaborators need `git lfs install` before cloni
 - A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
 - Code tests: run once on 2026-11-23, **89 passed** (79 before the R3 bug fixes; mocked DeepSeek and GPIO, no Pi, no API keys). Not tested on the Pi.
 - Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Accepted for model selection, not yet implemented — `code/` still routes to DeepSeek only.
+- **Booth API cost (2 days, Dec 12–13):** ~$43–77 USD at packed traffic (100 contests/day), ~$21–38 at typical traffic (50/day). Worst case dominated by Qwen4 Max ~$36, Hy4 ~$21.6, DeepSeek ~$15.4, GLM 5.4 ~$4, Jev ~$0.05. Full breakdown in `docs/MODEL_TIERS.md`.
 
 ## Decisions made / recommended (details in `docs/decisions.md`)
 

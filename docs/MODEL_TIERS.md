@@ -9,6 +9,37 @@ multi-provider table and the demo configuration. Implementation (changes to
 
 Date: 2026-11-25. Supersedes the 2026-11-24 PROPOSED draft.
 
+## Total API cost — 2-day booth (Maker Faire Shenzhen, Dec 12–13, 2026)
+
+**Headline: ~$43–77 USD for the whole two-day fair at packed traffic (100
+contests/day).** At typical traffic (50/day) it is ~$21–38. The booth has
+internet and every model is an API call; these figures are the full expected
+spend, no price cap assumed. See the derivation in §"Booth arena — layout and
+cost" below.
+
+| Traffic | Contests (2 days) | 1.5k out/iter | 4k out/iter |
+|---|---|---|---|
+| Slow — 20/day | 40 | ~$8.57 | ~$15.39 |
+| Typical — 50/day | 100 | ~$21.42 | ~$38.48 |
+| Packed — 100/day | 200 | **~$42.84** | **~$76.96** |
+
+Per-model breakdown at **packed traffic, 4k out/iteration** (the worst realistic
+case), 200 contests:
+
+| Model | Role | Per contest | 2-day total |
+|---|---|---|---|
+| **Qwen4 Max** | sole T1 heavy racer | $0.1800 | **$36.00** (47%) |
+| **Hy4** | T0 orchestrator B + T2 primary | $0.1079 | **$21.58** (28%) |
+| **DeepSeek V4.1 Flash** | T0 orchestrator A + T2 backup + tabs | $0.0769 | **$15.38** (20%) |
+| **GLM 5.4** | T0 orchestrator C + T2 #3 + tabs | $0.0198 | **$3.96** (5%) |
+| **Jev 1.14** | judge (output free) | $0.00025 | **$0.05** (<0.1%) |
+| **TOTAL** | | **~$0.385** | **~$76.96** |
+
+Cheapest pinned configuration (all orchestrators DeepSeek, T2 pools GLM 5.4
+only, T1 off): ~$0.02–0.03/contest → **~$5–6 for two packed days**, but loses
+the frontier race. The default configuration keeps Qwen4 Max for the spectacle.
+The old ~$110 estimate included Kimi K3.1 Pro as a second racer; Kimi is culled.
+
 ## Sources
 
 Benchmark data checked 2026-11-24/25:
