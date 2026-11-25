@@ -246,7 +246,7 @@ def _escalate(task: TaskNote, rounds: int, reason: str, log_lines: list) -> Loop
     """Mark a task blocked and write an escalation note.
 
     The escalation note says what was tried in each round and what is
-    missing. The screens show ESCALATE TO HUMAN. The coordinator LED
+    missing. The screens show ESCALATE TO HUMAN. The COORD LED
     fast blinks, which means blocked. A human clears it by pressing
     red to reject and start a new proposal, or by writing a new task.
     """

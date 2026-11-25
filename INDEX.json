@@ -60,15 +60,15 @@
     "type": "doc",
     "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes, R5 open-frame, and the accepted 2026-11-25 model router decision (see MODEL_TIERS.md)",
     "status": "DRAFT",
-    "last_updated": "2026-11-25",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
     "path": "docs/GPIO_PIN_MAP.md",
     "type": "doc",
-    "description": "Only GPIO map, Rev R2, ULN2003 math",
+    "description": "Only GPIO map: pins, grounds, LED resistors, ULN2003 wiring",
     "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -76,7 +76,7 @@
     "type": "data",
     "description": "Only current BOM, Rev R5 on R2.1 (fan and 2 acrylic sheets removed), 767.15 CAD fundable",
     "status": "LIKELY",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {
@@ -84,7 +84,7 @@
     "type": "doc",
     "description": "BOM totals and cuts",
     "status": "VERIFIED",
-    "last_updated": "2026-11-23",
+    "last_updated": "2026-11-24",
     "owner": "Jayden"
   },
   {

@@ -94,7 +94,7 @@ This model is reference only. It is not Fallen submission material. Check every 
 - Finger joints are not modelled. The panels are plain rectangles. See the 2D R3 drawings for the joint layout. Draw the joints in Fusion 360.
 - Case outer size 360 x 240 x 140 mm is ASSUMED, from R2. It is not a CAD result. Confirm before cutting.
 - Front panel hole centres are ASSUMED. Measure the real buttons with calipers and test in cardboard first.
-- LED colour map is ASSUMED: green COORD, red AGENT 1, blue AGENT 2, yellow GUARD. Confirm the colours with the team before wiring.
+- LED colour map: green COORD, white AGENT 1, blue AGENT 2, yellow GUARD.
 - Soundbar size is ASSUMED, 100 x 45 x 45 mm. No datasheet was found. The soundbar is a proposed budget cut. The monitor speakers over HDMI audio replace it. See the Overview doc for the totals with and without the cut.
 - Monitor tilt is 10 degrees, ASSUMED. Kickstand shape is ASSUMED.
 - Case fan position on the rear wall, centre X 320 Z 115, is ASSUMED.

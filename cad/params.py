@@ -199,7 +199,7 @@ BREAKOUT_CY = 161.0       # DESIGN.
 BREAKOUT_PAD_PITCH = 4.0  # DESIGN. Pitch of the signal pads along the breakout.
 
 # --------------------------------------------------------------------------
-# WIRES (thin tubes, colours follow the wiring table in blueprints/2d/wiring-diagram.svg)
+# WIRES (thin tubes, colours follow the wiring table in blueprints/R5/wiring_diagram_R5.svg)
 # --------------------------------------------------------------------------
 WIRE_R = 0.9              # DESIGN. Wire tube radius.
 CABLE_R = 2.5             # DESIGN. HDMI and USB cable tube radius.

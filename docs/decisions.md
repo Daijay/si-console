@@ -95,3 +95,12 @@ Effect on the R3 review items: OPEN 1 (screen cutout) no longer applies, the scr
 
 Open after R5: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), review the DXF, dry fit the strip slope and the wire lengths with the real parts. The 20 degree slope is read as 20 degrees from vertical; say if it should be from horizontal. The "Printed wedge" BOM line is probably obsolete. Cable ties are not in the BOM.
 
+## G. LED resistors, pins and grounds (2026-11-24, Jayden)
+
+Final, and the same in `docs/GPIO_PIN_MAP.md`, `code/si_console/gpio_map.py` and the R5 wiring diagram:
+
+- COORD green GPIO5 pin 29 to IN1, 150 ohm. AGENT 1 white GPIO6 pin 31 to IN2, 100 ohm. AGENT 2 blue GPIO13 pin 33 to IN3, 100 ohm. GUARD yellow GPIO19 pin 35 to IN4, 220 ohm.
+- Button LEDs: green GPIO20 pin 38 to IN5, red GPIO21 pin 40 to IN6, from 5V through their built-in resistors, no extra resistor. IN7 tied to GND.
+- Kill switch, push to talk and EN/ZH toggle grounds go to the common GND bus on the perfboard, fed from Pi GND pins 6, 9 and 14. Green button ground stays on pin 14, red button ground on pin 20.
+- Still to do on the bench: measure each LED forward voltage and current, and confirm the delivered buttons have built-in resistors.
+

@@ -2,7 +2,7 @@
 
 Date: 2026-11-23.
 Status: DRAFT REFERENCE. Not for Fallen submission. Not Jayden's README.
-Rev: R2.1 for BOM and power. Rev R2 for wiring and GPIO map. Rev R3 for the case drawings, power diagram, and 3D model, in blueprints-R3/. The R3 drawings supersede the R2 drawings. In the repo, the R3 drawings live in blueprints/ and the 3D files in cad/.
+Rev: R2.1 for BOM and power. Wiring and GPIO map follow GPIO_PIN_MAP.md (updated 2026-11-24). Rev R3 for the case drawings, power diagram, and 3D model, in blueprints-R3/. The R3 drawings supersede the R2 drawings. In the repo, the R3 drawings live in blueprints/ and the 3D files in cad/.
 Model note: the model-router sections below describe the 2026-11-23 two-option decision (DeepSeek plus Claude vs DeepSeek only). The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25) and supersedes those options for model selection.
 Source folder: ~/workspace/si-console-research-2/
 Rule: plain words, short sentences, no em dashes.
@@ -110,7 +110,7 @@ Status mix of the fundable total: VERIFIED 452.50, LIKELY 325.84, ASSUMED 66.97.
 | USB speaker | PiShop mini speaker confirmed out of stock 2026-11-23. This Best Buy soundbar replaces it. Price from search result only. Seller claims Windows, MacOS, ChromeOS only. Test on Pi before the booth. Bigger than the PiShop speaker. Check the front panel grille size first. LIKELY. |
 | Arcade buttons | No CAD price found in this pass. CAD 24.99 is a conservative estimate. Recheck at checkout. ASSUMED. |
 | Kill switch | In stock 188 at DigiKey.ca. 22.3 mm cutout. Pull or twist reset. Replaces a generic 19.99 CAD estimate, adds 37.38 CAD. VERIFIED. |
-| Resistor kit | Listing includes 150 ohm, 20 pieces, 1/4W metal film, plus 100, 120, 180, 220 ohm. LIKELY. No separate 150 ohm pack is needed. |
+| Resistor kit | Listing includes 150 ohm, 20 pieces, 1/4W metal film, plus 100 and 220 ohm. LIKELY. No separate 150 ohm pack is needed. |
 | Acrylic sheets | 6 sheets total. 4-pack at 32.99 plus 2-pack at 19.99. Second link: https://www.amazon.ca/dp/B0C6KMSKSG. Prices from search results. Amazon.ca page opens failed with HTTP 403. Recheck at checkout. LIKELY. |
 | Micro HDMI adapters | Short converter cable, not a rigid dongle. Use the cables that ship with both screens. Sale ends Nov 24, 2026. LIKELY. |
 | ULN2003 | Price 1.79 CAD. Offer shows InStock. Page body also lists a 26 week manufacturer lead time. Confirm quantity at checkout. Order 3 for spares. VERIFIED. |
@@ -151,27 +151,27 @@ GPIO library: gpiozero only. RPi.GPIO does not work on Pi 5. VERIFIED from the b
 
 | LED | GPIO | Pin | ULN2003 input | ULN2003 output pin | Resistor | Colour |
 |---|---|---|---|---|---|---|
-| COORD | GPIO5 | 29 | IN1 | OUT1 pin 16 | 150 ohm green, see note | Green, ASSUMED |
-| AGENT 1 | GPIO6 | 31 | IN2 | OUT2 pin 15 | 220 ohm | Red, ASSUMED |
-| AGENT 2 | GPIO13 | 33 | IN3 | OUT3 pin 14 | 100 ohm | Blue, ASSUMED |
-| GUARD | GPIO19 | 35 | IN4 | OUT4 pin 13 | 220 ohm | Yellow, ASSUMED |
-| Green button LED | GPIO20 | 38 | IN5 | OUT5 pin 12 | See note | Green, ASSUMED |
-| Red button LED | GPIO21 | 40 | IN6 | OUT6 pin 11 | See note | Red, ASSUMED |
+| COORD | GPIO5 | 29 | IN1 | OUT1 pin 16 | 150 ohm | Green |
+| AGENT 1 | GPIO6 | 31 | IN2 | OUT2 pin 15 | 100 ohm | White |
+| AGENT 2 | GPIO13 | 33 | IN3 | OUT3 pin 14 | 100 ohm | Blue |
+| GUARD | GPIO19 | 35 | IN4 | OUT4 pin 13 | 220 ohm | Yellow |
+| Green button LED | GPIO20 | 38 | IN5 | OUT5 pin 12 | Built in, no extra resistor | Green |
+| Red button LED | GPIO21 | 40 | IN6 | OUT6 pin 11 | Built in, no extra resistor | Red |
 | Not wired | GPIO26 | 37 | IN7 tied to GND | OUT7 pin 10, unused | None | None |
 
-Resistor rule, Rev R2 decision 2026-11-22: green 150 ohm, red and yellow 220 ohm, blue 100 ohm. All values are ASSUMED until Vf is bench measured.
+Resistor values, decided by Jayden: COORD green 150 ohm, AGENT 1 white 100 ohm, AGENT 2 blue 100 ohm, GUARD yellow 220 ohm. LED forward voltages are ASSUMED until bench measured.
 
-Resistor disagreement, unresolved: ARCH says green Vf 2.2V, 200 ohm. LASER_AND_TOOLS.md says green Vf 3.0V, 100 ohm. Rev R2 decision is 150 ohm in every file. Bench measurement decides. See open question Q11.
+Bench check: measure each LED forward voltage and current with a multimeter. Pass if 5 to 20 mA per LED. The math is in GPIO_PIN_MAP.md.
 
-Button LED note: the EG STARTS button LEDs are LIKELY 5V LEDs with a built-in resistor, or plain LEDs. UNVERIFIED for the exact part. If the LED has a built-in resistor, do not add another resistor. Measure with a multimeter first. See open question Q12.
+Button LED note: the two button LEDs run from 5V through their built-in resistors, with no extra resistor. Confirm this on the delivered parts and measure the current with a multimeter. See open question Q12.
 
-ULN2003 wiring: pin 8 GND to Pi GND. Pin 9 COM to 5V. Do not tie COM to ground. VERIFIED from the datasheet. The chip sinks only. LED path is 5V, resistor, LED anode, cathode to ULN2003 output, GND. GPIO HIGH means LED on.
+ULN2003 wiring: pin 8 GND to the common GND bus on the perfboard, which is fed from Pi GND pins 6, 9 and 14. Pin 9 COM to 5V. Do not tie COM to ground. VERIFIED from the datasheet. The chip sinks only. LED path is 5V, resistor, LED anode, cathode to ULN2003 output, GND. GPIO HIGH means LED on.
 
 ULN2003 facts: 7 channels, not 8. Inputs pins 1 to 7. GND pin 8. COM pin 9 to 5V. Outputs pins 16 to 10, reversed, OUT1 pin 16 to OUT7 pin 10. 500 mA per channel. VERIFIED from the datasheet.
 
 ULN2003 at 3.3V: test first, not guaranteed. Datasheet VIH min 2.4V, LIKELY. Input at 3.3V gives about 0.7 to 1 mA, ASSUMED. Most parts turn on, LIKELY. The datasheet does not promise full saturation at 3.3V. Fallback if a channel is dim or warm: TBD62083A, LIKELY 3.3V friendly, or a logic level MOSFET per LED. See open question Q11.
 
-LED current, all 6 LEDs on: about 63 to 83 mA total, ASSUMED. Heat about 0.066W, ASSUMED. Pass if 5 to 20 mA per LED, measured. Bench measure the green Vf first, then record it. The old target of 8 to 10 mA cannot pass: green is 13.3 mA at Vf 2.2V or 6.7 mA at Vf 3.0V. Vce_sat about 0.8V, ASSUMED, to match the R3 schematic. Vce_sat max is 1.6V per the DigiKey page, so red current at max is 6.4 mA, not 9.1 mA. That is from OPEN_QUESTIONS.md Q11.
+LED current, all 6 LEDs on: about 63 to 83 mA total, ASSUMED. Heat about 0.07W, ASSUMED. Pass if 5 to 20 mA per LED, measured. COORD green is 13.3 mA at Vf 2.2V or 8.0 mA at Vf 3.0V. Vce_sat about 0.8V, ASSUMED. Vce_sat max is 1.6V per the DigiKey page, which would lower every current; see OPEN_QUESTIONS.md Q11.
 
 ### 3.3 LED behaviour
 
@@ -185,11 +185,11 @@ LED current, all 6 LEDs on: about 63 to 83 mA total, ASSUMED. Heat about 0.066W,
 
 Kill pattern picked 2026-11-20. VERIFIED from the brief.
 
-LED colour mapping is ASSUMED: green, red, blue, yellow in order to COORD, AGENT 1, AGENT 2, GUARD. ARCH names are signal, risk, execution, coordinator. The scratch code used ARCH names. Jayden must pick the final colour for each agent at build time. See open question Q35.
+LED colours, decided: COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow. Red is for the reject button and the kill switch only.
 
-### 3.4 Known conflict, must fix before the build
+### 3.4 Pin map in code
 
-The scratch code now maps COORD to GPIO5, Rev R2, in scratch/si_console/gpio_map.py, the single source of truth. Fixed in the 2026-11-23 code work. 79 tests pass, including 8 GPIO map tests. CODE_NOTES.md records the fix.
+The code maps COORD to GPIO5 and GUARD to GPIO19 in code/si_console/gpio_map.py, which matches GPIO_PIN_MAP.md. The GPIO map tests check the pins and the resistor values.
 
 ### 3.5 Wire table
 
@@ -201,10 +201,15 @@ The scratch code now maps COORD to GPIO5, Rev R2, in scratch/si_console/gpio_map
 | GPIO19 pin 35 | ULN2003 IN4 | Jumper | GUARD LED control |
 | GPIO20 pin 38 | ULN2003 IN5 | Jumper | Green button LED control |
 | GPIO21 pin 40 | ULN2003 IN6 | Jumper | Red button LED control |
-| GND | ULN2003 IN7 | Jumper | IN7 tied to GND, GPIO26 not wired |
+| GND bus | ULN2003 IN7 | Jumper | IN7 tied to GND, GPIO26 not wired |
 | 5V rail | ULN2003 COM pin 9 | Jumper | Never tie COM to ground |
-| Pi GND | ULN2003 GND pin 8 | Jumper | Common ground |
-| 5V rail | Resistor, LED anode | Hookup wire | One resistor per LED, on the anode side |
+| Pi GND pins 6, 9, 14 | GND bus on the perfboard | Jumper | Feeds the common GND bus |
+| GND bus | ULN2003 GND pin 8 | Jumper | Common ground |
+| GND bus | Kill switch, PTT button, toggle switch | Hookup wire | Second contact of each |
+| Pi GND pin 14 | Green button contact | Hookup wire | Green button ground |
+| Pi GND pin 20 | Red button contact | Hookup wire | Red button ground |
+| 5V rail | Resistor, LED anode | Hookup wire | One resistor per status LED, on the anode side |
+| 5V rail | Button LED | Hookup wire | Built-in resistor, no extra resistor |
 | LED cathode | ULN2003 OUT pin | Hookup wire | OUT1 pin 16 to OUT6 pin 11 |
 | GPIO17 pin 11 | Green button contact | Twisted pair with GND | Keep button wires under 30 cm |
 | GPIO27 pin 13 | Red button contact | Twisted pair with GND | Keep button wires under 30 cm |
@@ -486,7 +491,7 @@ Bocha domains: api.bochaai.com and api.bocha.cn. The conflict is VERIFIED from s
 | AGENT 2 | GPIO13 | Worker agent. Execution, portfolio updates. |
 | GUARD | GPIO19 | Guard. Enforces hard rules and approval gates in code. Blocks bad tool calls, bad tickers, bad amounts, kill state, risk failures. |
 
-ARCH names for the same roles are signal, risk, execution, coordinator. The scratch code used ARCH names. The Rev R2 wiring uses COORD, AGENT 1, AGENT 2, GUARD. Pick one naming set at build time. See open question Q35.
+The role names are COORD, AGENT 1, AGENT 2 and GUARD.
 
 ### 7.2 Task lifecycle
 
@@ -605,7 +610,7 @@ Autumn is Jayden's FastAPI plus React dashboard, local-first, private repo Daija
 | Bridge /docs | Left on by default. Disable in the booth build. |
 | DeepSeek cost cap | Daily cap USD 5.0, ASSUMED, added in config. Closes part of the cost gap. Bocha cost cap still open. See open question Q13. |
 | DeepSeek model | Taken from .env, fails loudly if missing. Never hardcodes deepseek-chat. |
-| GPIO map | Fixed 2026-11-23. The code maps COORD to GPIO5 in gpio_map.py, Rev R2. 8 GPIO map tests pass. See section 3.4. |
+| GPIO map | The code maps COORD to GPIO5 in gpio_map.py. The GPIO map tests pass. See section 3.4. |
 | Scratch tests | 37 passed on 2026-11-20, Python 3.12.3, fresh venv. Bridge smoke test passed: health 200, no token 401, bad token 401, 10 API routes. make_slides wrote a 2-slide deck. Rules engine with no price files returned Hold cash. |
 
 ## 9. Build plan
@@ -620,8 +625,8 @@ Order of work: design and CAD, submit, approval, order, build. Fallen funds part
 |---|---|---|
 | Stage 0, measure and mockup | Measure every real part with calipers when it arrives. Before that, measure from datasheets only. Make a cardboard mockup at full size. Put the buttons in it. Press them. Test button spacing. Test mini screen readability at 800x480. Draw the lid on paper at 100 percent scale. Lay it on the real lid or the mockup. Check holes line up. | A hand can press green and red without hitting the other button. Mini screen text is readable from a seated position. The cardboard box closes without parts poking through. No hole is drilled yet. |
 | Stage 1, Pi and screens | Flash Raspberry Pi OS Trixie on the 128GB microSD. Use a venv for Python. Pin versions in requirements.txt. Boot the Pi 5 with the official 27W PSU and the active cooler. Plug in both screens before power on. Main screen to HDMI0, closest to USB-C power. Mini screen to HDMI1. Set the layout in Screen Configuration. Test Chinese font rendering. Install the bridge skeleton, the dashboard, and the vault watcher. Do not wire buttons yet. | Pi boots cleanly 5 times in a row. Both screens show at the right resolution. Main screen shows the dashboard. Mini screen shows the agent chain, 4 rows, large text. Chinese text renders, not boxes. vcgencmd get_throttled returns 0x0 after 10 minutes with both screens on. |
-| Stage 2, breadboard buttons and LEDs | Build on a solderless breadboard, MB-102 830-point. Wire green GPIO17, red GPIO27, push to talk GPIO23, toggle GPIO24, all active low with internal pull-up. Wire the 4 status LEDs direct from GPIO first, for testing only, with 220 ohm for red and yellow and 100 ohm for green and blue at 3.3V. That direct wiring is dimmer. It is a test only, not the final wiring. Run a gpiozero test script. Press each button 100 times. | Each button press prints once. No double press in 100 presses. Each LED turns on and off on command. Toggle flips EN to ZH and back, and the screen language changes. Debounce is 0.05 s. If one press creates two executions, raise debounce to 0.1 s and retest. |
-| Stage 3, kill switch and ULN2003 | Highest risk stage. Do it before soldering anything else. Bench test the ULN2003 at 3.3V before soldering. Test every channel. Measure LED current with a multimeter. Bench measure the green Vf first. Pass if 5 to 20 mA per LED. The old 8 to 10 mA target cannot pass with the 150 ohm resistor. If a channel is dim or the chip is warm, stop. Use the fallback: TBD62083A, LIKELY 3.3V friendly, or a logic level MOSFET per LED. Wire the kill switch next. Kill is GPIO22 pin 15, NC. Closed reads LOW, normal. Open reads HIGH, frozen. Test with a multimeter before trusting code. Poll GPIO22 every 100 ms. Wire the ULN2003 per section 3. Pin 8 to GND. Pin 9 COM to 5V. | All 6 LEDs light at 5 to 20 mA, measured, with the green Vf recorded. Kill pressed and latched reads HIGH and freezes all agents within 200 ms, ASSUMED. Kill released still stays frozen until green is pressed once. Green press while kill is still latched does nothing. All 4 agent LEDs go off on kill, plus the kill pattern on screen. No channel is warm to the touch after 10 minutes on. |
+| Stage 2, breadboard buttons and LEDs | Build on a solderless breadboard, MB-102 830-point. Wire green GPIO17, red GPIO27, push to talk GPIO23, toggle GPIO24, all active low with internal pull-up. Wire the 4 status LEDs direct from GPIO first, for testing only, with the same resistors as the final build (green 150 ohm, white 100 ohm, blue 100 ohm, yellow 220 ohm) at 3.3V. That direct wiring is dimmer. It is a test only, not the final wiring. Run a gpiozero test script. Press each button 100 times. | Each button press prints once. No double press in 100 presses. Each LED turns on and off on command. Toggle flips EN to ZH and back, and the screen language changes. Debounce is 0.05 s. If one press creates two executions, raise debounce to 0.1 s and retest. |
+| Stage 3, kill switch and ULN2003 | Highest risk stage. Do it before soldering anything else. Bench test the ULN2003 at 3.3V before soldering. Test every channel. Measure LED current with a multimeter. Bench measure the green Vf first. Pass if 5 to 20 mA per LED. If a channel is dim or the chip is warm, stop. Use the fallback: TBD62083A, LIKELY 3.3V friendly, or a logic level MOSFET per LED. Wire the kill switch next. Kill is GPIO22 pin 15, NC. Closed reads LOW, normal. Open reads HIGH, frozen. Test with a multimeter before trusting code. Poll GPIO22 every 100 ms. Wire the ULN2003 per section 3. Pin 8 to GND. Pin 9 COM to 5V. | All 6 LEDs light at 5 to 20 mA, measured, with the green Vf recorded. Kill pressed and latched reads HIGH and freezes all agents within 200 ms, ASSUMED. Kill released still stays frozen until green is pressed once. Green press while kill is still latched does nothing. All 4 agent LEDs go off on kill, plus the kill pattern on screen. No channel is warm to the touch after 10 minutes on. |
 | Stage 4, solder | Move the breadboard circuit to perfboard. Solder the 4 status LED resistors in a row. Solder LED anode wires to resistors, cathode wires to the ground rail. Solder the ULN2003 socket, not the chip directly, so a dead chip can be swapped. Keep button wires under 30 cm. Twist GPIO and ground together per button. Keep LED wires under 20 cm. Label every wire. | Continuity test with a multimeter on every wire before first power on. No short between 5V and GND. No short between any GPIO pin and 5V. Each LED lights on command after soldering. Each button still prints once in 100 presses. |
 | Stage 5, case, laser cutting | Finish CAD first. Every acrylic panel flat with dimensions in mm, finger joints, hole sizes with clearance. Send clean DXF or SVG files to MakerLabs fabrication service. Or use MakerLabs drop-in LaserLab at 2 CAD per min, if the age rule allows. Do not use FabLab Vancouver for a single case. Minimum commitment is 320 CAD plus tax for two months. Do not use Vancouver Hack Space. It requires age 19 plus. Jayden is 18. That is LIKELY. | All 6 panels fit together with finger joints, no force needed, no gap over 0.5 mm. Every button, switch, and LED fits its hole. The mini screen fits its bezel cutout. The Pi, perfboard, and speaker fit inside with clearance. No panel is cracked. |
 | Stage 6, mount and heat test | Mount the Pi on M2.5 standoffs, 10 mm high. Mount the perfboard on M3 screws. Mount the speaker front right inside, behind the front face, at least 20 mm from the Pi. Do not mount the mic inside the box. Route the USB-C power cable through a cable gland or a panel mount socket on the rear wall. Route two micro HDMI cables out the rear wall. Keep the Pi USB and Ethernet edge facing the rear wall. Leave 25 mm clear above the Pi for the active cooler and for air. Take a photo of the inside before closing it for the last time. | Close the box, run for 2 hours lid closed, with both screens on, speaker at 50 percent, fan on. Log temperature with vcgencmd measure_temp. If temperature stays above 75C for 5 minutes, fail, add vents or a case fan. Check vcgencmd get_throttled. It must be 0x0. Run the full 2020 replay and the full 2022 replay end to end, with no crash. Run 100 button presses, green and red, with no double execution. Run 100 vault writes, with no lost status change. |
@@ -788,8 +793,8 @@ Hardware research is done, see reviews/09-decisions-hardware-research.md. The Cl
 | Q8 | Scenario start date and holdings. Worked example uses replay_date 2022-12-30, ASSUMED, and portfolio start 100000. The 2020 start date and start holdings for both scenarios are unset. | Jayden picks the start date and start holdings for 2020 and 2022. The code worker writes them in config.yaml. |
 | Q9 | Market CSV names, tickers, and dates. No file names, ticker list, or date range is fixed. | Jayden picks the sector ETF list. The code worker downloads the CSV files before travel and records their names and date ranges in the vault. |
 | Q10 | SenseVoice Small on Pi 5 ARM64. Size and RAM are UNVERIFIED. No install or test was done. | Install SenseVoice Small on the Pi, test EN and ZH, measure RAM and latency. If it fails, fall back to faster-whisper Base. |
-| Q11 | ULN2003 at 3.3V and resistor values on the bench. Resistor values disagree across files. Vce_sat max is 1.6V per the DigiKey page, not 1.0V assumed. | Bench test every ULN2003 channel at 3.3V, measure the real LED Vf with a multimeter, pick resistor values from the measured Vf. Do not solder first. Fallback is TBD62083A, LIKELY, or a logic level MOSFET per LED. |
-| Q12 | Button LED type for EG STARTS parts. LIKELY 5V LEDs with a built-in resistor, or plain LEDs. UNVERIFIED. | Read the part datasheet before wiring, measure the current with a multimeter on the bench. |
+| Q11 | ULN2003 at 3.3V on the bench. Vce_sat max is 1.6V per the DigiKey page, not 1.0V assumed. Resistor values are decided (see section 3.2). | Bench test every ULN2003 channel at 3.3V and measure each LED current with a multimeter. Fallback is TBD62083A, LIKELY, or a logic level MOSFET per LED. |
+| Q12 | Button LEDs run from 5V through built-in resistors. The exact EG STARTS part is UNVERIFIED. | Read the part datasheet before wiring and measure the current with a multimeter on the bench. |
 | Q13 | Bocha cost cap and DeepSeek cost cap confirmation. DeepSeek daily cap USD 5.0, ASSUMED. No Bocha cap exists. | Jayden confirms the daily cap in dollars. The code worker adds a Bocha cap the same way. The bridge logs cost per call. |
 | Q14 | Claim expiry and task status. Expiry leaves the task status as working. A second claim gets 409. | The bridge must decide whether expiry resets the task to queued with reason CLAIM_EXPIRED. The code worker implements it. |
 | Q15 | NEEDS APPROVAL pause in coordinator.py is a skeleton. It logs the pause, it does not wait for the bridge. | The code worker wires the coordinator to wait on the bridge approval state, with the 120 s timeout, and tests it with a real button press. |
@@ -812,7 +817,7 @@ Hardware research is done, see reviews/09-decisions-hardware-research.md. The Cl
 | Q32 | Text input fallback has no designed field. No keyboard is in the BOM. No strings.json IDs cover it. | Design a text field on the main screen, add a keyboard to the BOM or use an on-screen keyboard, test it with voice off. |
 | Q33 | DeepSeek and Bocha in Shenzhen. Neither tested from China. | Test both from Shenzhen on arrival day. Have the recorded fallback ready before the booth opens. |
 | Q34 | Kill switch depth. APEM depth 78.3 mm vs 75 mm clearance, 3.3 mm over. | Measure the APEM kill switch cutout, 22.3 mm, and the depth in the CAD redraw. Fix the drawing before cutting. |
-| Q35 | LED colour and name mapping. Colour map is ASSUMED. ARCH names are signal, risk, execution, coordinator. W5 used ARCH names. | Jayden picks the final colour for each agent at build time. The wiring diagram is updated to match. |
+| Q35 | Closed. LED names and colours are decided: COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow. | None. |
 
 ### 13.3 Resolved in session, kept here so the fix is visible
 

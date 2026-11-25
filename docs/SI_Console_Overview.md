@@ -13,7 +13,7 @@ SI Console is a physical console for dispatching and supervising a team of gener
 
 ![Connection diagram, Pi 5 in the middle, every part around it](blueprints-R3/connection-diagram.png)
 
-Pi 5 sits in the middle. Each line is labelled with the connection type. GPIO map Rev R2: COORD GPIO5, AGENT 1 GPIO6, AGENT 2 GPIO13, GUARD GPIO19, green button LED GPIO20, red button LED GPIO21. All 6 LEDs run through the ULN2003. Green resistor 150 ohm, red and yellow 220 ohm, blue 100 ohm. GPIO26 is free. ULN2003 IN7 is tied to GND. Full diagram: blueprints-R3/connection-diagram.svg.
+Pi 5 sits in the middle. Each line is labelled with the connection type. GPIO map: COORD GPIO5, AGENT 1 GPIO6, AGENT 2 GPIO13, GUARD GPIO19, green button LED GPIO20, red button LED GPIO21. All 6 LEDs run through the ULN2003. Resistors: COORD green 150 ohm, AGENT 1 white 100 ohm, AGENT 2 blue 100 ohm, GUARD yellow 220 ohm. Button LEDs use their built-in resistors. Kill switch, push to talk and toggle grounds go to the GND bus on the perfboard, fed from Pi pins 6, 9 and 14. GPIO26 is free. ULN2003 IN7 is tied to GND. Full diagram: blueprints-R3/connection-diagram.svg.
 
 ## 3. Parts
 

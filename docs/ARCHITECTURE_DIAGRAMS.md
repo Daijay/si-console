@@ -18,7 +18,7 @@ current `code/` skeleton: **DONE** (already implemented and tested),
 
 ```mermaid
 flowchart TB
-    subgraph H["HARDWARE (Pi 5, R2/R3 pin map)"]
+    subgraph H["HARDWARE (Pi 5, GPIO_PIN_MAP.md)"]
         PTT["Push-to-talk + Mic"]
         BTN["Green / Red buttons<br/>Kill switch (GPIO22 NC)<br/>EN/ZH toggle"]
         LED["4 agent LEDs + 2 button LEDs<br/>via ULN2003"]
@@ -344,14 +344,13 @@ flowchart TB
         H1["Fusion model / DXF review<br/>(R4.2 candidate waits for caliper checks)"]
     end
     CHRIS -->|"hands off spec to"| JAY
-    JAY -->|"hardware + pin map (R2/R3)"| CHRIS
+    JAY -->|"hardware + pin map"| CHRIS
     HASAN -->|"laser-ready geometry"| JAY
 ```
 
-**Legend:** ownership matches the spec. One open conflict is shown in the
-diagram set: the spec says the pin map is R2/R3 only, but `docs/GPIO_PIN_MAP.md`
-now also carries a dated R4.1 section — flagged in `ARCHITECTURE.md`'s gaps table
-for the two owners to reconcile.
+**Legend:** ownership matches the spec. The pin map has one source,
+`docs/GPIO_PIN_MAP.md`; the code and the R5 wiring diagram agree with it
+(reconciled 2026-11-24).
 
 ---
 

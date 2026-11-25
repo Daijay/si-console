@@ -2,13 +2,13 @@
 
     python wiring_diagram.py
 
-The PNG next to it is a browser screenshot of the SVG at 1x (1760 x 1360).
+The PNG next to it is a browser screenshot of the SVG at 1x (1760 x 1396).
 """
 import os
 from xml.sax.saxutils import escape
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "blueprints", "R5", "wiring_diagram_R5.svg")
-W, H = 1760, 1360
+W, H = 1760, 1396
 C = {"green": "#12a037", "red": "#d71920", "yellow": "#f2c500", "white": "#ffffff", "orange": "#f57c00", "blue": "#1f55d6",
      "grey": "#9a9da3", "black": "#141414"}
 S = []
@@ -39,12 +39,6 @@ def label(x, y, t, size=13, anchor="start", weight="normal"):
     x0 = x - 4 if anchor == "start" else x - w / 2 if anchor == "middle" else x - w + 4
     S.append(f'<rect x="{x0}" y="{y - size}" width="{w}" height="{size + 5}" fill="#fff" opacity="0.92"/>')
     text(x, y, t, size, weight, anchor)
-
-
-def gnd(x, y):
-    wire([(x, y), (x, y + 14)], "black", 3)
-    for i, half in enumerate((13, 8, 3)):
-        S.append(f'<line x1="{x - half}" y1="{y + 15 + 5 * i}" x2="{x + half}" y2="{y + 15 + 5 * i}" stroke="#111" stroke-width="2.4"/>')
 
 
 def led(x, y, colour):
@@ -92,7 +86,7 @@ wire([(200, 300), (200, 277), (1300, 277), (1300, 210)], "black", 5)
 label(1110, 271, "USB-A to the Pi", 12, "middle")
 
 # ------------------------------------------------------------------ Pi and breakout
-box(30, 300, 220, 745, "#e8f5e9")
+box(30, 300, 220, 810, "#e8f5e9")
 for x, t in ((60, "PWR"), (100, "HD0"), (150, "HD1"), (200, "USB")):
     text(x, 318, t, 11, "bold", "middle")
 text(140, 420, "Raspberry Pi 5 8GB", 17, "bold", "middle")
@@ -100,8 +94,8 @@ text(140, 444, "with Active Cooler", 14, "normal", "middle")
 text(140, 466, "back left of the base", 12, "normal", "middle")
 text(140, 650, "40-pin GPIO header", 13, "bold", "middle")
 text(140, 670, "3.3 V logic only", 12, "normal", "middle")
-box(330, 318, 220, 727, "#e3f2fd")
-text(440, 1068, "GPIO ribbon breakout", 15, "bold", "middle")
+box(330, 318, 220, 792, "#e3f2fd")
+text(440, 1133, "GPIO ribbon breakout", 15, "bold", "middle")
 wire([(250, 655), (330, 655)], "grey", 22)
 label(290, 628, "ribbon", 12, "middle")
 
@@ -117,17 +111,17 @@ wire([(550, 340), (1690, 340), (1690, 750)], "red")
 label(1220, 333, "5 V rail (from the Pi, never from a GPIO pin)", 13, "middle")
 
 # ------------------------------------------------------------------ ULN2003 and LEDs
-box(820, 358, 450, 424, "#fbf3df", "#8a6d1d", True)
-text(836, 802, "Perfboard, right side of the base", 13, "bold")
+box(820, 358, 450, 478, "#fbf3df", "#8a6d1d", True)
+text(1252, 787, "Perfboard, right side of the base", 13, "bold", "end")
 box(900, 370, 260, 402, "#263238")
 text(1030, 392, "ULN2003AN (DIP-16)", 15, "bold", "middle", "#fff")
 channels = [
-    (400, "COORD", "GPIO5  pin 29", 1, 16, "green", "200 Ω", "COORD status LED (green)"),
+    (400, "COORD", "GPIO5  pin 29", 1, 16, "green", "150 Ω", "COORD status LED (green)"),
     (450, "AGENT 1", "GPIO6  pin 31", 2, 15, "white", "100 Ω", "AGENT 1 status LED (white)"),
     (500, "AGENT 2", "GPIO13  pin 33", 3, 14, "blue", "100 Ω", "AGENT 2 status LED (blue)"),
     (550, "GUARD", "GPIO19  pin 35", 4, 13, "yellow", "220 Ω", "GUARD status LED (yellow)"),
-    (600, "GRN BTN LED", "GPIO20  pin 38", 5, 12, "green", "see note A", "LED inside the green button"),
-    (650, "RED BTN LED", "GPIO21  pin 40", 6, 11, "red", "see note A", "LED inside the red button"),
+    (600, "GRN BTN LED", "GPIO20  pin 38", 5, 12, "green", None, "LED inside the green button"),
+    (650, "RED BTN LED", "GPIO21  pin 40", 6, 11, "red", None, "LED inside the red button"),
 ]
 box(1340, 362, 330, 318, "none", "#37474f", True)
 text(1350, 702, "LEDs on the control strip", 13, "bold")
@@ -139,57 +133,76 @@ for y, name, gp, inp, outp, col, res, desc in channels:
     text(1150, y + 5, f"OUT{inp}  {outp}", 13, "bold", "end", "#fff")
     wire([(1160, y), (1425, y)], col)
     led(1425, y, col)
-    wire([(1442, y), (1545, y)], col)
-    dashed = res.startswith("see")
-    box(1545, y - 13, 100, 26, "#fff", "#111", dashed, 3)
-    text(1595, y + 5, res, 13, "bold", "middle")
-    wire([(1645, y), (1690, y)], "red")
+    if res is None:
+        # built-in resistor: the LED runs straight from the 5 V rail
+        wire([(1442, y), (1690, y)], "red")
+        label(1570, y - 7, "built-in resistor", 11, "middle")
+    else:
+        wire([(1442, y), (1545, y)], col)
+        box(1545, y - 13, 100, 26, "#fff", "#111", False, 3)
+        text(1595, y + 5, res, 13, "bold", "middle")
+        wire([(1645, y), (1690, y)], "red")
     dot(1690, y)
     text(1352, y - 22 if False else y - 20, desc, 11)
 text(910, 705, "7  IN7", 13, "bold", "start", "#fff")
 text(1150, 705, "OUT7  10 (unused)", 12, "normal", "end", "#cfd8dc")
-wire([(900, 700), (860, 700), (860, 716)], "grey")
-gnd(860, 716)
-label(760, 694, "IN7 tied to GND", 13)
+wire([(900, 700), (845, 700)], "grey")
+label(715, 695, "IN7 tied to GND", 13)
 text(910, 755, "8  GND", 13, "bold", "start", "#fff")
+wire([(900, 750), (845, 750)], "black")
 text(1150, 755, "COM  9", 13, "bold", "end", "#fff")
-wire([(900, 750), (800, 750), (800, 756)], "black")
-gnd(800, 756)
 wire([(1160, 750), (1690, 750)], "red")
 label(1420, 743, "COM (pin 9) to 5 V", 13, "middle")
 
+# ------------------------------------------------------------------ GND bus on the perfboard
+pad(725, "GND  pins 6, 9, 14", "black")
+wire([(550, 725), (845, 725)], "black")
+wire([(845, 700), (845, 815)], "black", 9)
+for yy in (700, 725, 750):
+    dot(845, yy)
+label(600, 718, "feeds the GND bus", 13)
+label(857, 800, "common GND bus (perfboard)", 13, "start", "bold")
+
 # ------------------------------------------------------------------ buttons and switches
-box(610, 1075, 1100, 180, "none", "#37474f", True)
-text(1696, 1244, "Control strip, front of the base: buttons and switches", 13, "bold", "end")
+box(610, 1115, 1090, 180, "none", "#37474f", True)
+text(1690, 1284, "Control strip, front of the base: buttons and switches", 13, "bold", "end")
 buttons = [  # rows run right to left so no signal wire crosses another
-    (830, "LANG", "GPIO24  pin 18", "orange", 1540, "EN/ZH toggle", "ON-OFF, 12 mm", "GND bus"),
-    (870, "PTT", "GPIO23  pin 16", "white", 1330, "Push to talk", "momentary, 12 mm", "GND bus"),
-    (910, "K", "GPIO22  pin 15", "yellow", 1120, "Kill switch (NC)", "latching, 22 mm", "GND pin 25"),
-    (950, "R", "GPIO27  pin 13", "red", 910, "Red button", "reject, 30 mm", "GND pin 20"),
-    (990, "G", "GPIO17  pin 11", "green", 700, "Green button", "approve, 30 mm", "GND pin 14"),
+    (850, "LANG", "GPIO24  pin 18", "orange", 1540, "EN/ZH toggle", "ON-OFF, 12 mm", "GND bus"),
+    (890, "PTT", "GPIO23  pin 16", "white", 1330, "Push to talk", "momentary, 12 mm", "GND bus"),
+    (930, "K", "GPIO22  pin 15", "yellow", 1120, "Kill switch (NC)", "latching, 22 mm", "GND bus"),
+    (970, "R", "GPIO27  pin 13", "red", 910, "Red button", "reject, 30 mm", "GND pin 20"),
+    (1010, "G", "GPIO17  pin 11", "green", 700, "Green button", "approve, 30 mm", "GND pin 14"),
 ]
 for y, tag, gp, col, x, name, sub, ground in buttons:
     pad(y, gp, col)
-    wire([(550, y), (x - 40, y), (x - 40, 1110)], col)
+    wire([(550, y), (x - 40, y), (x - 40, 1150)], col)
     label(600, y - 8, f"{tag}: {name}", 13)
-    box(x - 70, 1110, 140, 92, "#fff")
-    dot(x - 40, 1110)
-    text(x, 1142, name, 14, "bold", "middle")
-    text(x, 1161, sub, 11, "normal", "middle")
+    box(x - 70, 1150, 140, 92, "#fff")
+    dot(x - 40, 1150)
+    text(x, 1182, name, 14, "bold", "middle")
+    text(x, 1201, sub, 11, "normal", "middle")
     if tag == "K":
-        text(x, 1186, "closed = LOW = run", 11, "bold", "middle")
-    dot(x + 40, 1110)
-    wire([(x + 40, 1110), (x + 40, 1090), (x + 82, 1090), (x + 82, 1225)], "black")
-    dot(x + 82, 1225)
-    label(x + 40, 1219, ground, 12, "middle", "bold")
-pad(1025, "GND  6, 14, 20, 25, 30", "black")
-wire([(550, 1025), (580, 1025), (580, 1225), (1622, 1225)], "black")
-label(592, 1244, "GND bus", 12)
+        text(x, 1226, "closed = LOW = run", 11, "bold", "middle")
+    dot(x + 40, 1150)
+    if ground == "GND bus":
+        wire([(x + 40, 1150), (x + 40, 1130), (x + 82, 1130), (x + 82, 1263)], "black")
+        dot(x + 82, 1263)
+        label(x + 40, 1258, "to GND bus", 12, "middle", "bold")
+# green and red button grounds go to their own header pins
+pad(1055, "GND  pin 20", "black")
+wire([(550, 1055), (950, 1055), (950, 1150)], "black")
+label(600, 1048, "red button ground", 12)
+pad(1085, "GND  pin 14", "black")
+wire([(550, 1085), (740, 1085), (740, 1150)], "black")
+label(600, 1078, "green button ground", 12)
+# bus run from the perfboard to the kill switch, push to talk and toggle
+wire([(845, 815), (1722, 815), (1722, 1263), (1202, 1263)], "black")
+label(1330, 808, "GND bus to kill switch, push to talk and EN/ZH toggle", 13, "middle")
 
 # ------------------------------------------------------------------ notes
-text(30, 1292, "Inputs use the Pi internal pull-ups, active LOW. Kill switch: NC contacts between GPIO22 and GND; open (HIGH) means frozen. Never wire a button or switch to 5 V.", 13)
-text(30, 1314, "LED path: 5 V rail, resistor, LED anode, LED cathode, ULN2003 output. A GPIO HIGH turns its LED on. Measure each LED's forward voltage before soldering (green especially).", 13)
-text(30, 1336, "Note A: button LEDs with a built-in resistor get no external resistor. A plain LED needs 200 Ω (green) or 220 Ω (red). COORD green: 220 Ω if no 200 Ω is available.", 13)
+text(30, 1330, "Inputs use the Pi internal pull-ups, active LOW. Kill switch: NC contacts between GPIO22 and GND; open (HIGH) means frozen. Never wire a button or switch to 5 V.", 13)
+text(30, 1352, "Grounds: kill switch, push to talk and EN/ZH toggle go to the common GND bus on the perfboard, fed from Pi GND pins 6, 9 and 14. Green button: pin 14. Red button: pin 20.", 13)
+text(30, 1374, "LED path: 5 V rail, resistor, LED anode, LED cathode, ULN2003 output. A GPIO HIGH turns its LED on. Button LEDs use their built-in resistors: no extra resistor.", 13)
 
 svg = (f'<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
        f'font-family="Segoe UI, Arial, sans-serif">\n<rect width="{W}" height="{H}" fill="#fff"/>\n' + "\n".join(S) + "\n</svg>\n")

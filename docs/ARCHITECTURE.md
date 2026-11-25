@@ -93,7 +93,7 @@ token-protected bridge API, home LAN only, off in booth. External agents (Hermes
 
 ## OWNERSHIP
 
-Christopher owns router, policy, injection guard, telemetry, state machine code. Jayden owns vault, bridge, GPIO, offline fallback, integration. Pin map is repo R2/R3 only.
+Christopher owns router, policy, injection guard, telemetry, state machine code. Jayden owns vault, bridge, GPIO, offline fallback, integration. Pin map is `docs/GPIO_PIN_MAP.md` only.
 
 ---
 
@@ -106,7 +106,7 @@ above. This list is for planning. It does not change the authoritative spec.
 |---|---|---|
 | Explicit IDLE/RUNNING/AWAITING_APPROVAL/KILLED state machine | Implicit in `status` frontmatter (`queued`/`working`/`blocked`/`done`) plus `kill_active` in `state.json` | No state machine module; LEDs read `state.json` fields directly. Owner: Christopher. |
 | 120 s approval timeout treated as reject | Approval pause in `coordinator._run_one_tool_call` only logs and waits; no timeout | Needs the wait loop reading note `approved_by`, green/red, and a 120 s clock. Owner: Jayden. |
-| Hardware kill poll at 100 ms | Bridge GPIO debounce 0.05 s; coordinator reads `state.json` once per 1 s loop iteration | Tighten poll to 0.1 s at the GPIO layer. Pin map remains R2/R3 as stated. Owner: Jayden. |
+| Hardware kill poll at 100 ms | Bridge GPIO debounce 0.05 s; coordinator reads `state.json` once per 1 s loop iteration | Tighten poll to 0.1 s at the GPIO layer. Pin map is `docs/GPIO_PIN_MAP.md`. Owner: Jayden. |
 | Ctrl+K text intake | Only `voice_intents.py` (fixed EN/ZH phrase matcher) | Text intake with its own fixed vocabulary not implemented. Owner: Jayden. |
 | Rules-only ROUTER -> tier (v1 FAST/THINK; accepted T0/T1/T2/T3 2026-11-25) | 2026-11-24: `router.py` rules (skill, keywords, length) with Jev tie-break; `models.py` T0-T3 chains across DeepSeek, Hunyuan, GLM, Bailian/Qwen, MiMo with fallback, pane pins, T2 allowlists, T1 off | Coordinator has no worker-dispatch action in the fixed menu yet, so `router.dispatch` is not called from the loop; arena contest runner and UI not built. Owner: Christopher. |
 | Default-deny policy, allowlisted read-only tools auto-run | `tools.py` tags each tool `SAFE` or `NEEDS APPROVAL`; SAFE runs immediately in `coordinator._run_one_tool_call` | Permissive tag list must be replaced with default-deny and a read-only allow list. Owner: Christopher. |
@@ -118,7 +118,7 @@ above. This list is for planning. It does not change the authoritative spec.
 | Telemetry to SQLite (route, model, tokens, latency, cost) | 2026-11-24: `telemetry.py` writes every chat attempt, judge call and route to SQLite (no prompt text, no keys) | Dashboard view of telemetry not built. Owner: Christopher. |
 | Every live run recorded; automatic offline replay | No recording mode; `deepseek_client.py` makes live calls only | Need a recorder in the client layer and a replay player feeding the same validation/GUARD path. Owner: Jayden. |
 | External agents off in booth, claim research/narration only | Bridge API has `_check_home_mode()`, 10/min rate limit, `CLAIMABLE_TYPES = {research, narration}` | Already aligned. Claim TTL/heartbeat present in `state_store.py`. Owner: Jayden. |
-| Pin map is repo R2/R3 only | `docs/GPIO_PIN_MAP.md` now has a dated R4.1 section (white AGENT 1 LED resistor, cable hole) | Spec says R2/R3 only; R4.1 doc section was added by the CAD work. Reconcile before implementation. Owners: Jayden + Christopher. |
+| Pin map has one source | Reconciled 2026-11-24: `docs/GPIO_PIN_MAP.md`, `code/si_console/gpio_map.py` and the R5 wiring diagram agree (AGENT 1 white, 100 ohm; grounds on the perfboard bus). | None. Owner decision: Jayden. |
 
 Cross-reference: `AGENTS.md` (repo rules and sources of truth), `docs/decisions.md`
 (open decisions), `llms.txt` (machine index). Missing integrations from older
