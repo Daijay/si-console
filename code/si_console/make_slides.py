@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The slide maker is new code. Autumn had no slide maker.
 # The tool is make_slides, tag NEEDS APPROVAL, per ARCHITECTURE.md
 # section 5.6. Making slides never executes a trade. The slide

@@ -1,82 +1,39 @@
 # SI Console
 
-STATUS: DRAFT REFERENCE. Private repo. Not for Fallen submission as-is.
+SI Console stands for Super Intelligence Console. It is a physical console that allows agentic orchestration. There is a push to talk mic, an English/Chinese toggle, LEDs, a 5 inch status screen and a monitor dashboard. This hardware project showcases the physical process of agentic orchestration, not just something that lives in your computer.
 
-SI Console is a physical desk console for controlling a team of AI agents, built for Hack Club Fallen. A Raspberry Pi 5 drives a 5 inch status screen, four agent LEDs, and physical controls: green approve, red reject, a latching kill switch, push to talk and an EN/ZH toggle. Voice proposes, a physical button executes, and the system fails closed. The case is laser-cut acrylic. Build deadline is Dec 8, 2026.
+![Hero render](docs/images/render_hero_R5.png)
+
+## How to use it
+Press and hold the push to talk button and speak. The agents work, the LEDs show which agent is active, and the 5 inch screen shows status. Risky actions wait for you to press the green button. The red button rejects. The kill switch freezes everything. The toggle switches between English and Chinese.
+
+## Why I made it
+I wanted agents that can't just run wild. Most AI agents live in a window on your computer, and if something goes wrong, the same software that's running away has to be the thing that stops it. A software approve button has that problem. If the agent or a prompt injection controls the software, it can press the button itself. So I put approval on a real button on its own wire. Nothing in the software can press it. The kill switch is a latching switch on its own pin, and the orchestrator stops everything when it is flipped. Right now that stop is read by software, so I want to wire it in series with the green button so approval is physically impossible while the kill switch is engaged. It also makes the demo physical, because a visitor can press the big green button themselves. For low-risk actions like read-only searches, I plan to add approve on the touchscreen, so risky things need the real button and safe things stay fast. This is my first hardware project.
+
+## Design
+![Exploded view](docs/images/render_exploded_R5.png)
+![Wiring diagram](blueprints/R5/wiring_diagram_R5.png)
+
+- Raspberry Pi 5 8GB, ULN2003 driver for the LEDs, GPIO buttons, 5 inch HDMI status screen, MSI portable monitor
+- Open frame on clear laser-cut acrylic, 2 sheets. The circuit is on a custom PCB, with perfboard as a backup.
+- Pin map: docs/GPIO_PIN_MAP.md
+![PCB](docs/images/pcb_3d.png)
+![Schematic](docs/images/schematic.png)
+- PCB source: pcb/
+
+## Files
+- CAD assembly (STEP): blueprints/R5/si_console_assembly_R5.step
+- Per-part STEP files: blueprints/R5/step/
+- Fusion source: [Fusion archive (R5)](cad/si_console_R5.f3d)
+- Firmware and agent code: code/
+- BOM with links: bom/BOM.csv (about CAD 885.81 before tax, the main monitor was bought by me and is not in the fundable total)
 
 ## Team
+- Jayden: system, hardware, CAD, integration
+- Christopher: software architecture and agent orchestration
 
-| Person | Role |
-| --- | --- |
-| Jayden | System, hardware, integration |
-| Hasan | CAD and enclosure |
-| Christopher | Software architecture |
+## How I used AI
+I came up with the idea and made the main decisions: the hardware, the open-frame design, and what to cut or add to stay on budget. I used AI for brainstorming, looking up part specs and prices, and Claude Code to generate first versions of the CAD scripts, wiring diagram, code and tests. I then reviewed what came out and decided what to change, keep or throw away. For example, I scrapped the boxed case because it hid the electronics.
 
-Collaborators (private repo, write access):
-
-| Person | GitHub | Status |
-| --- | --- | --- |
-| Christopher | CascV8 | Invited 2026-11-23, pending acceptance |
-| Hasan | not yet added | Pending: waiting for GitHub username |
-
-To add Hasan: GitHub, repo `Daijay/si-console`, Settings, Collaborators, Add people (https://github.com/Daijay/si-console/settings/access). Or from a terminal:
-
-```
-gh api -X PUT repos/Daijay/si-console/collaborators/<HASAN_USERNAME> -f permission=push
-```
-
-Because the repo uses Git LFS, collaborators need `git lfs install` before cloning.
-
-## Current status (2026-11-25)
-
-- **Rev R5 CAD is built**: open-frame "cyberdeck" (no enclosure) as a parametric CadQuery model in `cad/` (change `cad/params.py`, run `python build.py`). STEP, laser DXF (2 sheets of 12 x 16 in), dimensioned drawings and renders are in `blueprints/R5/`. All automated checks pass (`cad/output/CHECKS.md`). Many dimensions are ASSUMED: measure them with calipers before cutting (`cad/output/ASSUMED.md`). Hasan still needs to review the DXF. The boxed design (R4.2) is the alternative in `research/R4.2-boxed/`.
-- BOM: 851.13 CAD fundable before tax (953.27 with 12 percent tax), including the soundbar, a spare microSD and 40 CAD of API credits. Over the 800 CAD team limit by 51.13. See `bom/BOM_NOTES.md`.
-- R3 drawings and renders exist as PNGs. They are reference only and contain known errors, most of them fixed in R4 and R5.
-- GPIO map is Rev R2 and DRAFT, with an unresolved green LED Vf.
-- A candidate laser cut file now exists from R5 (`blueprints/R5/dxf/`), pending Hasan's review and the caliper measurements.
-- Code tests: last run 2026-11-24, **174 passed** (163 before the smoke check, 134 before the roster router, 89 before the 2026-11-24 bug pass, 79 before the R3 bug fixes; mocked providers and GPIO, no Pi, no API keys). Not tested on the Pi.
-- Model tiers: four-tier roster **ACCEPTED 2026-11-25** in `docs/MODEL_TIERS.md` (T0 DeepSeek/Hy4/GLM 5.4, T1 Qwen4 Max, T2 Hy4/DeepSeek/GLM 5.4, T3 MiMo, Jev judge). Implemented in `code/` 2026-11-24 with fallback chains, pane pinning, Jev routing tie-break and SQLite telemetry; mocked tests only, no live provider call yet. Keys and model ids go in `code/.env` (see `code/.env.example`).
-- **Booth API cost (2 days, Dec 12–13):** ~$43–77 USD at packed traffic (100 contests/day), ~$21–38 at typical traffic (50/day). Worst case dominated by Qwen4 Max ~$36, Hy4 ~$21.6, DeepSeek ~$15.4, GLM 5.4 ~$4, Jev ~$0.05. Full breakdown in `docs/MODEL_TIERS.md`.
-
-## Decisions made / recommended (details in `docs/decisions.md`)
-
-- Case: clear acrylic now (recommended, final choice pending).
-- Mini screen: 5 inch HDMI (recommended, pending).
-- Model router: four-tier provider roster with Jev judge **accepted 2026-11-25** (`docs/MODEL_TIERS.md`), implemented in `code/` 2026-11-24 (mocked tests).
-- The earlier soundbar and spare microSD cuts were reversed on 2026-11-24: both are in the BOM again. Sound from the monitor over HDMI stays the default in the CAD until the soundbar is modelled.
-
-## Open decisions (R3 review, see `docs/decisions.md`; R4 and R5 outcomes noted there)
-
-1. Mini screen cutout: no longer applies in R5, the screen sits on an angled stand instead of in a panel.
-2. Soundbar: back in the BOM since 2026-11-24, not in the R5 CAD yet.
-3. Pi 5 port side: the Pi is rotated 180 degrees so power and HDMI face the back and the cables leave off the back edge. Dry fit the cables.
-4. AGENT 1 LED is white with a 100 ohm resistor (closed in R4.1; bench-measure the white Vf).
-5. Laser cut file: R5 supplies a candidate DXF. Hasan reviews it before anything is cut.
-
-## Where to find things
-
-| Thing | Location |
-| --- | --- |
-| Decisions and open items | `docs/decisions.md` |
-| Agent runtime spec (authoritative v1) and gaps | `docs/ARCHITECTURE.md` |
-| Architecture visualizations (10 Mermaid diagrams) | `docs/ARCHITECTURE_DIAGRAMS.md` |
-| Model tiers (accepted roster, selection rules, arena cost) | `docs/MODEL_TIERS.md` |
-| GPIO pin map (only one) | `docs/GPIO_PIN_MAP.md` |
-| BOM (only one) and totals | `bom/BOM.csv`, `bom/BOM_NOTES.md` |
-| R5 CAD (parametric, open frame), outputs and checks | `cad/`, `blueprints/R5/` |
-| R4.2 boxed case alternative | `research/R4.2-boxed/` |
-| 2D drawings (SVG sources and PNG, R3) | `blueprints/2d/` |
-| 3D: STEP per part and assembly, STL, renders | `blueprints/3d/` |
-| Onshape / Fusion import steps | `docs/ONSHAPE_IMPORT.md` |
-| Overview and detailed docs | `docs/SI_Console_Overview.md`, `docs/SI_Console_Detailed.md` |
-| Scratch code, tests, pinned requirements (DRAFT REFERENCE) | `code/` |
-| Older material, round 1 research, UI design system | `research/` |
-| File index for people and agents | `llms.txt`, `INDEX.json`, `AGENTS.md` |
-| History | `CHANGELOG.md` |
-
-## Still missing
-
-- Review files (e.g. `reviews/11-skeptic-r3.md`).
-- Note: `blueprints/3d/` still includes `soundbar.step` and `monitor.step` (in the assembly). The soundbar is cut from the BOM, see OPEN 2 in `docs/decisions.md`.
-
-Binary files (PNG, STL, STEP) are stored with Git LFS.
+## What's next
+Christopher and I are each logging 5 to 6 hours a day while balancing IB. The plan is to get the design approved, order the parts, and finish the build by December 8, then take it to Maker Faire Shenzhen on December 11 to 14. We both want to travel there, show the project, and see Shenzhen. My biggest worry is running out of time to submit, especially waiting on design approval and parts shipping before the build.

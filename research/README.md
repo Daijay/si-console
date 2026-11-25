@@ -1,6 +1,6 @@
 # research/
 
-Older reference material. DRAFT and SUPERSEDED. Nothing here is current. The current BOM, GPIO map and blueprints live in `bom/`, `docs/` and `blueprints/`.
+Historical material. This folder holds superseded designs. Nothing here is current. The current BOM, GPIO map and blueprints live in `bom/`, `docs/` and `blueprints/`.
 
 - `BLUEPRINT-round1-2026-11-20.md`, `LOG-round1-2026-11-20.md`, `OPEN_QUESTIONS-round1-2026-11-20.md`, `PROMPTS-round1-2026-11-20.md`: research round 1 outputs.
 - `PARTS-R1-2026-11-20.csv`, `SI_Console_Parts-2026-11-20.xlsx`: first parts lists.

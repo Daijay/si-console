@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # ROUTER, per ARCHITECTURE.md FLOW and docs/MODEL_TIERS.md. It is the
 # only component that selects a model, and it runs twice:
 #   1. at intake: orchestrator_for(pane) -> the pane's T0 plan;

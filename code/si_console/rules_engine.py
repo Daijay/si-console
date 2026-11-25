@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The rules engine is new code. Autumn had no trading code at all.
 # This file is deterministic code, not an LLM. The LLM writes the
 # explanation. This file computes the numbers. That split is the

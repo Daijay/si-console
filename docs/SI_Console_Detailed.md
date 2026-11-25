@@ -1,7 +1,6 @@
 # SI Console Detailed
 
 Date: 2026-11-23.
-Status: DRAFT REFERENCE. Not for Fallen submission. Not Jayden's README.
 Rev: R2.1 for BOM and power. Wiring and GPIO map follow GPIO_PIN_MAP.md (updated 2026-11-24). Rev R3 for the case drawings, power diagram, and 3D model, in blueprints-R3/. The R3 drawings supersede the R2 drawings. In the repo, the R3 drawings live in blueprints/ and the 3D files in cad/.
 Model note: the model-router sections below describe the 2026-11-23 two-option decision (DeepSeek plus Claude vs DeepSeek only). The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25) and supersedes those options for model selection.
 Source folder: ~/workspace/si-console-research-2/
@@ -41,20 +40,20 @@ Totals updated 2026-11-24 from `bom/BOM.csv`. All prices in CAD. Tax is 12 perce
 
 | Line | Amount CAD | Status |
 |---|---|---|
-| Fundable, before tax | 851.13 | Re-added from BOM.csv |
-| Fundable, tax 12 percent | 102.14 | Tax on every line is ASSUMED |
-| Fundable, with tax | 953.27 | Computed |
+| Fundable, before tax | 885.81 | Re-added from BOM.csv |
+| Fundable, tax 12 percent | 106.30 | Tax on every line is ASSUMED |
+| Fundable, with tax | 992.11 | Computed |
 | Self-funded, before tax | 128.24 | From the R2.1 summary |
 | Self-funded, with tax | 143.63 | From the R2.1 summary |
-| All-in, with tax, before shipping and laser | 1096.90 | Computed |
+| All-in, with tax, before shipping and laser | 1135.74 | Computed |
 | All-in, with laser, shipping, tools | About 1246.90 to 1336.90 | ASSUMED |
 | Core after voice cut (120.97) and mini screen cut (83.94), before tax | 646.22 | Computed |
 | Same, with tax | 723.77 | Computed |
-| Team limit | About 800 | VERIFIED from the brief. Exceeded by 51.13 before tax |
-| Hard max | 900 | VERIFIED from the brief. Exceeded by 53.27 with tax |
+| Team limit | About 800 | VERIFIED from the brief. Exceeded by 85.81 before tax |
+| Hard max | 900 | VERIFIED from the brief. Exceeded by 92.11 with tax |
 | 400 CAD target, missed by | 246.22 before tax, even after both cuts | Computed |
 
-Status mix of the fundable total: VERIFIED 474.30, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified.
+Status mix of the fundable total: VERIFIED 508.98, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified.
 
 ### 2.2 Spare card, soundbar and API credits
 
@@ -111,7 +110,7 @@ The earlier proposal to cut the spare 32GB microSD (27.99) and the USB soundbar 
 | 5V case fan | 2-wire red and black leads, 130 mm cable. Draws 140 mA, 0.7W. Mounts on the rear wall, exhaust high. Replaces the AC Infinity MULTIFAN S5 at 25.99 CAD, saves 21.80 CAD. VERIFIED 2026-11-23. |
 | M2.5 standoff kit | Needed because the Hilitchi kit has no M2.5. Pi mounting holes are M2.5. LIKELY. |
 
-### 2.5 Self-funded and reference only rows
+### 2.5 Self-funded and uncounted rows
 
 | Part | Model | Qty | Unit CAD | Store | Status | Link |
 |---|---|---|---|---|---|---|
@@ -551,7 +550,7 @@ How slides are shown on screen is undefined. make_slides writes a .pptx to the v
 
 ## 8. Autumn reuse plan
 
-Autumn is Jayden's FastAPI plus React dashboard, local-first, private repo Daijay/autumn, head commit d88368d, 2026-09-07. Scratch copy at ~/workspace/si-console-research-2/scratch/autumn-clone/. 79 files, local git only, no remote, never pushed, real repo never edited.
+Autumn is Jayden's FastAPI plus React dashboard, local-first, repo Daijay/autumn, head commit d88368d, 2026-09-07. Scratch copy at ~/workspace/si-console-research-2/scratch/autumn-clone/. 79 files, local git only, no remote, never pushed, real repo never edited.
 
 ### 8.1 Audit findings
 
@@ -635,7 +634,7 @@ Safety: safety glasses on. Soldering iron 60W adjustable. Borrow first. Do not s
 | Dates | Work | Gate |
 |---|---|---|
 | Fri Nov 20 | Design day 1. Research, blueprints, ARCHITECTURE.md, INTEGRATION.md, BOM.csv, LASER_AND_TOOLS.md, BUILD_PLAN.md, TEST_PLAN.md, DEMO_SCRIPT.md, OPEN_QUESTIONS.md, MORNING_SUMMARY.md. | Research done. |
-| Sat Nov 21 to Sun Nov 22 | Design days 2 to 3. Budget and monitor decisions. Start CAD. Draw all 6 acrylic panels. Cardboard mockup. Test button spacing. Start the starter firmware skeleton, reference only. | Cardboard mockup passes Stage 0. CAD draft is complete enough to send for a quote. |
+| Sat Nov 21 to Sun Nov 22 | Design days 2 to 3. Budget and monitor decisions. Start CAD. Draw all 6 acrylic panels. Cardboard mockup. Test button spacing. Start the starter firmware skeleton. | Cardboard mockup passes Stage 0. CAD draft is complete enough to send for a quote. |
 | Mon Nov 23 to Tue Nov 24 | Submit the Fallen design package. Ask Fallen the grant cap, approval time, self-funded parts, AI-assisted code with disclosure, team size. See section 13.4. Send the CAD files to MakerLabs for a quote in parallel. Do not wait for Fallen approval to get a laser quote. | Submission sent. MakerLabs quote in hand. Laser cost known, 50 to 90 CAD ASSUMED. |
 | Wed Nov 25 to Fri Nov 27 | Approval window, ASSUMED 2 to 4 business days. If approval comes early, move the order up. If approval is late, do not order the Pi on a guess. Wait for approval. Use the wait to finish the firmware skeleton and the voice test plan. If approval has not come by Fri Nov 27, email Fallen once to ask for a status update. | Fallen approval received, or a clear no-go date is set. |
 | Mon Nov 30 | Parts arrival target. Order the PiShop.ca parts in one order on approval: Pi 5 8GB, PSU, cooler, microSD, mini screen. Order buttons, kill switch, LEDs, perfboard, wires, breakout, acrylic, cables, mic, speaker, travel adapter. Recheck every ASSUMED price at checkout before paying. If the spare card cut is not taken, clone the microSD as soon as the first card is flashed and keep the spare card in carry-on. If the cut is taken, back up the image to a laptop instead. | All parts are in hand, or a missing part has a named fallback and a new arrival date. |
@@ -715,7 +714,7 @@ Same demo, in Chinese. Same time marks. Flip the GPIO24 toggle to ZH, or say the
 | What if the internet fails in Shenzhen. | The console switches to recorded agent runs automatically. The demo continues on replay data. No live price feed is needed. |
 | Can voice approve. | No. Voice proposes only. Voice never executes. Voice never approves. That is a hard rule. |
 | Is this real money. | No. Paper money only. 100000 paper dollars. No real money is connected. |
-| How much did it cost. | Fundable parts and API credits 851.13 CAD before tax, 953.27 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1096.90 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is ASSUMED 40 to 60 CAD extra. |
+| How much did it cost. | Fundable parts and API credits 885.81 CAD before tax, 992.11 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1135.74 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is ASSUMED 40 to 60 CAD extra. |
 | What is the hardest part. | Voice in a loud hall, and heat in a closed case. Both are tested. See TEST_PLAN.md T2 and T6. If voice fails, buttons and text still work. |
 
 ### 11.5 Recorded fallback path, when internet or DeepSeek fails
@@ -746,7 +745,7 @@ Do not: let a visitor press kill without warning them first. Run the demo with t
 | Risk | Impact | Fix or mitigation | Status |
 |---|---|---|---|
 | Laser timing | Files sent Fri Nov 27 finish Dec 7 to 9, too late for Dec 8 | Send files Mon Nov 23, before Fallen approval, or use drop-in if the age rule allows | Open. See Q21. |
-| Grant cap unknown | Fundable total 851.13 CAD before tax is over the 400 CAD target by 451.13 CAD, and over the 800 CAD team limit by 51.13 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen, which gives 646.22 CAD before tax. | Open. See Q22. |
+| Grant cap unknown | Fundable total 885.81 CAD before tax is over the 400 CAD target by 485.81 CAD, and over the 800 CAD team limit by 85.81 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen, which gives 646.22 CAD before tax. | Open. See Q22. |
 | Shenzhen offline demo | No internet kills the live demo. Recorded fallback format is undefined. No file exists, no code exists. | Define the recorded run format, record at least one full run at home with live DeepSeek, store it on the microSD, test the automatic switch with Wi-Fi off. | Open. See Q3. |
 | Voice in a loud booth | Chinese STT is weakest. SenseVoice Small is UNVERIFIED on Pi 5 ARM64. Whisper Base Chinese CER 15.99 percent is clean speech only, LIKELY. | Test STT on Dec 2, with noise. If it fails, cut voice from the booth demo and run on buttons and text only. Text input must exist in v1. | Open. See Q10, Q32. |
 | Power, heat, ULN2003 together | Old USB headroom was 0.10A. Acrylic insulates. ULN2003 at 3.3V is test first, not guaranteed. | Rev R2.1 fixes the power headroom: about 1.0A, ASSUMED, with the mini screen and monitor on their own chargers. Case fan added. Bench test the ULN2003 at 3.3V before soldering. Heat test T6 decides. | Partly fixed. USB currents still ASSUMED until measured. |

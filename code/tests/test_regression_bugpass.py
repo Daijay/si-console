@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # Regression tests for the 2026-11-24 bug pass. Each test names the
 # hole it closes. No Pi, no keys, no network: mocked model, mocked
 # httpx and DNS, temp folders only.

@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # Provider smoke check. Run it on the Pi after copying .env, and again
 # at the booth in Shenzhen, before starting the services:
 #   python -m si_console.smoke          free: config, DNS, clock, keys

@@ -2,6 +2,22 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-25, screen UI design and mockups
+- Research, direction choice and full screen spec: `docs/UI_RESEARCH.md`, `docs/UI_SPEC.md`.
+- Static mockups with fake data for 33 states on both screens in EN and ZH: `code/dashboard/mockups/`; screenshots in `docs/images/ui/`.
+- `code/dashboard/strings.json`: added `ui_` screen strings; spoken sentences unchanged. Chinese not reviewed by a native speaker.
+- UI skills added under `.claude/skills/`.
+- Not wired to the console; no change under `code/si_console/`. Missing bridge work is listed in `docs/UI_SPEC.md` section 7.
+
+## 2026-11-25, custom PCB
+- Added `pcb/` (SI Console HAT, KiCad 9). Perfboard is the fallback.
+- BOM adds 34.68 CAD; fundable total 885.81 CAD before tax.
+
+## 2026-11-25, .env sync, DeepSeek pro removed
+- `code/deploy/sync_env.py`: rebuilds an existing `.env` from the current `.env.example`, keeping filled values; removes `DEEPSEEK_MODEL_PRO`; moves a non-OpenRouter key from `OPENROUTER_API_KEY` to `TYPESAFE_API_KEY`; sets `JEV_MODEL=jev-1.14.0` on the TypeSafe route; backs up the old file; never prints key values. `install_pi.sh` runs it.
+- `DEEPSEEK_MODEL_PRO` removed from config and `.env.example`: not in the accepted roster (T1 is Qwen4 Max). `.env.example` pre-fills `DEEPSEEK_MODEL=deepseek-flash` (verified 2026-11-23).
+- 179 tests pass (was 174).
+
 ## 2026-11-24, Provider smoke check, Pi installer, TypeSafe and Hong Kong endpoints
 - `si_console/smoke.py`: `python -m si_console.smoke` checks config, panes, DNS, clock skew, and each key and model id through the providers' free `/models` (and TypeSafe `/v1/models`) endpoints. No paid call. `--live` sends one tiny call per model and thinking setting, with tool calling for T0 models, using the same request the router sends. It shows a cost ceiling and asks first. Keys are redacted from all output. Exit 1 if T0 or T2 has no working model.
 - Provider errors now include the provider's own message, with keys redacted, so a rejected field or model id is visible.
@@ -104,7 +120,7 @@ Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py
 - R3 files stay in `blueprints/2d` and `blueprints/3d` as reference.
 
 ## 2026-11-23, R3 review (repo created)
-- R3 drawings (case panels, schematic, wiring, power, connection) and renders are REFERENCE ONLY. The laser cut file must come from Hasan's Fusion model.
+- R3 drawings (case panels, schematic, wiring, power, connection) and renders are superseded. The laser cut file must come from Hasan's Fusion model.
 - BOM Rev R2.1 finalised with both cuts: no spare microSD, no USB soundbar (monitor speakers over HDMI). Fundable total 791.33 CAD before tax (superseded; current total 851.13).
 - R3 review notes logged as OPEN items in `docs/decisions.md`.
 - Second drop added: 24 STEP, 6 STL, render, 5 R3 SVGs, code with tests (79 passed), Overview, Detailed, ONSHAPE_IMPORT.

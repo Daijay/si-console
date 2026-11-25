@@ -5,7 +5,6 @@
 <text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
 <text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">CONNECTION DIAGRAM</text>
 <text x="1180" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
-<text x="1180" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
 <text x="20" y="92" font-family="monospace" font-size="13" fill="#000">Pi 5 in the middle. Every line says how it connects. Prices in CAD. Full parts table in SI_Console_Overview.md.</text>
 <g stroke="#000" stroke-width="2" fill="none">
 <path d="M430 205 H700 V520"/>
@@ -111,5 +110,4 @@
 <text x="20" y="1138" font-family="monospace" font-size="12" fill="#000">Pi USB peak about 0.6A vs 1.6A limit, headroom about 1.0A, ASSUMED. Mini screen is not on Pi USB. Monitor is never powered from the Pi.</text>
 <rect x="20" y="1160" width="1560" height="80" fill="none" stroke="#000" stroke-width="2"/>
 <text x="30" y="1190" font-family="monospace" font-size="12" fill="#000">Project: SI Console | Drawing: Connection Diagram | Rev: R3 | Date: 2026-11-23</text>
-<text x="30" y="1215" font-family="monospace" font-size="12" font-weight="bold" fill="#000">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
 </svg>

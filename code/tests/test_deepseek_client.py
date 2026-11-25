@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton tests. Reference only. Not for Fallen submission.
 # These tests check deepseek_client.py with a mocked httpx.post. No
 # test calls the real DeepSeek API. No test needs a key. The fake
 # reply is shaped like the real chat completions response.

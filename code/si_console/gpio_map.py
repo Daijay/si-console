@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # GPIO pin map. Matches docs/GPIO_PIN_MAP.md. This file is the single
 # source of truth for pins in code. gpio_test.py and the bridge GPIO
 # layer import from here.

@@ -3,32 +3,32 @@
     "path": "README.md",
     "type": "doc",
     "description": "Human front page",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "AGENTS.md",
     "type": "doc",
     "description": "Rules for AI agents",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "llms.txt",
     "type": "index",
     "description": "Short file index",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "CHANGELOG.md",
     "type": "doc",
     "description": "Dated revision log",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -43,7 +43,7 @@
     "path": "docs/ARCHITECTURE_DIAGRAMS.md",
     "type": "doc",
     "description": "10 Mermaid visualizations of the merged v1 architecture and the accepted 2026-11-25 model tiers, with per-part implementation status",
-    "status": "DRAFT",
+    "status": "current",
     "last_updated": "2026-11-25",
     "owner": "Jayden, Christopher"
   },
@@ -56,25 +56,41 @@
     "owner": "Jayden, Christopher"
   },
   {
+    "path": "docs/UI_SPEC.md",
+    "type": "doc",
+    "description": "Screen design for the 5 inch screen and monitor: states, drivers, motion, missing bridge work",
+    "status": "current",
+    "last_updated": "2026-11-25",
+    "owner": "Jayden"
+  },
+  {
+    "path": "docs/UI_RESEARCH.md",
+    "type": "doc",
+    "description": "UI skills used, visual references and design principles",
+    "status": "current",
+    "last_updated": "2026-11-25",
+    "owner": "Jayden"
+  },
+  {
     "path": "docs/decisions.md",
     "type": "doc",
     "description": "Decisions, R3 review items (OPEN 1 to 5), R4 outcomes, R5 open-frame, and the accepted 2026-11-25 model router decision (see MODEL_TIERS.md)",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "docs/GPIO_PIN_MAP.md",
     "type": "doc",
     "description": "Only GPIO map: pins, grounds, LED resistors, ULN2003 wiring",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "bom/BOM.csv",
     "type": "data",
-    "description": "Only current BOM, Rev R5, 851.13 CAD fundable before tax (soundbar, spare microSD and API credits included)",
+    "description": "Only current BOM, Rev R5, 885.81 CAD fundable before tax (soundbar, spare microSD and API credits included)",
     "status": "LIKELY",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -82,7 +98,7 @@
   {
     "path": "bom/BOM_NOTES.md",
     "type": "doc",
-    "description": "BOM totals (851.13 CAD fundable), limits and history",
+    "description": "BOM totals (885.81 CAD fundable), limits and history",
     "status": "VERIFIED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -90,7 +106,7 @@
   {
     "path": "blueprints/2d/case-panels-R3.png",
     "type": "drawing",
-    "description": "Superseded by R5. Case panel drawings R3, reference only, known errors",
+    "description": "Superseded by R5. Case panel drawings R3, known errors",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Hasan"
@@ -131,40 +147,40 @@
     "path": "blueprints/3d/render-hero-R3.png",
     "type": "render",
     "description": "Hero render",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/3d/render-exploded-R3.png",
     "type": "render",
     "description": "Exploded view",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/3d/render-front-R3.png",
     "type": "render",
     "description": "Front view",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/3d/render-top-R3.png",
     "type": "render",
     "description": "Top view",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "research/",
     "type": "folder",
     "description": "Superseded material, never current",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -179,38 +195,38 @@
     "path": "research/ui-design-system/",
     "type": "folder",
     "description": "Dashboard UI tokens and HTML previews",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Christopher"
   },
   {
     "path": "docs/SI_Console_Overview.md",
     "type": "doc",
     "description": "2 page overview",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "docs/SI_Console_Detailed.md",
     "type": "doc",
     "description": "Full compiled doc, 13 sections",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "docs/ONSHAPE_IMPORT.md",
     "type": "doc",
     "description": "Onshape and Fusion 360 STEP import guide",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/2d/case-drawings.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: case-drawings, reference only",
+    "description": "Superseded by R5. R3 SVG source: case-drawings",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Hasan"
@@ -218,7 +234,7 @@
   {
     "path": "blueprints/2d/connection-diagram.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: connection-diagram, reference only",
+    "description": "Superseded by R5. R3 SVG source: connection-diagram",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -226,7 +242,7 @@
   {
     "path": "blueprints/2d/electrical-schematic.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: electrical-schematic, reference only",
+    "description": "Superseded by R5. R3 SVG source: electrical-schematic",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -234,7 +250,7 @@
   {
     "path": "blueprints/2d/power-diagram.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: power-diagram, reference only",
+    "description": "Superseded by R5. R3 SVG source: power-diagram",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -242,7 +258,7 @@
   {
     "path": "blueprints/2d/wiring-diagram.svg",
     "type": "drawing",
-    "description": "Superseded by R5. R3 SVG source: wiring-diagram, reference only",
+    "description": "Superseded by R5. R3 SVG source: wiring-diagram",
     "status": "SUPERSEDED",
     "last_updated": "2026-11-24",
     "owner": "Jayden"
@@ -250,47 +266,47 @@
   {
     "path": "blueprints/3d/si_console_assembly.step",
     "type": "cad",
-    "description": "Full assembly STEP, R3, reference only",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "Full assembly STEP, R3, superseded",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/3d/",
     "type": "folder",
     "description": "Per-part STEP, STL and renders from CadQuery, R3",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "blueprints/3d/render_see_through.png",
     "type": "render",
     "description": "See-through render",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "superseded",
+    "last_updated": "2026-11-25",
     "owner": "Hasan"
   },
   {
     "path": "code/README.md",
     "type": "doc",
-    "description": "DRAFT REFERENCE layout and test command",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "description": "What is built, what is planned, and the test command",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Christopher"
   },
   {
     "path": "code/si_console/",
     "type": "code",
     "description": "Scratch Python package (coordinator, guard, vault, bridge, router)",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Christopher"
   },
   {
     "path": "code/tests/",
     "type": "tests",
-    "description": "174 mocked tests, passed 2026-11-24",
+    "description": "179 mocked tests, passed 2026-11-25",
     "status": "VERIFIED",
     "last_updated": "2026-11-23",
     "owner": "Christopher"
@@ -307,144 +323,144 @@
     "path": "cad/README.md",
     "type": "doc",
     "description": "The R5 open-frame design, how to run and change the parametric CAD, ASSUMED list",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/params.py",
     "type": "code",
     "description": "Every R5 dimension and switch, tagged VERIFIED, ASSUMED or DESIGN",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/build.py",
     "type": "code",
     "description": "Builds all R5 outputs and runs the checks",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/requirements.txt",
     "type": "data",
     "description": "Pinned CAD dependencies (Python 3.11)",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/output/CHECKS.md",
     "type": "doc",
     "description": "R5 check results (collisions, holes, sheet fit, tabs and slots, clearances, wires, margins)",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/output/ASSUMED.md",
     "type": "doc",
     "description": "ASSUMED dimensions to measure with calipers before cutting",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/geo.py",
     "type": "code",
     "description": "Shared geometry helpers (tilted frames, Pi, pins)",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/panels.py",
     "type": "code",
     "description": "The 5 laser parts as 2D models plus 3D solids",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/parts.py",
     "type": "code",
     "description": "Components, wire tubes and the assembly",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/wires.py",
     "type": "code",
     "description": "Wire and cable routes, colours, length limits, tie slots",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/checks.py",
     "type": "code",
     "description": "R5 design checks",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/outputs.py",
     "type": "code",
     "description": "STEP, DXF, nesting and drawings",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/render.py",
     "type": "code",
     "description": "Labelled PNG renders",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/R5/si_console_assembly_R5.step",
     "type": "data",
     "description": "R5 full assembly STEP",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/R5/step/",
     "type": "data",
     "description": "R5 STEP, one per part and per wire",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/R5/dxf/",
     "type": "data",
     "description": "R5 laser DXF per part (kerf applied) and 2 nested sheets of 12 x 16 in; needs review before cutting",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/R5/drawings/",
     "type": "data",
     "description": "R5 dimensioned drawings of every laser part, SVG per part and one PDF",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/R5/renders/",
     "type": "data",
     "description": "R5 renders: hero, front, top, exploded",
-    "status": "DRAFT",
-    "last_updated": "2026-11-23",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
@@ -459,32 +475,32 @@
     "path": "blueprints/R5/wiring_diagram_R5.svg",
     "type": "data",
     "description": "R5 wiring diagram: pins, colours, ULN2003, LED resistors, displays, mic, power",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "blueprints/R5/wiring_diagram_R5.png",
     "type": "data",
     "description": "PNG of the R5 wiring diagram",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "cad/wiring_diagram.py",
     "type": "code",
     "description": "Generates the R5 wiring diagram SVG",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   },
   {
     "path": "docs/images/",
     "type": "data",
     "description": "R5 renders for documentation: hero, front, top, exploded",
-    "status": "DRAFT",
-    "last_updated": "2026-11-24",
+    "status": "current",
+    "last_updated": "2026-11-25",
     "owner": "Jayden"
   }
 ]

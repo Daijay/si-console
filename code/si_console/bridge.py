@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # The bridge is new code. Autumn had no bridge, no watcher, no GPIO,
 # and no external agent API. Autumn read the vault on demand. The
 # bridge watches it continuously. The bridge is a small Python

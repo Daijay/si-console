@@ -5,7 +5,6 @@
 <text x="20" y="28" font-family="monospace" font-size="24" fill="#fff" font-weight="bold">SI CONSOLE</text>
 <text x="20" y="52" font-family="monospace" font-size="14" fill="#fff">03 POWER DIAGRAM</text>
 <text x="700" y="28" font-family="monospace" font-size="13" fill="#fff">REV R3  |  DATE 2026-11-23</text>
-<text x="700" y="52" font-family="monospace" font-size="13" fill="#ff6666">DRAFT REFERENCE, NOT FOR SUBMISSION</text>
 <text x="20" y="88" font-family="monospace" font-size="13" fill="#000">Wall, 27W PSU, Pi, USB loads, monitor on own supply, headroom.</text>
 <text x="20" y="120" font-family="monospace" font-size="14" font-weight="bold">POWER FLOW, WALL TO PI TO USB LOADS. MONITOR ON ITS OWN SUPPLY.</text>
 <rect x="20" y="140" width="210" height="110" fill="#eee" stroke="#000" stroke-width="2"/>
@@ -61,5 +60,4 @@
 <text x="20" y="775" font-family="monospace" font-size="15" font-weight="bold" fill="#c00">ASSUMPTIONS</text><text x="20" y="797" font-family="monospace" font-size="11" fill="#c00">* USB currents for mic and soundbar are ASSUMED, not measured on these exact parts. Soundbar 0.5 A max is a planning number, measure with a USB meter.</text><text x="20" y="814" font-family="monospace" font-size="11" fill="#c00">* Pi idle 4.84W and typ 11.9W / peak 19.4W are from previous blueprint, LIKELY, not measured in this build.</text><text x="20" y="831" font-family="monospace" font-size="11" fill="#c00">* Mini screen is NOT on Pi USB in Rev R2.1. It has its own USB charger. The old 1.50 A peak and 0.10 A headroom are stale, do not use them.</text><text x="20" y="848" font-family="monospace" font-size="11" fill="#c00">* Monitor 10W max and 1.4A typ / 2.0A peak are from previous blueprint, LIKELY.</text><text x="20" y="865" font-family="monospace" font-size="11" fill="#c00">* Wall totals 20W typ / 30-33W peak are LIKELY, efficiency about 89 percent ASSUMED.</text>
 <rect x="20" y="900" width="1160" height="54" fill="none" stroke="#000" stroke-width="2"/>
 <text x="30" y="920" font-family="monospace" font-size="12">Project: SI Console | Drawing: 03 POWER DIAGRAM | Rev: R3 | Date: 2026-11-23</text>
-<text x="30" y="940" font-family="monospace" font-size="12" font-weight="bold">DRAFT REFERENCE, NOT FOR SUBMISSION. Reference only. Do not use as Fallen submission material.</text>
 </svg>

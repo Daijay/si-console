@@ -1,6 +1,6 @@
 # SI Console
 
-> Private project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). All content is DRAFT; the R3 drawings are reference only; Rev R5 (open-frame) CAD is in `cad/` and `blueprints/R5/`; the boxed R4.2 is in `research/R4.2-boxed/`.
+> Project repo for SI Console, a Raspberry Pi 5 physical console for supervising AI agents (Hack Club Fallen). The R3 drawings are superseded; Rev R5 (open-frame) CAD is in `cad/` and `blueprints/R5/`; the boxed R4.2 is in `research/R4.2-boxed/`.
 
 ## Start here
 - [README.md](README.md): human front page, team, status, open decisions
@@ -12,6 +12,8 @@
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): authoritative merged v1 agent runtime spec (Jayden + Christopher) plus implementation gaps
 - [docs/ARCHITECTURE_DIAGRAMS.md](docs/ARCHITECTURE_DIAGRAMS.md): 10 Mermaid diagrams of the whole architecture, with per-part status legends
 - [docs/MODEL_TIERS.md](docs/MODEL_TIERS.md): ACCEPTED 2026-11-25 final model roster, tier chains, Jev judge, final culls, per-orchestrator pinning, T2 worker allowlists, booth arena design and cost
+- [docs/UI_SPEC.md](docs/UI_SPEC.md): screen design for both displays, state table, motion spec, missing bridge endpoints; mockups in code/dashboard/mockups/
+- [docs/UI_RESEARCH.md](docs/UI_RESEARCH.md): UI skills, references and principles
 - [docs/decisions.md](docs/decisions.md): case, mini screen, model router (accepted 2026-11-25, see MODEL_TIERS.md) and the 5 open R3 review items
 - [docs/SI_Console_Overview.md](docs/SI_Console_Overview.md): 2 page overview, connection diagram, parts table, 3 decisions
 - [docs/SI_Console_Detailed.md](docs/SI_Console_Detailed.md): full 13 section compiled document
@@ -19,7 +21,7 @@
 - [docs/GPIO_PIN_MAP.md](docs/GPIO_PIN_MAP.md): the only GPIO map: pins, grounds, ULN2003 wiring and resistor math
 
 ## Bill of materials
-- [bom/BOM.csv](bom/BOM.csv): the only current BOM, Rev R5, 851.13 CAD fundable before tax
+- [bom/BOM.csv](bom/BOM.csv): the only current BOM, Rev R5, 885.81 CAD fundable before tax
 - [bom/BOM_NOTES.md](bom/BOM_NOTES.md): totals and the cuts applied
 
 ## CAD, Rev R5 (open frame, parametric, current)
@@ -48,11 +50,11 @@
 - [blueprints/3d/render-top-R3.png](blueprints/3d/render-top-R3.png): top view
 
 ## Code
-- [code/README.md](code/README.md): DRAFT REFERENCE layout and test command
+- [code/README.md](code/README.md): what is built, what is planned, and the test command
 - [code/si_console/coordinator.py](code/si_console/coordinator.py): agent loop
 - [code/si_console/bridge.py](code/si_console/bridge.py): vault watcher, buttons, LEDs
 - [code/si_console/gpio_map.py](code/si_console/gpio_map.py): GPIO constants (code side)
-- [code/tests/](code/tests/): 174 mocked tests, no Pi needed
+- [code/tests/](code/tests/): 179 mocked tests, no Pi needed
 
 ## Optional (older, superseded)
 - [research/README.md](research/README.md): index of older material

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
 # SI Console Pi installer. Run on the Pi, from anywhere, as your normal
 # user (not root). It uses sudo only for apt and systemd.
 #   bash code/deploy/install_pi.sh            install, check, do not start
@@ -48,6 +47,9 @@ ENV_FILE="$CODE_DIR/.env"
 [[ -f "$ENV_FILE" ]] || die "missing $ENV_FILE - copy it from your laptop: scp <laptop>/code/.env $RUN_USER@<pi>:$ENV_FILE"
 # A .env made on Windows has CRLF endings and maybe a BOM. Strip both.
 sed -i -e 's/\r$//' -e '1s/^\xEF\xBB\xBF//' "$ENV_FILE"
+# Bring it in line with the current .env.example, keeping your values
+# (backs up the old file; prints names only, never key values).
+python3 "$CODE_DIR/deploy/sync_env.py" --env "$ENV_FILE" --template "$CODE_DIR/.env.example"
 chmod 600 "$ENV_FILE"
 echo "permissions: $(stat -c '%a %U' "$ENV_FILE")  (keys are not shown)"
 

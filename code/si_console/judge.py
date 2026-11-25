@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # Jev 1.14 judge (TypeSafe), per docs/MODEL_TIERS.md. Default route is
 # TypeSafe's own API with a TypeSafe key; OpenRouter is the alternate
 # (config.JEV_PROVIDER). Both take the same body and answer shape. A decision model,

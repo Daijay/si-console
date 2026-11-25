@@ -1,5 +1,3 @@
-# DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
-# SI Console skeleton code. Reference only. Not for Fallen submission.
 # This file is Autumn's autumn/search.py, repointed at SI Console task
 # notes. What stayed: keyword scoring with stemming, accent folding,
 # and IDF reweighting, section excerpts, citations with labels, the

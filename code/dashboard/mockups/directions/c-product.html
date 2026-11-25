@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Direction C: product panel</title>
+<link rel="stylesheet" href="base.css"><style>
+body{font-family:"SI Product","SI Sans SC",sans-serif;background:#d9dcda;color:#16181a}
+.mini{padding:22px}.top{display:flex;justify-content:space-between;font-size:22px;font-weight:600}
+h1{font-size:120px;font-weight:600;line-height:1;margin-top:46px;letter-spacing:-.02em}p.s{font-size:30px;margin-top:10px}
+.dots{display:grid;grid-template-columns:repeat(4,1fr);margin-top:auto;gap:18px}.d{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:22px;font-weight:600}
+.d i{width:86px;height:86px;border-radius:50%;background:var(--c);border:3px solid #16181a}.d.off i{opacity:.25}
+#approval.mini{padding:0}.sh{padding:20px 26px;flex:1}.act{font-size:64px;font-weight:600;line-height:1.05;margin-top:12px}
+.pads{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px;height:210px}.pads div{border-radius:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:30px;font-weight:600;border:4px solid #16181a}
+.pads b{font-size:46px}.yes{background:#2fbf71}.no{background:#c8261e;color:#fff}
+.mon{padding:36px}.grid{flex:1;display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:28px;margin-top:28px}
+.k{background:#eef0ee;border-radius:24px;padding:30px;font-size:25px;line-height:1.5}.k h2{font-size:26px;margin-bottom:18px}
+.msg{margin-bottom:18px;display:flex;gap:14px}.msg i{width:22px;height:22px;border-radius:50%;background:var(--c);border:2px solid #16181a;flex:none;margin-top:7px}
+</style></head><body>
+<section class="view mini" id="idle"><div class="top"><span>SI Console</span><span>0/3</span><span>EN / 中文</span></div><h1>Ready</h1><p class="s">Hold the button and ask something</p>
+<div class="dots"><div class="d off" style="--c:#2fbf71"><i></i>COORD</div><div class="d off" style="--c:#fff"><i></i>AGENT 1</div><div class="d off" style="--c:#2f7de1"><i></i>AGENT 2</div><div class="d off" style="--c:#f2c200"><i></i>GUARD</div></div></section>
+<section class="view mini" id="approval"><div class="sh"><div class="top"><span>Waiting for you</span><span>2/3</span><span>EN / 中文</span></div><div class="act">Buy $2,000<br>of XLK</div><p class="s">AGENT 2, risk high</p></div><div class="pads"><div class="yes">Press green<b>to approve</b></div><div class="no">Red<b>to reject</b></div></div></section>
+<section class="view mon" id="monitor"><div class="top" style="font-size:36px"><span>SI Console</span><span>Waiting for you</span><span>2/3, EN / 中文</span></div>
+<div class="grid"><div class="k"><h2>Conversation</h2><div class="msg"><i style="--c:#16181a"></i>Visitor: Buy XLK</div><div class="msg"><i style="--c:#2fbf71"></i>COORD created a task</div><div class="msg"><i style="--c:#fff"></i>AGENT 1 ran the rules engine</div><div class="msg"><i style="--c:#2f7de1"></i>AGENT 2 proposed an order</div><div class="msg"><i style="--c:#f2c200"></i>GUARD asks for a human</div></div>
+<div class="k"><h2>Agents</h2><svg width="540" height="760" viewBox="0 0 540 760"><path d="M270 90V260L110 400M270 260L430 400L270 560V690" stroke="#16181a" stroke-width="5" fill="none"/><g stroke="#16181a" stroke-width="5"><circle cx="270" cy="90" r="54" fill="#16181a"/><circle cx="270" cy="250" r="64" fill="#2fbf71"/><circle cx="110" cy="400" r="64" fill="#fff"/><circle cx="430" cy="400" r="64" fill="#2f7de1"/><circle cx="270" cy="560" r="64" fill="#f2c200"/><circle cx="270" cy="690" r="54" fill="#eef0ee"/></g></svg></div>
+<div class="k"><h2>Approval</h2><div class="act" style="font-size:48px">Buy $2,000 of XLK</div><p>AGENT 2, risk high. GUARD passed.</p><p style="margin-top:16px">XLK ranks first on price.</p><p style="margin-top:30px;font-weight:600">Green approves. Red rejects.</p><h2 style="margin-top:44px">Cost today $0.042</h2><h2>Judge 0.86</h2></div></div></section>
+<script>document.body.dataset.view=new URLSearchParams(location.search).get('view')||'idle'</script></body></html>
