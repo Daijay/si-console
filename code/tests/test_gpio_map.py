@@ -88,11 +88,10 @@ def test_uln2003_channel_map():
 
 def test_led_resistors_rev_r2():
     # Rev R2: green 150 ohm, not 200 ohm as in R1. Red and yellow
-    # 220 ohm, blue 100 ohm. See ARCHITECTURE.md section 9. R4.1:
-    # AGENT 1 is now white with 100 ohm (docs/GPIO_PIN_MAP.md).
+    # 220 ohm, blue 100 ohm. See ARCHITECTURE.md section 9.
     assert gpio_map.LED_RESISTORS_OHM == {
         "COORD": 150,
-        "AGENT 1": 100,
+        "AGENT 1": 220,
         "AGENT 2": 100,
         "GUARD": 220,
     }
