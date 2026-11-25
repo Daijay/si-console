@@ -19,7 +19,7 @@ The earlier boxed design (Rev R4.2: finger-jointed clear acrylic case, 40 mm fan
 | Perfboard + ULN2003 | On four 10 mm M3 standoffs, right side |
 | GPIO ribbon breakout | Between the Pi and the perfboard, on the base |
 | Monitor | MSI PRO MP165 E6 behind the base on its own kickstand. Assembly only, never cut |
-| Wires | Thin colour-coded tubes following the wiring table (`blueprints/2d/wiring-diagram.svg`): G green, R red, K yellow, PTT white, LANG orange, COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow, 5V red, GND black, IN7 grey. Plus the ribbon and the HDMI, USB-C and mic cables |
+| Wires | Thin colour-coded tubes following the wiring table (`blueprints/R5/wiring_diagram_R5.svg`): G green, R red, K yellow, PTT white, LANG orange, COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow, 5V red, GND black, IN7 grey. Plus the ribbon and the HDMI, USB-C and mic cables |
 | Cable-tie slots | Pairs of 3 x 5 mm holes in the base along the wire routes, 4 pairs |
 
 "Slope" is read as 20 degrees from vertical (a dashboard-style strip). That puts the button bodies 50 to 75 mm back into open space above the base. If you meant 20 degrees from horizontal, set `STRIP_TILT = 70` and re-run: the clearance check will tell you what has to move.

@@ -27,6 +27,6 @@ The 791.33 figure was re-added from `BOM.csv` (30 lines); the 767.15 figure was 
 
 Team limit is about 800 CAD, hard max 900 CAD. 767.15 is under both.
 
-Open items: several rows are LIKELY or ASSUMED prices (see the status column), re-check at checkout. Green LED Vf is disputed (see `docs/GPIO_PIN_MAP.md`), measure on the bench first.
+Open items: several rows are LIKELY or ASSUMED prices (see the status column), re-check at checkout. LED resistors are decided: green 150 ohm, white 100 ohm, blue 100 ohm, yellow 220 ohm; button LEDs use their built-in resistors (see `docs/GPIO_PIN_MAP.md`). Measure each LED on the bench.
 
 The soundbar cut stands: sound comes from the monitor over HDMI (see `docs/decisions.md`).

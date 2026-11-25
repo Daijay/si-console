@@ -2,6 +2,12 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-24, resistor, pin and ground reconciliation
+- Final values everywhere: COORD green 150 ohm, AGENT 1 white 100 ohm, AGENT 2 blue 100 ohm, GUARD yellow 220 ohm; button LEDs on 5V through built-in resistors.
+- `gpio_map.py`, `gpio_test.py`, tests, `GPIO_PIN_MAP.md` (rewritten around one table), Detailed, Overview, Onshape notes, ARCHITECTURE gap rows, BOM notes and the R5 wiring diagram now agree.
+- Kill switch, push to talk and EN/ZH toggle grounds go to the perfboard GND bus, fed from Pi pins 6, 9 and 14.
+- Closes the gpio_map mismatch noted in the code bug pass.
+
 ## 2026-11-24, R5 submission assets
 - New R5 wiring diagram `blueprints/R5/wiring_diagram_R5.svg` and `.png` (generator `cad/wiring_diagram.py`).
 - R5 hero, front, top and exploded renders copied to `docs/images/`.

@@ -1,10 +1,10 @@
 # DRAFT REFERENCE, TO BE REVIEWED AND REWRITTEN BY THE TEAM.
 # SI Console skeleton tests. Reference only. Not for Fallen submission.
-# These tests check the Rev R2 GPIO pin map in gpio_map.py. No test
+# These tests check the GPIO pin map in gpio_map.py. No test
 # touches real GPIO. No test needs a Pi. The map is the single
 # source of truth. gpio_test.py imports it, it does not copy it.
 # Run with: cd scratch && python3 -m pytest tests/test_gpio_map.py -v
-"""GPIO map tests. Rev R2 pins, channels, and resistors."""
+"""GPIO map tests. Pins, channels, and resistors."""
 
 import sys
 from pathlib import Path
@@ -14,9 +14,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from si_console import gpio_map, gpio_test
 
 
-def test_status_led_pins_rev_r2():
-    # Rev R2: COORD GPIO5, AGENT 1 GPIO6, AGENT 2 GPIO13, GUARD GPIO19.
-    # The R1 map had COORD on GPIO19. That is gone. Do not use it.
+def test_status_led_pins():
+    # COORD GPIO5, AGENT 1 GPIO6, AGENT 2 GPIO13, GUARD GPIO19.
     assert gpio_map.STATUS_LEDS == {
         "COORD": 5,
         "AGENT 1": 6,
@@ -86,12 +85,12 @@ def test_uln2003_channel_map():
     assert gpio_map.ULN2003_CHANNELS[6] == (6, 11, 21, "red button")
 
 
-def test_led_resistors_rev_r2():
-    # Rev R2: green 150 ohm, not 200 ohm as in R1. Red and yellow
-    # 220 ohm, blue 100 ohm. See ARCHITECTURE.md section 9.
+def test_led_resistors():
+    # COORD green 150, AGENT 1 white 100, AGENT 2 blue 100, GUARD
+    # yellow 220. Button LEDs have built-in resistors, so none here.
     assert gpio_map.LED_RESISTORS_OHM == {
         "COORD": 150,
-        "AGENT 1": 220,
+        "AGENT 1": 100,
         "AGENT 2": 100,
         "GUARD": 220,
     }

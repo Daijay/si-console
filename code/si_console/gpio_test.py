@@ -7,13 +7,12 @@
 # Run it on a breadboard first. Solder later. Do not run it on a
 # laptop. It needs real GPIO. It needs gpiozero, which does not work
 # on a laptop. On a laptop it will fail at import, and that is fine.
-# GPIO map, Rev R2, imported from si_console/gpio_map.py. That file
-# is the single source of truth for pins. Do not copy pin numbers
-# here. The Rev R2 names are COORD, AGENT 1, AGENT 2, GUARD. COORD
-# is GPIO5, AGENT 1 is GPIO6, AGENT 2 is GPIO13, GUARD is GPIO19.
-# The R1 names signal, risk, execution, coordinator are deleted.
-# All 6 LEDs run through the ULN2003. Green resistor is 150 ohm.
-# GPIO26 is free. ULN2003 IN7 is tied to GND.
+# GPIO map imported from si_console/gpio_map.py. That file is the
+# single source of truth for pins. Do not copy pin numbers here. The
+# status LED names are COORD, AGENT 1, AGENT 2, GUARD. COORD is
+# GPIO5, AGENT 1 is GPIO6, AGENT 2 is GPIO13, GUARD is GPIO19.
+# All 6 LEDs run through the ULN2003. GPIO26 is free. ULN2003 IN7 is
+# tied to GND.
 # Buttons are inputs, GPIO to ground, internal pull up, active low.
 # Green approve GPIO17, physical pin 11. Red reject GPIO27, pin 13.
 # Kill freeze GPIO22, physical pin 15, wired normally closed.
@@ -28,25 +27,18 @@
 # ULN2003 pinout, VERIFIED from the datasheet: inputs pins 1 to 7,
 # GND pin 8, COM pin 9 to the 5V load rail, outputs pins 16 to 10
 # in reverse order. IN1 drives OUT1, IN2 drives OUT2, and so on.
-# Channel map, Rev R2:
+# Channel map:
 #   Ch1 IN1 pin 1 from GPIO5, OUT1 pin 16 to COORD LED, green, 150 ohm
-#   Ch2 IN2 pin 2 from GPIO6, OUT2 pin 15 to AGENT 1 LED, red, 220 ohm
+#   Ch2 IN2 pin 2 from GPIO6, OUT2 pin 15 to AGENT 1 LED, white, 100 ohm
 #   Ch3 IN3 pin 3 from GPIO13, OUT3 pin 14 to AGENT 2 LED, blue, 100 ohm
 #   Ch4 IN4 pin 4 from GPIO19, OUT4 pin 13 to GUARD LED, yellow, 220 ohm
 #   Ch5 IN5 pin 5 from GPIO20, OUT5 pin 12 to green button LED
 #   Ch6 IN6 pin 6 from GPIO21, OUT6 pin 11 to red button LED
 #   Ch7 spare. IN7 pin 7 tied to GND. Do not leave it floating.
-# Resistor math, from ARCHITECTURE.md section 9, Rev R2: R equals
-# (5V minus Vf minus Vce_sat) divided by I. Vce_sat about 0.8V at
-# 10 to 20 mA, ASSUMED. Green Vf 2.2V gives 13.3 mA at 150 ohm.
-# Red Vf 2.0V gives 10.0 mA at 220 ohm. Yellow Vf 2.1V gives 9.5 mA
-# at 220 ohm. Blue Vf 3.2V gives 10.0 mA at 100 ohm. The green Vf
-# is disputed: ARCHITECTURE.md uses 2.2V, LEAD_CHECKS.md uses 3.0V.
-# Both are ASSUMED. Measure the current with a multimeter on the
-# bench. Do not guess. Button LEDs: EG STARTS style, 5V LED with
-# a built in resistor, LIKELY. If the button LED has a built in
-# resistor, do not add another one. Check the part before wiring.
-# If it is a plain LED, use the same math.
+# Resistor math: see docs/GPIO_PIN_MAP.md. Every Vf is ASSUMED.
+# Measure the current with a multimeter on the bench. Do not guess.
+# Button LEDs run from 5V through their built-in resistors. Do not add
+# another resistor.
 # ULN2003 input at 3.3V is test first, not guaranteed. The chip is
 # sized for 5V TTL logic. Bench test every channel at 3.3V before
 # soldering. If a channel is dim or warm, use a different driver,

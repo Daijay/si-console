@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="1360" viewBox="0 0 1760 1360" font-family="Segoe UI, Arial, sans-serif">
-<rect width="1760" height="1360" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="1396" viewBox="0 0 1760 1396" font-family="Segoe UI, Arial, sans-serif">
+<rect width="1760" height="1396" fill="#fff"/>
 <text x="1460" y="52" font-size="30" font-weight="bold" text-anchor="start" fill="#111">SI CONSOLE</text>
 <text x="1460" y="80" font-size="15" font-weight="normal" text-anchor="start" fill="#111">Wiring diagram, Rev R5 (open frame)</text>
 <text x="1460" y="102" font-size="13" font-weight="normal" text-anchor="start" fill="#111">Pins: docs/GPIO_PIN_MAP.md (BCM / physical)</text>
@@ -46,7 +46,7 @@
 <polyline points="200,300 200,277 1300,277 1300,210" fill="none" stroke="#141414" stroke-width="5" stroke-linejoin="round"/>
 <rect x="1053.8" y="259" width="112.39999999999999" height="17" fill="#fff" opacity="0.92"/>
 <text x="1110" y="271" font-size="12" font-weight="normal" text-anchor="middle" fill="#111">USB-A to the Pi</text>
-<rect x="30" y="300" width="220" height="745" rx="8" fill="#e8f5e9" stroke="#222" stroke-width="1.6"/>
+<rect x="30" y="300" width="220" height="810" rx="8" fill="#e8f5e9" stroke="#222" stroke-width="1.6"/>
 <text x="60" y="318" font-size="11" font-weight="bold" text-anchor="middle" fill="#111">PWR</text>
 <text x="100" y="318" font-size="11" font-weight="bold" text-anchor="middle" fill="#111">HD0</text>
 <text x="150" y="318" font-size="11" font-weight="bold" text-anchor="middle" fill="#111">HD1</text>
@@ -56,8 +56,8 @@
 <text x="140" y="466" font-size="12" font-weight="normal" text-anchor="middle" fill="#111">back left of the base</text>
 <text x="140" y="650" font-size="13" font-weight="bold" text-anchor="middle" fill="#111">40-pin GPIO header</text>
 <text x="140" y="670" font-size="12" font-weight="normal" text-anchor="middle" fill="#111">3.3 V logic only</text>
-<rect x="330" y="318" width="220" height="727" rx="8" fill="#e3f2fd" stroke="#222" stroke-width="1.6"/>
-<text x="440" y="1068" font-size="15" font-weight="bold" text-anchor="middle" fill="#111">GPIO ribbon breakout</text>
+<rect x="330" y="318" width="220" height="792" rx="8" fill="#e3f2fd" stroke="#222" stroke-width="1.6"/>
+<text x="440" y="1133" font-size="15" font-weight="bold" text-anchor="middle" fill="#111">GPIO ribbon breakout</text>
 <polyline points="250,655 330,655" fill="none" stroke="#222" stroke-width="23.8" stroke-linejoin="round"/>
 <polyline points="250,655 330,655" fill="none" stroke="#9a9da3" stroke-width="22" stroke-linejoin="round"/>
 <rect x="265.12" y="616" width="49.76" height="17" fill="#fff" opacity="0.92"/>
@@ -68,8 +68,8 @@
 <polyline points="550,340 1690,340 1690,750" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
 <rect x="1046.35" y="320" width="347.29999999999995" height="18" fill="#fff" opacity="0.92"/>
 <text x="1220" y="333" font-size="13" font-weight="normal" text-anchor="middle" fill="#111">5 V rail (from the Pi, never from a GPIO pin)</text>
-<rect x="820" y="358" width="450" height="424" rx="8" fill="#fbf3df" stroke="#8a6d1d" stroke-width="1.6" stroke-dasharray="7 5"/>
-<text x="836" y="802" font-size="13" font-weight="bold" text-anchor="start" fill="#111">Perfboard, right side of the base</text>
+<rect x="820" y="358" width="450" height="478" rx="8" fill="#fbf3df" stroke="#8a6d1d" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="1252" y="787" font-size="13" font-weight="bold" text-anchor="end" fill="#111">Perfboard, right side of the base</text>
 <rect x="900" y="370" width="260" height="402" rx="8" fill="#263238" stroke="#222" stroke-width="1.6"/>
 <text x="1030" y="392" font-size="15" font-weight="bold" text-anchor="middle" fill="#fff">ULN2003AN (DIP-16)</text>
 <rect x="1340" y="362" width="330" height="318" rx="8" fill="none" stroke="#37474f" stroke-width="1.6" stroke-dasharray="7 5"/>
@@ -90,7 +90,7 @@
 <polyline points="1442,400 1545,400" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
 <polyline points="1442,400 1545,400" fill="none" stroke="#12a037" stroke-width="4" stroke-linejoin="round"/>
 <rect x="1545" y="387" width="100" height="26" rx="3" fill="#fff" stroke="#111" stroke-width="1.6"/>
-<text x="1595" y="405" font-size="13" font-weight="bold" text-anchor="middle" fill="#111">200 Ω</text>
+<text x="1595" y="405" font-size="13" font-weight="bold" text-anchor="middle" fill="#111">150 Ω</text>
 <polyline points="1645,400 1690,400" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
 <polyline points="1645,400 1690,400" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
 <circle cx="1690" cy="400" r="4.5" fill="#111"/>
@@ -171,12 +171,10 @@
 <circle cx="1425" cy="600" r="17" fill="#12a037" stroke="#111" stroke-width="1.8"/>
 <path d="M 1433 591 L 1433 609 L 1418 600 Z" fill="#fff" stroke="#111" stroke-width="1.4"/>
 <line x1="1417" y1="591" x2="1417" y2="609" stroke="#111" stroke-width="2.4"/>
-<polyline points="1442,600 1545,600" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1442,600 1545,600" fill="none" stroke="#12a037" stroke-width="4" stroke-linejoin="round"/>
-<rect x="1545" y="587" width="100" height="26" rx="3" fill="#fff" stroke="#111" stroke-width="1.6" stroke-dasharray="7 5"/>
-<text x="1595" y="605" font-size="13" font-weight="bold" text-anchor="middle" fill="#111">see note A</text>
-<polyline points="1645,600 1690,600" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1645,600 1690,600" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="1442,600 1690,600" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="1442,600 1690,600" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
+<rect x="1511.77" y="582" width="116.46" height="16" fill="#fff" opacity="0.92"/>
+<text x="1570" y="593" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">built-in resistor</text>
 <circle cx="1690" cy="600" r="4.5" fill="#111"/>
 <text x="1352" y="580" font-size="11" font-weight="normal" text-anchor="start" fill="#111">LED inside the green button</text>
 <circle cx="550" cy="650" r="6" fill="#d71920" stroke="#111" stroke-width="1.5"/>
@@ -192,128 +190,129 @@
 <circle cx="1425" cy="650" r="17" fill="#d71920" stroke="#111" stroke-width="1.8"/>
 <path d="M 1433 641 L 1433 659 L 1418 650 Z" fill="#fff" stroke="#111" stroke-width="1.4"/>
 <line x1="1417" y1="641" x2="1417" y2="659" stroke="#111" stroke-width="2.4"/>
-<polyline points="1442,650 1545,650" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1442,650 1545,650" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
-<rect x="1545" y="637" width="100" height="26" rx="3" fill="#fff" stroke="#111" stroke-width="1.6" stroke-dasharray="7 5"/>
-<text x="1595" y="655" font-size="13" font-weight="bold" text-anchor="middle" fill="#111">see note A</text>
-<polyline points="1645,650 1690,650" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1645,650 1690,650" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="1442,650 1690,650" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="1442,650 1690,650" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
+<rect x="1511.77" y="632" width="116.46" height="16" fill="#fff" opacity="0.92"/>
+<text x="1570" y="643" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">built-in resistor</text>
 <circle cx="1690" cy="650" r="4.5" fill="#111"/>
 <text x="1352" y="630" font-size="11" font-weight="normal" text-anchor="start" fill="#111">LED inside the red button</text>
 <text x="910" y="705" font-size="13" font-weight="bold" text-anchor="start" fill="#fff">7  IN7</text>
 <text x="1150" y="705" font-size="12" font-weight="normal" text-anchor="end" fill="#cfd8dc">OUT7  10 (unused)</text>
-<polyline points="900,700 860,700 860,716" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="900,700 860,700 860,716" fill="none" stroke="#9a9da3" stroke-width="4" stroke-linejoin="round"/>
-<polyline points="860,716 860,730" fill="none" stroke="#222" stroke-width="4.8" stroke-linejoin="round"/>
-<polyline points="860,716 860,730" fill="none" stroke="#141414" stroke-width="3" stroke-linejoin="round"/>
-<line x1="847" y1="731" x2="873" y2="731" stroke="#111" stroke-width="2.4"/>
-<line x1="852" y1="736" x2="868" y2="736" stroke="#111" stroke-width="2.4"/>
-<line x1="857" y1="741" x2="863" y2="741" stroke="#111" stroke-width="2.4"/>
-<rect x="756" y="681" width="121.1" height="18" fill="#fff" opacity="0.92"/>
-<text x="760" y="694" font-size="13" font-weight="normal" text-anchor="start" fill="#111">IN7 tied to GND</text>
+<polyline points="900,700 845,700" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="900,700 845,700" fill="none" stroke="#9a9da3" stroke-width="4" stroke-linejoin="round"/>
+<rect x="711" y="682" width="121.1" height="18" fill="#fff" opacity="0.92"/>
+<text x="715" y="695" font-size="13" font-weight="normal" text-anchor="start" fill="#111">IN7 tied to GND</text>
 <text x="910" y="755" font-size="13" font-weight="bold" text-anchor="start" fill="#fff">8  GND</text>
+<polyline points="900,750 845,750" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="900,750 845,750" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
 <text x="1150" y="755" font-size="13" font-weight="bold" text-anchor="end" fill="#fff">COM  9</text>
-<polyline points="900,750 800,750 800,756" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="900,750 800,750 800,756" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<polyline points="800,756 800,770" fill="none" stroke="#222" stroke-width="4.8" stroke-linejoin="round"/>
-<polyline points="800,756 800,770" fill="none" stroke="#141414" stroke-width="3" stroke-linejoin="round"/>
-<line x1="787" y1="771" x2="813" y2="771" stroke="#111" stroke-width="2.4"/>
-<line x1="792" y1="776" x2="808" y2="776" stroke="#111" stroke-width="2.4"/>
-<line x1="797" y1="781" x2="803" y2="781" stroke="#111" stroke-width="2.4"/>
 <polyline points="1160,750 1690,750" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
 <polyline points="1160,750 1690,750" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
 <rect x="1348.14" y="730" width="143.72" height="18" fill="#fff" opacity="0.92"/>
 <text x="1420" y="743" font-size="13" font-weight="normal" text-anchor="middle" fill="#111">COM (pin 9) to 5 V</text>
-<rect x="610" y="1075" width="1100" height="180" rx="8" fill="none" stroke="#37474f" stroke-width="1.6" stroke-dasharray="7 5"/>
-<text x="1696" y="1244" font-size="13" font-weight="bold" text-anchor="end" fill="#111">Control strip, front of the base: buttons and switches</text>
-<circle cx="550" cy="830" r="6" fill="#f57c00" stroke="#111" stroke-width="1.5"/>
-<text x="538" y="835" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO24  pin 18</text>
-<polyline points="550,830 1500,830 1500,1110" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="550,830 1500,830 1500,1110" fill="none" stroke="#f57c00" stroke-width="4" stroke-linejoin="round"/>
-<rect x="596" y="809" width="143.72" height="18" fill="#fff" opacity="0.92"/>
-<text x="600" y="822" font-size="13" font-weight="normal" text-anchor="start" fill="#111">LANG: EN/ZH toggle</text>
-<rect x="1470" y="1110" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
-<circle cx="1500" cy="1110" r="4.5" fill="#111"/>
-<text x="1540" y="1142" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">EN/ZH toggle</text>
-<text x="1540" y="1161" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">ON-OFF, 12 mm</text>
-<circle cx="1580" cy="1110" r="4.5" fill="#111"/>
-<polyline points="1580,1110 1580,1090 1622,1090 1622,1225" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1580,1110 1580,1090 1622,1090 1622,1225" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="1622" cy="1225" r="4.5" fill="#111"/>
-<rect x="1551.64" y="1207" width="56.72" height="17" fill="#fff" opacity="0.92"/>
-<text x="1580" y="1219" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">GND bus</text>
-<circle cx="550" cy="870" r="6" fill="#ffffff" stroke="#111" stroke-width="1.5"/>
-<text x="538" y="875" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO23  pin 16</text>
-<polyline points="550,870 1290,870 1290,1110" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="550,870 1290,870 1290,1110" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
-<rect x="596" y="849" width="136.17999999999998" height="18" fill="#fff" opacity="0.92"/>
-<text x="600" y="862" font-size="13" font-weight="normal" text-anchor="start" fill="#111">PTT: Push to talk</text>
-<rect x="1260" y="1110" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
-<circle cx="1290" cy="1110" r="4.5" fill="#111"/>
-<text x="1330" y="1142" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Push to talk</text>
-<text x="1330" y="1161" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">momentary, 12 mm</text>
-<circle cx="1370" cy="1110" r="4.5" fill="#111"/>
-<polyline points="1370,1110 1370,1090 1412,1090 1412,1225" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1370,1110 1370,1090 1412,1090 1412,1225" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="1412" cy="1225" r="4.5" fill="#111"/>
-<rect x="1341.64" y="1207" width="56.72" height="17" fill="#fff" opacity="0.92"/>
-<text x="1370" y="1219" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">GND bus</text>
-<circle cx="550" cy="910" r="6" fill="#f2c500" stroke="#111" stroke-width="1.5"/>
-<text x="538" y="915" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO22  pin 15</text>
-<polyline points="550,910 1080,910 1080,1110" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="550,910 1080,910 1080,1110" fill="none" stroke="#f2c500" stroke-width="4" stroke-linejoin="round"/>
-<rect x="596" y="889" width="151.26" height="18" fill="#fff" opacity="0.92"/>
-<text x="600" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#111">K: Kill switch (NC)</text>
-<rect x="1050" y="1110" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
-<circle cx="1080" cy="1110" r="4.5" fill="#111"/>
-<text x="1120" y="1142" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Kill switch (NC)</text>
-<text x="1120" y="1161" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">latching, 22 mm</text>
-<text x="1120" y="1186" font-size="11" font-weight="bold" text-anchor="middle" fill="#111">closed = LOW = run</text>
-<circle cx="1160" cy="1110" r="4.5" fill="#111"/>
-<polyline points="1160,1110 1160,1090 1202,1090 1202,1225" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="1160,1110 1160,1090 1202,1090 1202,1225" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="1202" cy="1225" r="4.5" fill="#111"/>
-<rect x="1121.2" y="1207" width="77.6" height="17" fill="#fff" opacity="0.92"/>
-<text x="1160" y="1219" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">GND pin 25</text>
-<circle cx="550" cy="950" r="6" fill="#d71920" stroke="#111" stroke-width="1.5"/>
-<text x="538" y="955" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO27  pin 13</text>
-<polyline points="550,950 870,950 870,1110" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="550,950 870,950 870,1110" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
-<rect x="596" y="929" width="106.02" height="18" fill="#fff" opacity="0.92"/>
-<text x="600" y="942" font-size="13" font-weight="normal" text-anchor="start" fill="#111">R: Red button</text>
-<rect x="840" y="1110" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
-<circle cx="870" cy="1110" r="4.5" fill="#111"/>
-<text x="910" y="1142" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Red button</text>
-<text x="910" y="1161" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">reject, 30 mm</text>
-<circle cx="950" cy="1110" r="4.5" fill="#111"/>
-<polyline points="950,1110 950,1090 992,1090 992,1225" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="950,1110 950,1090 992,1090 992,1225" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="992" cy="1225" r="4.5" fill="#111"/>
-<rect x="911.2" y="1207" width="77.6" height="17" fill="#fff" opacity="0.92"/>
-<text x="950" y="1219" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">GND pin 20</text>
-<circle cx="550" cy="990" r="6" fill="#12a037" stroke="#111" stroke-width="1.5"/>
-<text x="538" y="995" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO17  pin 11</text>
-<polyline points="550,990 660,990 660,1110" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="550,990 660,990 660,1110" fill="none" stroke="#12a037" stroke-width="4" stroke-linejoin="round"/>
-<rect x="596" y="969" width="121.1" height="18" fill="#fff" opacity="0.92"/>
-<text x="600" y="982" font-size="13" font-weight="normal" text-anchor="start" fill="#111">G: Green button</text>
-<rect x="630" y="1110" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
-<circle cx="660" cy="1110" r="4.5" fill="#111"/>
-<text x="700" y="1142" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Green button</text>
-<text x="700" y="1161" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">approve, 30 mm</text>
-<circle cx="740" cy="1110" r="4.5" fill="#111"/>
-<polyline points="740,1110 740,1090 782,1090 782,1225" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="740,1110 740,1090 782,1090 782,1225" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="782" cy="1225" r="4.5" fill="#111"/>
-<rect x="701.2" y="1207" width="77.6" height="17" fill="#fff" opacity="0.92"/>
-<text x="740" y="1219" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">GND pin 14</text>
-<circle cx="550" cy="1025" r="6" fill="#141414" stroke="#111" stroke-width="1.5"/>
-<text x="538" y="1030" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GND  6, 14, 20, 25, 30</text>
-<polyline points="550,1025 580,1025 580,1225 1622,1225" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
-<polyline points="550,1025 580,1025 580,1225 1622,1225" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
-<rect x="588" y="1232" width="56.72" height="17" fill="#fff" opacity="0.92"/>
-<text x="592" y="1244" font-size="12" font-weight="normal" text-anchor="start" fill="#111">GND bus</text>
-<text x="30" y="1292" font-size="13" font-weight="normal" text-anchor="start" fill="#111">Inputs use the Pi internal pull-ups, active LOW. Kill switch: NC contacts between GPIO22 and GND; open (HIGH) means frozen. Never wire a button or switch to 5 V.</text>
-<text x="30" y="1314" font-size="13" font-weight="normal" text-anchor="start" fill="#111">LED path: 5 V rail, resistor, LED anode, LED cathode, ULN2003 output. A GPIO HIGH turns its LED on. Measure each LED's forward voltage before soldering (green especially).</text>
-<text x="30" y="1336" font-size="13" font-weight="normal" text-anchor="start" fill="#111">Note A: button LEDs with a built-in resistor get no external resistor. A plain LED needs 200 Ω (green) or 220 Ω (red). COORD green: 220 Ω if no 200 Ω is available.</text>
+<circle cx="550" cy="725" r="6" fill="#141414" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="730" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GND  pins 6, 9, 14</text>
+<polyline points="550,725 845,725" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,725 845,725" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="845,700 845,815" fill="none" stroke="#222" stroke-width="10.8" stroke-linejoin="round"/>
+<polyline points="845,700 845,815" fill="none" stroke="#141414" stroke-width="9" stroke-linejoin="round"/>
+<circle cx="845" cy="700" r="4.5" fill="#111"/>
+<circle cx="845" cy="725" r="4.5" fill="#111"/>
+<circle cx="845" cy="750" r="4.5" fill="#111"/>
+<rect x="596" y="705" width="136.17999999999998" height="18" fill="#fff" opacity="0.92"/>
+<text x="600" y="718" font-size="13" font-weight="normal" text-anchor="start" fill="#111">feeds the GND bus</text>
+<rect x="853" y="787" width="204.04" height="18" fill="#fff" opacity="0.92"/>
+<text x="857" y="800" font-size="13" font-weight="bold" text-anchor="start" fill="#111">common GND bus (perfboard)</text>
+<rect x="610" y="1115" width="1090" height="180" rx="8" fill="none" stroke="#37474f" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="1690" y="1284" font-size="13" font-weight="bold" text-anchor="end" fill="#111">Control strip, front of the base: buttons and switches</text>
+<circle cx="550" cy="850" r="6" fill="#f57c00" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="855" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO24  pin 18</text>
+<polyline points="550,850 1500,850 1500,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,850 1500,850 1500,1150" fill="none" stroke="#f57c00" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="829" width="143.72" height="18" fill="#fff" opacity="0.92"/>
+<text x="600" y="842" font-size="13" font-weight="normal" text-anchor="start" fill="#111">LANG: EN/ZH toggle</text>
+<rect x="1470" y="1150" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<circle cx="1500" cy="1150" r="4.5" fill="#111"/>
+<text x="1540" y="1182" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">EN/ZH toggle</text>
+<text x="1540" y="1201" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">ON-OFF, 12 mm</text>
+<circle cx="1580" cy="1150" r="4.5" fill="#111"/>
+<polyline points="1580,1150 1580,1130 1622,1130 1622,1263" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="1580,1150 1580,1130 1622,1130 1622,1263" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="1622" cy="1263" r="4.5" fill="#111"/>
+<rect x="1541.2" y="1246" width="77.6" height="17" fill="#fff" opacity="0.92"/>
+<text x="1580" y="1258" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">to GND bus</text>
+<circle cx="550" cy="890" r="6" fill="#ffffff" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="895" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO23  pin 16</text>
+<polyline points="550,890 1290,890 1290,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,890 1290,890 1290,1150" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="869" width="136.17999999999998" height="18" fill="#fff" opacity="0.92"/>
+<text x="600" y="882" font-size="13" font-weight="normal" text-anchor="start" fill="#111">PTT: Push to talk</text>
+<rect x="1260" y="1150" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<circle cx="1290" cy="1150" r="4.5" fill="#111"/>
+<text x="1330" y="1182" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Push to talk</text>
+<text x="1330" y="1201" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">momentary, 12 mm</text>
+<circle cx="1370" cy="1150" r="4.5" fill="#111"/>
+<polyline points="1370,1150 1370,1130 1412,1130 1412,1263" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="1370,1150 1370,1130 1412,1130 1412,1263" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="1412" cy="1263" r="4.5" fill="#111"/>
+<rect x="1331.2" y="1246" width="77.6" height="17" fill="#fff" opacity="0.92"/>
+<text x="1370" y="1258" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">to GND bus</text>
+<circle cx="550" cy="930" r="6" fill="#f2c500" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="935" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO22  pin 15</text>
+<polyline points="550,930 1080,930 1080,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,930 1080,930 1080,1150" fill="none" stroke="#f2c500" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="909" width="151.26" height="18" fill="#fff" opacity="0.92"/>
+<text x="600" y="922" font-size="13" font-weight="normal" text-anchor="start" fill="#111">K: Kill switch (NC)</text>
+<rect x="1050" y="1150" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<circle cx="1080" cy="1150" r="4.5" fill="#111"/>
+<text x="1120" y="1182" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Kill switch (NC)</text>
+<text x="1120" y="1201" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">latching, 22 mm</text>
+<text x="1120" y="1226" font-size="11" font-weight="bold" text-anchor="middle" fill="#111">closed = LOW = run</text>
+<circle cx="1160" cy="1150" r="4.5" fill="#111"/>
+<polyline points="1160,1150 1160,1130 1202,1130 1202,1263" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="1160,1150 1160,1130 1202,1130 1202,1263" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="1202" cy="1263" r="4.5" fill="#111"/>
+<rect x="1121.2" y="1246" width="77.6" height="17" fill="#fff" opacity="0.92"/>
+<text x="1160" y="1258" font-size="12" font-weight="bold" text-anchor="middle" fill="#111">to GND bus</text>
+<circle cx="550" cy="970" r="6" fill="#d71920" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="975" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO27  pin 13</text>
+<polyline points="550,970 870,970 870,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,970 870,970 870,1150" fill="none" stroke="#d71920" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="949" width="106.02" height="18" fill="#fff" opacity="0.92"/>
+<text x="600" y="962" font-size="13" font-weight="normal" text-anchor="start" fill="#111">R: Red button</text>
+<rect x="840" y="1150" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<circle cx="870" cy="1150" r="4.5" fill="#111"/>
+<text x="910" y="1182" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Red button</text>
+<text x="910" y="1201" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">reject, 30 mm</text>
+<circle cx="950" cy="1150" r="4.5" fill="#111"/>
+<circle cx="550" cy="1010" r="6" fill="#12a037" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="1015" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GPIO17  pin 11</text>
+<polyline points="550,1010 660,1010 660,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,1010 660,1010 660,1150" fill="none" stroke="#12a037" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="989" width="121.1" height="18" fill="#fff" opacity="0.92"/>
+<text x="600" y="1002" font-size="13" font-weight="normal" text-anchor="start" fill="#111">G: Green button</text>
+<rect x="630" y="1150" width="140" height="92" rx="8" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<circle cx="660" cy="1150" r="4.5" fill="#111"/>
+<text x="700" y="1182" font-size="14" font-weight="bold" text-anchor="middle" fill="#111">Green button</text>
+<text x="700" y="1201" font-size="11" font-weight="normal" text-anchor="middle" fill="#111">approve, 30 mm</text>
+<circle cx="740" cy="1150" r="4.5" fill="#111"/>
+<circle cx="550" cy="1055" r="6" fill="#141414" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="1060" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GND  pin 20</text>
+<polyline points="550,1055 950,1055 950,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,1055 950,1055 950,1150" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="1036" width="126.32" height="17" fill="#fff" opacity="0.92"/>
+<text x="600" y="1048" font-size="12" font-weight="normal" text-anchor="start" fill="#111">red button ground</text>
+<circle cx="550" cy="1085" r="6" fill="#141414" stroke="#111" stroke-width="1.5"/>
+<text x="538" y="1090" font-size="13" font-weight="bold" text-anchor="end" fill="#111">GND  pin 14</text>
+<polyline points="550,1085 740,1085 740,1150" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="550,1085 740,1085 740,1150" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<rect x="596" y="1066" width="140.23999999999998" height="17" fill="#fff" opacity="0.92"/>
+<text x="600" y="1078" font-size="12" font-weight="normal" text-anchor="start" fill="#111">green button ground</text>
+<polyline points="845,815 1722,815 1722,1263 1202,1263" fill="none" stroke="#222" stroke-width="5.8" stroke-linejoin="round"/>
+<polyline points="845,815 1722,815 1722,1263 1202,1263" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<rect x="1126.19" y="795" width="407.61999999999995" height="18" fill="#fff" opacity="0.92"/>
+<text x="1330" y="808" font-size="13" font-weight="normal" text-anchor="middle" fill="#111">GND bus to kill switch, push to talk and EN/ZH toggle</text>
+<text x="30" y="1330" font-size="13" font-weight="normal" text-anchor="start" fill="#111">Inputs use the Pi internal pull-ups, active LOW. Kill switch: NC contacts between GPIO22 and GND; open (HIGH) means frozen. Never wire a button or switch to 5 V.</text>
+<text x="30" y="1352" font-size="13" font-weight="normal" text-anchor="start" fill="#111">Grounds: kill switch, push to talk and EN/ZH toggle go to the common GND bus on the perfboard, fed from Pi GND pins 6, 9 and 14. Green button: pin 14. Red button: pin 20.</text>
+<text x="30" y="1374" font-size="13" font-weight="normal" text-anchor="start" fill="#111">LED path: 5 V rail, resistor, LED anode, LED cathode, ULN2003 output. A GPIO HIGH turns its LED on. Button LEDs use their built-in resistors: no extra resistor.</text>
 </svg>

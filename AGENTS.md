@@ -29,7 +29,7 @@ SI Console: physical console for supervising AI agents. Raspberry Pi 5 8GB, 5 in
 
 ## Do not edit
 - `research/**` (historical).
-- `docs/GPIO_PIN_MAP.md` body (verbatim extract, change only through the owner, Jayden).
+- `docs/GPIO_PIN_MAP.md` values (change only through the owner, Jayden; keep `gpio_map.py` and the R5 wiring diagram matching).
 - `bom/BOM.csv` prices or status without a source.
 - Never commit API keys, tokens, `.env`, addresses, phone numbers or order details. Binary files (PNG, STL, STEP) go through Git LFS (`.gitattributes`).
 
