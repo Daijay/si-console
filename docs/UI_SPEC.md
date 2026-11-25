@@ -1,6 +1,6 @@
 # UI spec
 
-Status: DRAFT, 2026-11-25. Mockups with fake data only. Nothing is wired to the live system, and `code/si_console/` is unchanged.
+Mockups with fake data only. Nothing is wired to the live system, and `code/si_console/` is unchanged.
 
 - Mockups: [`code/dashboard/mockups/`](../code/dashboard/mockups/) (open `index.html`; on a state page `L` switches language, arrow keys step through states)
 - Screenshots: [`docs/images/ui/`](images/ui/) as `mini/<state>-<en|zh>.png` and `monitor/<state>-<en|zh>.png`

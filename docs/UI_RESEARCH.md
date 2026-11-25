@@ -1,6 +1,6 @@
 # UI research
 
-Status: DRAFT, 2026-11-25. Feeds [UI_SPEC.md](UI_SPEC.md).
+Feeds [UI_SPEC.md](UI_SPEC.md).
 
 **How to read the sources.** Web references below were read as search result summaries, not as full text. Treat their findings as LIKELY and open the link before quoting a number. Skill files marked installed were read in full. Star counts come from the GitHub API on 2026-11-25.
 

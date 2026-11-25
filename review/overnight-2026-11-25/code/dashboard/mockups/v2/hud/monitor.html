@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920">
+<title>SI Console HUD — monitor 1920x1080</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="screen" class="monitor"></div>
+<script src="../shared/v2-data.js"></script>
+<script src="render.js"></script>
+<script>
+(function () {
+  var m = location.hash.match(/state=([a-z]+)/);
+  var state = m ? m[1] : "idle";
+  var l = location.hash.match(/lang=(zh|en)/);
+  window.V2Render("monitor", state, l ? l[1] : "en");
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # BOM notes (Rev R5, updated 2026-11-24)
 
-STATUS: DRAFT. Prices CAD, before tax and shipping. Source file: `BOM.csv` (the only current BOM).
+Prices CAD, before tax and shipping. Source file: `BOM.csv` (the only current BOM).
 
 ## Current totals
 
