@@ -23,3 +23,21 @@ def test_no_key_material_survives(text):
 def test_plain_text_is_kept():
     message = "Rate limited by Hunyuan. Retry after 60s. Model hy4-flash not found."
     assert redact(message, KEY) == message
+
+
+@pytest.mark.parametrize("status,body", [
+    (429, {"error": {"code": "1113", "message": "余额不足或无可用资源包,请充值。"}}),
+    (402, {"error": {"message": "Insufficient Balance"}}),
+])
+def test_out_of_credit_is_not_called_a_rate_limit(monkeypatch, status, body):
+    import httpx
+    from si_console import chat_client, config
+    from si_console.errors import ModelError
+
+    monkeypatch.setattr(config, "GLM_API_KEY", "k")
+    monkeypatch.setattr(httpx, "post", lambda url, **kw: httpx.Response(
+        status, json=body, request=httpx.Request("POST", url)))
+    with pytest.raises(ModelError) as exc:
+        chat_client.complete("glm", "hi", model="m", max_tokens=5)
+    assert "out of credit" in exc.value.message and "Rate limited" not in exc.value.message
+    assert exc.value.status == 402

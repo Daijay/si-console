@@ -133,6 +133,16 @@ def error_detail(response, *secrets: str, limit: int = 240) -> str:
     return f" Provider says: {message}" if message else ""
 
 
+_CREDIT_WORDS = ("insufficient balance", "insufficient account balance", "insufficient_quota",
+                 "余额不足", "无可用资源包", "欠费", "请充值")
+
+
+def _out_of_credit(detail: str) -> bool:
+    """True when a provider's error text says the account has no money."""
+    text = (detail or "").lower()
+    return any(word in text for word in _CREDIT_WORDS)
+
+
 def base_url(provider: str) -> str:
     return str(getattr(config, provider_spec(provider)["url_attr"])).rstrip("/")
 
@@ -284,10 +294,20 @@ def complete(
             remedy=f"Check {spec['key_attr']} in .env is current.",
             status=401,
         )
+    detail = error_detail(response, key)
+    if response.status_code == 402 or _out_of_credit(detail):
+        # DeepSeek and MiMo answer 402; Zhipu answers 429 with
+        # "余额不足" (insufficient balance). Either way it is billing,
+        # not a rate limit, and waiting will not fix it.
+        raise ModelError(
+            f"{label} account is out of credit ({response.status_code}).{detail}",
+            remedy=f"Top up the {label} account, then run the smoke check again.",
+            status=402,
+        )
     if response.status_code == 429:
         retry = response.headers.get("retry-after", "60")
         raise ModelError(
-            f"Rate limited by {label}. Retry after {retry}s.{error_detail(response, key)}",
+            f"Rate limited by {label}. Retry after {retry}s.{detail}",
             remedy="Wait and try again, or slow the request rate.",
             status=429,
         )

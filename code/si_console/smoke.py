@@ -391,6 +391,14 @@ def main(argv=None) -> int:
     parser.add_argument("--live", action="store_true", help="send one tiny real call per model")
     parser.add_argument("--yes", action="store_true", help="do not ask before live calls")
     args = parser.parse_args(argv)
+    # Providers answer in Chinese at times. A Windows console defaults to
+    # cp1252 and would crash on that, so print UTF-8 and never fail on
+    # an unprintable character.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     return run(live=args.live, assume_yes=args.yes)
 
 
