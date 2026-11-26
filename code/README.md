@@ -67,7 +67,7 @@ python3 -m venv .venv
 On Windows use `.venv\Scripts\python`. `gpiozero` is only needed on the Pi and
 `python-pptx` only for slides.
 
-Last run 2026-11-26 on Windows: 213 passed.
+Last run 2026-11-26 on Windows: 223 passed.
 
 ## Deploy to the Pi
 1. On the Pi: `git clone` the repo (then `git lfs pull` if you need the CAD files).

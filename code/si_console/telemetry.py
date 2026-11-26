@@ -27,6 +27,9 @@ PRICES_PER_M = {
     "jev": (0.042, 0.0),
     # Small Qwen judge backup on Bailian: ceiling estimate, not a quote.
     "qwen-judge": (0.30, 1.20),
+    # Bailian decision model: "limited-time free" on its model page; this
+    # ceiling assumes Jev-like input pricing once that ends. Not a quote.
+    "bailian-decision": (0.10, 0.0),
 }
 
 _SCHEMA = """
