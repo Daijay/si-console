@@ -89,7 +89,7 @@ Decision: the console is redesigned as an open-frame "cyberdeck" with no enclosu
 - Main monitor: behind the base on its own kickstand, assembly only.
 - Removed: fan, side walls, lid, back panel, finger joints, the top-panel screen window and its bezel switch. No printed parts.
 - Wiring is drawn as colour-coded tubes that follow the wiring table, so the renders show it.
-- 2 laser sheets (was 4). BOM: fan and 2 acrylic sheets removed, fundable total 767.15 CAD (was 791.33). (Later changed, current total 851.13: see section H.)
+- 2 laser sheets (was 4). BOM: fan and 2 acrylic sheets removed, fundable total 767.15 CAD (was 791.33). (Later changed. The current total is USD 718.67 including tax.)
 
 Effect on the R3 review items: OPEN 1 (screen cutout) no longer applies, the screen is no longer in a panel. OPEN 2 stays decided (no soundbar, no grille). OPEN 3 stays as in R4: the Pi is rotated 180 degrees, power and HDMI face the back, and now the cables leave straight off the back edge of the open base. OPEN 5: R5 supplies candidate DXFs; Hasan reviews them before cutting.
 
@@ -110,11 +110,11 @@ Jayden chose to add three things to the BOM:
 
 - The USB soundbar (Best Buy, 25.99 CAD). It sits on the base plate behind the control strip. Not modelled in the R5 CAD yet: add after design approval, and check it against the clear space behind the buttons and kill switch. Test its volume against the monitor speakers.
 - The spare microSD card (32GB, 27.99 CAD), in case the main card fails at the booth.
-- API credits for DeepSeek and Bocha search, 40 CAD. Required for the live demo: the agents run on paid model APIs, so without credits the console cannot show live orchestration.
+- API credits for model and web search APIs, 40 CAD at the time. Required for the live demo: the agents run on paid model APIs, so without credits the console cannot show live orchestration.
 
 This replaces the earlier soundbar and spare card cuts for the BOM (OPEN 2 and the R4 and R5 notes above still describe the CAD and drawings, which have no soundbar yet).
 
-Fundable total: **851.13 CAD** before tax (was 757.15), 953.27 with 12 percent tax. That is 51.13 over the 800 CAD team limit before tax, and 53.27 over the 900 CAD hard max if tax counts.
+Fundable total at that date: **851.13 CAD** before tax (was 757.15), 953.27 with 12 percent tax. That is 51.13 over the 800 CAD team limit before tax, and 53.27 over the 900 CAD hard max if tax counts.
 
-Not verified: the DeepSeek and Bocha pages open but require sign-in, so payment methods, minimum top-up and whether 40 CAD covers the booth are unconfirmed. `docs/MODEL_TIERS.md` estimates about 43 to 77 USD of API spend for a packed two-day booth across its multi-provider roster.
+Not verified: the top-up pages require sign-in, so payment methods and minimum top-up are unconfirmed. `docs/MODEL_TIERS.md` estimates about 43 to 77 USD of API spend for a packed two-day booth across its multi-provider roster. Since 2026-11-26 the BOM has USD 50.00 of DeepSeek, Zhipu and Qwen credits and the fundable total is USD 718.67 including tax.
 

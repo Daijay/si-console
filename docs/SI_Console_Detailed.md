@@ -3,7 +3,7 @@
 Date: 2026-11-23.
 Rev: R2.1 for BOM and power. Wiring and GPIO map follow GPIO_PIN_MAP.md (updated 2026-11-24). Rev R3 for the case drawings, power diagram, and 3D model. The R3 drawings supersede the R2 drawings. The R3 drawings and 3D files are in blueprints/; the current CAD source is in cad/.
 Model note: the model-router sections below describe the 2026-11-23 two-option decision (DeepSeek plus Claude vs DeepSeek only). The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25) and supersedes those options for model selection.
-Search note (2026-11-26): web search now runs on Zhipu's Web Search API with the GLM key (`code/si_console/websearch.py`); Bocha is only an optional fallback, because a Bocha account could not be created. The Bocha sections below are historical.
+Search note (2026-11-26): web search runs on Zhipu's Web Search API with the GLM key (`code/si_console/websearch.py`).
 Rule: plain words, short sentences, no em dashes.
 Status words: "confirmed" means the page or source was opened and checked. "Unconfirmed" means a search result or secondhand claim only. "Estimated" means a figure nobody has measured or checked. Never treat an estimate as fact.
 
@@ -22,7 +22,7 @@ Status words: "confirmed" means the page or source was opened and checked. "Unco
 | Parts target | About Nov 30, 2026. Confirmed from the brief. |
 | Team | Jayden, overall system, hardware, integration. Hasan, CAD in Fusion 360. Christopher, software architecture, model router. Confirmed from the brief. |
 | Brain | DeepSeek API, OpenAI-compatible tool calling. Confirmed from the brief. |
-| Search | Bocha API, works in China. Confirmed from the brief. |
+| Search | Zhipu Web Search API, on the GLM key. |
 | Computer | Raspberry Pi 5 8GB, official 27W PSU, active cooler. Confirmed from the brief. |
 | Main screen | MSI PRO MP165 E6 15.6 inch portable monitor, bought, self-funded. Confirmed from the brief. |
 | Mini screen | Waveshare 5 inch HDMI LCD (H), 800x480, touch disabled. Confirmed from the brief. |
@@ -34,30 +34,24 @@ What a visitor sees: a console on a desk, a main screen with a dashboard, a smal
 
 ## 2. Full BOM with links and status
 
-Totals updated 2026-11-24 from `bom/BOM.csv`. All prices in CAD. Tax is 12 percent BC tax. The part tables in sections 2.3 to 2.5 are the older R2.1 list; `bom/BOM.csv` is the only current BOM.
+Totals updated 2026-11-26 from `bom/BOM.csv`, in USD. The part tables in sections 2.3 to 2.5 are the older R2.1 list in CAD; `bom/BOM.csv` is the only current BOM.
 
 ### 2.1 Totals
 
-| Line | Amount CAD | Status |
+| Line | Amount USD | Status |
 |---|---|---|
-| Fundable, before tax | 885.81 | Re-added from BOM.csv |
-| Fundable, tax 12 percent | 106.30 | Tax on every line is estimated |
-| Fundable, with tax | 992.11 | Computed |
-| Self-funded, before tax | 128.24 | From the R2.1 summary |
-| Self-funded, with tax | 143.63 | From the R2.1 summary |
-| All-in, with tax, before shipping and laser | 1135.74 | Computed |
-| All-in, with laser, shipping, tools | About 1246.90 to 1336.90 | Estimated |
-| Core after voice cut (120.97) and mini screen cut (83.94), before tax | 646.22 | Computed |
-| Same, with tax | 723.77 | Computed |
-| Team limit | About 800 | Confirmed from the brief. Exceeded by 85.81 before tax |
-| Hard max | 900 | Confirmed from the brief. Exceeded by 92.11 with tax |
-| 400 CAD target, missed by | 246.22 before tax, even after both cuts | Computed |
+| Fundable parts and API credits, before tax | 641.67 | Re-added from BOM.csv |
+| BC tax, 12 percent | 77.00 | A row in BOM.csv |
+| **Fundable total, including tax** | **718.67** | Computed |
+| Self-funded, before tax | 89.70 | Converted from the R2.1 summary |
+| Self-funded, with tax | 100.46 | Computed |
+| All-in, with tax, before shipping and laser | 819.13 | Computed |
 
-Status mix of the fundable total: confirmed 508.98, unconfirmed 269.86, estimated 106.97. Do not treat the total as verified.
+Status mix before tax: confirmed 356.05, unconfirmed 188.77, estimated 96.85. Do not treat the total as verified.
 
 ### 2.2 Spare card, soundbar and API credits
 
-The earlier proposal to cut the spare 32GB microSD (27.99) and the USB soundbar (25.99) is withdrawn: both are in the BOM again as of 2026-11-24. API credits for DeepSeek and Bocha (40.00) were added. The soundbar is not modelled in the R5 CAD yet.
+The earlier proposal to cut the spare 32GB microSD and the USB soundbar is withdrawn: both are in the BOM. API credits for DeepSeek, Zhipu and Qwen (USD 50.00) are in the BOM. The soundbar is not modelled in the R5 CAD yet.
 
 ### 2.3 Fundable parts
 
@@ -360,7 +354,7 @@ Ports: dashboard 8000, API 8001. Both estimated.
 | Round limit reason | ROUND_LIMIT, escalates to human | Confirmed from the brief |
 | Approval timeout | 120 s | Estimated |
 | DeepSeek timeout | 30 s per call, retry once | Estimated |
-| Bocha timeout | 15 s, return error, do not block the task | Estimated |
+| Search timeout | 15 s, return error, do not block the task | Estimated |
 | Tool timeout | 60 s max for shell_run and run_python, kill the process, log TOOL_TIMEOUT | Estimated |
 | Stuck task | Working for more than 300 s becomes blocked with reason STUCK, watchdog runs every 30 s | Estimated |
 | Claim TTL | 300 s | Estimated |
@@ -463,14 +457,14 @@ GUARD enforces hard rules and approval gates, as code, not as LLM. GUARD checks 
 | Models | DeepSeek plus Claude Fable 5.2, in tiers | DeepSeek only |
 | Owner | Christopher, software architecture, model router | Same |
 | Cost | Fable 5.2 is 8 USD input and 40 USD output per 1M tokens, confirmed. That is about 27 times DeepSeek flash input and 33 times its output. | DeepSeek daily cost cap USD 5.0, estimated, in config |
-| China access | Claude does not work from mainland China. Anthropic policy does not support use by persons physically in mainland China, Hong Kong, or Macau, confirmed. | DeepSeek works in China. Bocha works in China. |
+| China access | Claude does not work from mainland China. Anthropic policy does not support use by persons physically in mainland China, Hong Kong, or Macau, confirmed. | DeepSeek works in China. |
 | Fallback | Any router must fall back to DeepSeek only | N/A, DeepSeek only by design |
 | Verdict on Claude Fable 5.2 | Fable 5.2 exists, but it is too expensive and it cannot be used at the Shenzhen booth. Router must fall back to DeepSeek only. | N/A |
 | Status | Unresolved, team decides tomorrow | Jayden's stated position |
 
 Model names, confirmed on DeepSeek official docs 2026-11-23: current models are deepseek-flash (V4.1-Flash-1017) and deepseek-v4-pro (V4-Pro-0813). Both have 1M context and 384K max output. deepseek-chat and deepseek-reasoner are retired. deepseek-v4-flash is retired and only routes to V4.1 Flash. Pin deepseek-flash in config.yaml at build time. Run a live tool call test with the pinned model. Code takes the model from .env and fails loudly if missing. Never hardcode deepseek-chat. Never use a reasoner model as coordinator. See open question Q1.
 
-Bocha domains: api.bochaai.com and api.bocha.cn. The conflict is confirmed from search results. Put the base URL in config. Test both domains from Canada before travel, test again in Shenzhen, use the one that answers. If both fail, search is off and the agent says so on screen. See open question Q2.
+Search endpoint: the GLM base URL in config. It has not had a live call yet. If search fails, search is off and the agent says so on screen. See open question Q2.
 
 ## 7. Agent flow
 
@@ -537,7 +531,7 @@ From INTEGRATION.md. 5 DeepSeek calls. Replay date 2022-12-30, a Friday trading 
 |---|---|
 | 1 | Visitor holds push to talk, says: Research the 2022 bear market and make 3 slides. |
 | 2 | Coordinator creates a task note. Mini screen shows COORD working, then AGENT 1 working. |
-| 3 | Worker calls Bocha for research, if the network works. |
+| 3 | Worker runs a web search for research, if the network works. |
 | 4 | Rules engine computes the sector ranking from price only, up to the replay date. No future data. |
 | 5 | Worker makes 3 slides with python-pptx. Slides go to the vault, then to the main screen. |
 | 6 | Proposal appears. Green button glows. Screen says APPROVE and REJECT. |
@@ -600,7 +594,7 @@ Autumn is Jayden's FastAPI plus React dashboard, local-first.
 | search.py | No dedicated test. |
 | STT and TTS | Not installed. |
 | Bridge /docs | Left on by default. Disable in the booth build. |
-| DeepSeek cost cap | Daily cap USD 5.0, estimated, added in config. Closes part of the cost gap. Bocha cost cap still open. See open question Q13. |
+| DeepSeek cost cap | Daily cap USD 5.0, estimated, added in config. Closes part of the cost gap. Search cost cap still open. See open question Q13. |
 | DeepSeek model | Taken from .env, fails loudly if missing. Never hardcodes deepseek-chat. |
 | GPIO map | The code maps COORD to GPIO5 in gpio_map.py. The GPIO map tests pass. See section 3.4. |
 | Early tests | 37 passed on 2026-11-20, Python 3.12.3, fresh venv. Bridge smoke test passed: health 200, no token 401, bad token 401, 10 API routes. make_slides wrote a 2-slide deck. Rules engine with no price files returned Hold cash. |
@@ -652,10 +646,10 @@ Fri Dec 4 is also the Hack Club Harvest deadline, 11:59pm EST, for RAINBOUND PRO
 
 | Cut first | Saves CAD | Never cut |
 |---|---|---|
-| Voice | 120.97 | Buttons, LEDs, kill switch, agents |
-| Mini screen | 83.94 | Buttons, LEDs, kill switch, agents |
+| Voice | USD 84.62 | Buttons, LEDs, kill switch, agents |
+| Mini screen | USD 58.72 | Buttons, LEDs, kill switch, agents |
 
-Core after the voice and mini screen cuts: 646.22 CAD before tax, 723.77 CAD with tax. The voice cut of 120.97 CAD includes the soundbar at 25.99 CAD. The lit-button cut no longer exists. The ULN2003 stays in the design. That still misses the 400 CAD target by 246.22 CAD before tax.
+Core after the voice and mini screen cuts: USD 498.33 before tax, USD 558.13 including tax (full BOM: USD 718.67 including tax). The voice cut of USD 84.62 includes the soundbar at USD 18.18. The lit-button cut no longer exists. The ULN2003 stays in the design.
 
 If a stage fails twice, cut the feature in the cut order above. If the core still fails, stop and ask Jayden. He is the decision maker for a scope cut.
 
@@ -672,7 +666,7 @@ Run tests in order: T1 to T4 first, then T5 to T8, then T9 to T11, then T12 stre
 | T5 GPIO, buttons, LEDs, kill, toggle | Prove every physical control works, 100 times, with no double execution | 100 presses, no double execution. Kill freezes 20 of 20 times. Resume needs green once, 20 of 20 times. Green press while kill is latched does nothing, 20 of 20 times. LED currents are 5 to 20 mA, Vf measured first. Toggle flips language 20 of 20 times. |
 | T6 Heat, 2 hours lid closed | Prove the closed acrylic case does not throttle the Pi | Temperature stays under 75C for the full 2 hours, except for brief spikes under 5 minutes. get_throttled stays 0x0. |
 | T7 Coordinator loop | Prove the fixed action menu, the 3 round limit, and the approval gate work in code | All 10 checks pass. No tool runs on a rejected reply. No task is approved without a green press. No task runs a fourth round. Approval expires at 120 seconds. |
-| T8 DeepSeek and Bocha, home and booth | Prove the brain and the search work, and prove the fallback works when they do not | DeepSeek tool call works in Canada. At least one Bocha domain answers in Canada. Wi-Fi off switches to recorded runs with no crash. DeepSeek blocked switches to recorded runs with no crash. |
+| T8 DeepSeek and web search, home and booth | Prove the brain and the search work, and prove the fallback works when they do not | DeepSeek tool call works in Canada. Web search answers in Canada. Wi-Fi off switches to recorded runs with no crash. DeepSeek blocked switches to recorded runs with no crash. |
 | T9 Replay data | Prove the 2020 and 2022 replays use only data up to the replay date, never future data | Max date used is never after the replay date. Both replays finish with no crash. Two runs with the same inputs give identical results. |
 | T10 External agent API | Prove Hermes can claim tasks and write reports, but can never approve, execute, propose trades, or edit code | Claim plus research note succeeds with a valid token. Approve, execute, propose trade, and edit code all fail with a valid token. Every call fails with an invalid token or no token. Double claim fails. |
 | T11 Screens and language | Prove both screens show the right thing, in English and Chinese, with no boxes for Chinese characters | Both screens show the right content. Toggle flips language 20 of 20 times. Voice switch works. No Chinese character shows as a box. No English string is hard coded in dashboard code. |
@@ -681,7 +675,7 @@ Run tests in order: T1 to T4 first, then T5 to T8, then T9 to T11, then T12 stre
 
 Test order and sign-off: run T1 to T4 on Dec 1. Run T5 to T8 on Dec 2. Run T9 to T11 on Dec 3. Run T12 and T13 on Dec 5 to Dec 6. Fix failures on Dec 6 to Dec 7. Do not sign off until T12 and T13 pass.
 
-Sign-off checklist, all must be yes: T1 RAM passes. T2 STT passes, or voice is cut and text input works. T3 vault writes pass, 100 of 100. T4 power passes, get_throttled is 0x0. T5 GPIO passes, 100 presses, no double execution. T6 heat passes, 2 hours lid closed. T7 coordinator passes, 3 round limit, approval gate. T8 DeepSeek and Bocha pass, or fallback is proven. T9 replay passes, no lookahead. T10 external API passes, forbidden calls fail. T11 screens pass, Chinese renders. T12 stress passes, 100 rounds. T13 Wi-Fi off passes, booth demo runs. If any item is no, the build is not ready for Shenzhen. Record the no in LOG.md, with the test id, the numbers, and the fix.
+Sign-off checklist, all must be yes: T1 RAM passes. T2 STT passes, or voice is cut and text input works. T3 vault writes pass, 100 of 100. T4 power passes, get_throttled is 0x0. T5 GPIO passes, 100 presses, no double execution. T6 heat passes, 2 hours lid closed. T7 coordinator passes, 3 round limit, approval gate. T8 DeepSeek and web search pass, or fallback is proven. T9 replay passes, no lookahead. T10 external API passes, forbidden calls fail. T11 screens pass, Chinese renders. T12 stress passes, 100 rounds. T13 Wi-Fi off passes, booth demo runs. If any item is no, the build is not ready for Shenzhen. Record the no in LOG.md, with the test id, the numbers, and the fix.
 
 ## 11. Demo plan
 
@@ -696,7 +690,7 @@ Checklist, run every morning before the booth opens: Pi boots cleanly. Both scre
 | Time | What happens |
 |---|---|
 | 0:00 to 0:30, hook and start screen | Say: Hi, this is SI Console. Talk to dispatch, press to approve. I talk to a team of AI agents. I press a button to approve. Nothing runs without my press. Point to the start screen. It says CHOOSE SCENARIO, with 2020 and 2022. Say: Pick a crash. Green picks 2020. Red picks 2022. Ask the visitor which one they want to see. Press green for 2020, or red for 2022, as the visitor chooses. This is the only time red does not mean reject. The screen must label the buttons in large text. The screen shows the scenario start date, the start cash 100000 paper dollars, and the start holdings, 100 percent cash. Mini screen shows the agent chain: COORD, AGENT 1, AGENT 2, GUARD. All queued to start. |
-| 0:30 to 1:30, voice propose | Hold the push to talk button. Say: Research the 2022 bear market and make 3 slides. Release the button. The screen shows RECORDING, then the transcript. The system speaks a short confirmation with Piper TTS, in English. The mic is muted during playback. Voice proposes only. Voice never executes. The coordinator creates a task note. The mini screen shows COORD working, then AGENT 1 working. The main screen shows the proposal forming. The worker agent calls Bocha for research, if the network works. The rules engine computes the sector ranking from price only, up to the replay date. It never uses future data. The LLM writes the explanation. The code computes the numbers. The worker makes 3 slides with python-pptx. The slides go to the vault, then to the main screen. Say, while it runs: The agents are researching. The numbers come from code, not from the model. The model writes the words. |
+| 0:30 to 1:30, voice propose | Hold the push to talk button. Say: Research the 2022 bear market and make 3 slides. Release the button. The screen shows RECORDING, then the transcript. The system speaks a short confirmation with Piper TTS, in English. The mic is muted during playback. Voice proposes only. Voice never executes. The coordinator creates a task note. The mini screen shows COORD working, then AGENT 1 working. The main screen shows the proposal forming. The worker agent runs a web search for research, if the network works. The rules engine computes the sector ranking from price only, up to the replay date. It never uses future data. The LLM writes the explanation. The code computes the numbers. The worker makes 3 slides with python-pptx. The slides go to the vault, then to the main screen. Say, while it runs: The agents are researching. The numbers come from code, not from the model. The model writes the words. |
 | 1:30 to 2:30, approval pause | The proposal appears on the main screen. The green button glows. The screen says APPROVE with green, REJECT with red, in English and Chinese. Say: Now it waits for me. The agents proposed, but nothing runs until I press green. This is the hand on the brake. Point to the green button LED. Point to the GUARD LED. Say: GUARD is code, not a model. It checks the tool, the kill state, the approval state, and the risk check. It cannot be talked out of a block. Ask the visitor: Approve or reject. If the visitor says approve, press green once. One press approves one task only. The bridge sets approved_by to human, sets approved_at, sets status to working for execution. The green LED turns off. The execution agent fills at the replay close price, in paper only. The portfolio updates. The mini screen shows EXEC working, then done. If the visitor says reject, press red once. The task marks blocked, risk_reason is HUMAN_REJECT. The portfolio does not change. The coordinator routes work back to signal for a new proposal. Say, after the press: That press was the only execution path. Voice cannot do it. The model cannot do it. Only this button can. Show the slides on the main screen. Flip through the 3 slides. Each slide has a source line. |
 | 2:30 to 3:30, kill switch demo | Say: Now the safety test. This red mushroom is the kill switch. It freezes all agents. Press the kill switch and latch it. The bridge sets kill active to true in state.json. All working tasks mark blocked, with a log line KILL_SWITCH. No new orders run. Voice output stops. All 4 agent LEDs go off, plus the kill pattern. Both screens show KILL ACTIVE, in English and Chinese. Say: It is wired normally closed. A broken wire also reads frozen. That is fail safe. Release the kill switch. Twist or pull to release it. The console stays frozen. The screens say KILL ACTIVE, plus PRESS GREEN TO RESUME. Say: It does not auto resume. I have to press green once. Press green once. The console resumes. The coordinator creates a new signal task. It does not resume an old half finished order. Old blocked tasks stay blocked. Show the final score vs SPY on the main screen, price only, in large text. Show total return, SPY total return, excess return, max drawdown, number of trades. Say: Price only, no dividends, so SPY is understated by about 1 to 2 percent per year, unconfirmed. That is stated on screen. |
 | 3:30 to 4:00, close | Say: That is SI Console. Talk to dispatch, press to approve. Trading is one skill, not the whole product. The same console can research, write slides, and run any agent team, with the same green button as the gate. Ask: Do you want to try it. Let the visitor press green or red on the next proposal. Do not let a visitor press kill without warning them first. Reset to the start screen for the next visitor. The start screen shows CHOOSE SCENARIO again. |
@@ -714,7 +708,7 @@ Same demo, in Chinese. Same time marks. Flip the GPIO24 toggle to ZH, or say the
 | What if the internet fails in Shenzhen. | The console switches to recorded agent runs automatically. The demo continues on replay data. No live price feed is needed. |
 | Can voice approve. | No. Voice proposes only. Voice never executes. Voice never approves. That is a hard rule. |
 | Is this real money. | No. Paper money only. 100000 paper dollars. No real money is connected. |
-| How much did it cost. | Fundable parts and API credits 885.81 CAD before tax, 992.11 CAD with tax. Self-funded monitor, power brick, and travel adapter 128.24 CAD before tax, 143.63 CAD with tax. All-in with tax 1135.74 CAD, before shipping and laser cutting. Laser cutting is 50 to 90 CAD extra. Shipping is estimated 40 to 60 CAD extra. |
+| How much did it cost. | Fundable parts and API credits USD 718.67 including tax. The monitor, power brick and travel adapter are self-funded, USD 100.46 with tax. Shipping and laser cutting are extra. |
 | What is the hardest part. | Voice in a loud hall, and heat in a closed case. Both are tested. See TEST_PLAN.md T2 and T6. If voice fails, buttons and text still work. |
 
 ### 11.5 Recorded fallback path, when internet or DeepSeek fails
@@ -723,7 +717,7 @@ Booth mode uses live DeepSeek by default, with recorded agent runs as the automa
 
 | Item | Fact |
 |---|---|
-| Trigger | DeepSeek API timeout is 30 seconds per call, estimated. On timeout, retry once, then mark the task blocked with reason API_TIMEOUT, and switch to recorded fallback in booth mode. Do not retry forever. Bocha timeout is 15 seconds, estimated. On timeout, return an error, do not block the task, and continue without search results. |
+| Trigger | DeepSeek API timeout is 30 seconds per call, estimated. On timeout, retry once, then mark the task blocked with reason API_TIMEOUT, and switch to recorded fallback in booth mode. Do not retry forever. Search timeout is 15 seconds, estimated. On timeout, return an error, do not block the task, and continue without search results. |
 | What the visitor sees | The screen says LIVE MODE OFF, RECORDED RUN, in English and Chinese. The mini screen keeps showing the agent chain. The demo continues. No crash. No hang over 30 seconds. |
 | What changes | 0:00 to 0:30, same. 0:30 to 1:30, voice propose, same. Say: The network is off, so this run uses a recorded agent run. The numbers are the same as a live run for this replay date. The slides are pre-made from the recorded run. 1:30 to 2:30, approval pause, same. The proposal is from the recorded run, not from a live DeepSeek call. The green button still approves. The red button still rejects. The approval pause is real, even in fallback mode. Do not skip it. 2:30 to 3:30, kill switch demo, same. Kill works offline. It is hardware and bridge code, not a cloud call. 3:30 to 4:00, close, same. Say: This was the recorded path. With the network on, the same console runs live DeepSeek. The buttons and the kill switch work the same in both paths. |
 | Practice | Turn off Wi-Fi on the Pi. Turn off the phone hotspot. Unplug Ethernet. Run the full demo, start to finish, in 2020 mode, then in 2022 mode. See TEST_PLAN.md T13. Practice it at least twice before Shenzhen. If the fallback does not start automatically, do not go to Shenzhen with that build. Fix it first. |
@@ -745,7 +739,7 @@ Do not: let a visitor press kill without warning them first. Run the demo with t
 | Risk | Impact | Fix or mitigation | Status |
 |---|---|---|---|
 | Laser timing | Files sent Fri Nov 27 finish Dec 7 to 9, too late for Dec 8 | Send files Mon Nov 23, before Fallen approval, or use drop-in if the age rule allows | Open. See Q21. |
-| Grant cap unknown | Fundable total 885.81 CAD before tax is over the 400 CAD target by 485.81 CAD, and over the 800 CAD team limit by 85.81 CAD | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen, which gives 646.22 CAD before tax. | Open. See Q22. |
+| Grant cap unknown | Fundable total is USD 718.67 including tax. | Ask Fallen the cap at submission. Apply the cut order: voice first, then mini screen. | Open. See Q22. |
 | Shenzhen offline demo | No internet kills the live demo. Recorded fallback format is undefined. No file exists, no code exists. | Define the recorded run format, record at least one full run at home with live DeepSeek, store it on the microSD, test the automatic switch with Wi-Fi off. | Open. See Q3. |
 | Voice in a loud booth | Chinese STT is weakest. SenseVoice Small is unconfirmed on Pi 5 ARM64. Whisper Base Chinese CER 15.99 percent is clean speech only, unconfirmed. | Test STT on Dec 2, with noise. If it fails, cut voice from the booth demo and run on buttons and text only. Text input must exist in v1. | Open. See Q10, Q32. |
 | Power, heat, ULN2003 together | Old USB headroom was 0.10A. Acrylic insulates. ULN2003 at 3.3V is test first, not guaranteed. | Rev R2.1 fixes the power headroom: about 1.0A, estimated, with the mini screen and monitor on their own chargers. Case fan added. Bench test the ULN2003 at 3.3V before soldering. Heat test T6 decides. | Partly fixed. USB currents still estimates until measured. |
@@ -756,7 +750,7 @@ Do not: let a visitor press kill without warning them first. Run the demo with t
 | Shipping not in budget | Estimated 40 to 60 CAD across retailers. | Order from as few retailers as possible. Use BC store pickup for the monitor. | Open. |
 | Kill switch depth | APEM depth 78.3 mm vs 75 mm clearance, 3.3 mm over. | Check in the CAD redraw. See Q34. | Open. |
 | Heat in a closed acrylic case | Acrylic insulates more than a vented ABS box. Vents are 1440 mm2, estimated. | Vents low and high, case fan added in Rev R2.1. Run the 2 hour lid closed heat test early, in Stage 2, not Dec 5. See Q30. | Open. |
-| DeepSeek and Bocha in Shenzhen | Neither tested from China. DeepSeek model is unpinned. Bocha has two domains, neither tested. | Test both from Shenzhen on arrival day. Have the recorded fallback ready before the booth opens. See Q33. | Open. |
+| DeepSeek and web search in Shenzhen | Neither tested from China. DeepSeek model is unpinned. | Test both from Shenzhen on arrival day. Have the recorded fallback ready before the booth opens. See Q33. | Open. |
 | Acrylic price | 32.99 CAD confirmed only by a 210-day-old crawl. | Re-check the price at order time. Confirm the sheet size covers the 360 by 240 mm panels. See Q24. | Open. |
 
 ## 13. Open questions
@@ -776,7 +770,7 @@ Hardware research is done. The Claude Fable verdict is in, see the router row ab
 | ID | Question | What decides it |
 |---|---|---|
 | Q1 | DeepSeek model name at build time. Confirmed 2026-11-23 on DeepSeek official docs: current models are deepseek-flash and deepseek-v4-pro. deepseek-v4-flash is retired. | Pin deepseek-flash in config.yaml, run a live tool call test. |
-| Q2 | Bocha base URL. api.bochaai.com vs api.bocha.cn. Conflict confirmed from search results. | Test both domains from Canada before travel, test again in Shenzhen, put the working one in config. |
+| Q2 | Web search from China. The Zhipu search call has not been made live. | Test it from Canada before travel and again in Shenzhen. |
 | Q3 | Recorded fallback format. No format defined, no file exists, no code exists. | Decide the file format, record at least one full run at home with live DeepSeek, store it on the microSD, test the automatic switch with Wi-Fi off. |
 | Q4 | How slides are shown on screen. make_slides writes a .pptx to the vault. No file says how it is shown. | Pick one method, for example convert to images and show in the dashboard, or open in LibreOffice, and test it on the Pi. |
 | Q5 | Mini screen: separate process or one dashboard process. | Decide at build time, measure RAM both ways. |
@@ -787,7 +781,7 @@ Hardware research is done. The Claude Fable verdict is in, see the router row ab
 | Q10 | SenseVoice Small on Pi 5 ARM64. Size and RAM are unconfirmed. No install or test was done. | Install SenseVoice Small on the Pi, test EN and ZH, measure RAM and latency. If it fails, fall back to faster-whisper Base. |
 | Q11 | ULN2003 at 3.3V on the bench. Vce_sat max is 1.6V per the DigiKey page, not 1.0V assumed. Resistor values are decided (see section 3.2). | Bench test every ULN2003 channel at 3.3V and measure each LED current with a multimeter. Fallback is TBD62083A, unconfirmed, or a logic level MOSFET per LED. |
 | Q12 | Button LEDs run from 5V through built-in resistors. The exact EG STARTS part is unconfirmed. | Read the part datasheet before wiring and measure the current with a multimeter on the bench. |
-| Q13 | Bocha cost cap and DeepSeek cost cap confirmation. DeepSeek daily cap USD 5.0, estimated. No Bocha cap exists. | Jayden confirms the daily cap in dollars. The code worker adds a Bocha cap the same way. The bridge logs cost per call. |
+| Q13 | Search cost cap and DeepSeek cost cap confirmation. DeepSeek daily cap USD 5.0, estimated. No search cost cap exists. | Jayden confirms the daily cap in dollars. The code worker adds a search cap the same way. The bridge logs cost per call. |
 | Q14 | Claim expiry and task status. Expiry leaves the task status as working. A second claim gets 409. | The bridge must decide whether expiry resets the task to queued with reason CLAIM_EXPIRED. The code worker implements it. |
 | Q15 | NEEDS APPROVAL pause in coordinator.py is a skeleton. It logs the pause, it does not wait for the bridge. | The code worker wires the coordinator to wait on the bridge approval state, with the 120 s timeout, and tests it with a real button press. |
 | Q16 | Software freeze flag has no state.json field. | Add software_freeze to the state.json field list in ARCHITECTURE.md. Make the bridge enforce it. |
@@ -807,7 +801,7 @@ Hardware research is done. The Claude Fable verdict is in, see the router row ab
 | Q30 | Heat in a closed acrylic case. Vents are only 1440 mm2, estimated. Old note said no case fan is in the BOM. | Rev R2.1 added a 5V case fan, 4.19 CAD, confirmed. Run the 2 hour lid-closed heat test early, in Stage 2, not Dec 5. Fail if over 75C for 5 min or throttled is not 0x0. |
 | Q31 | Chinese demo sentences are translations, not verified by a native speaker. | Have a native speaker check the cue card before Shenzhen. |
 | Q32 | Text input fallback has no designed field. No keyboard is in the BOM. No strings.json IDs cover it. | Design a text field on the main screen, add a keyboard to the BOM or use an on-screen keyboard, test it with voice off. |
-| Q33 | DeepSeek and Bocha in Shenzhen. Neither tested from China. | Test both from Shenzhen on arrival day. Have the recorded fallback ready before the booth opens. |
+| Q33 | DeepSeek and web search in Shenzhen. Neither tested from China. | Test both from Shenzhen on arrival day. Have the recorded fallback ready before the booth opens. |
 | Q34 | Kill switch depth. APEM depth 78.3 mm vs 75 mm clearance, 3.3 mm over. | Measure the APEM kill switch cutout, 22.3 mm, and the depth in the CAD redraw. Fix the drawing before cutting. |
 | Q35 | Closed. LED names and colours are decided: COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow. | None. |
 
@@ -821,7 +815,7 @@ Hardware research is done. The Claude Fable verdict is in, see the router row ab
 | G6 | External API. Specified in INTEGRATION.md. Ports 8000 and 8001, claim TTL 300 s, heartbeat 60 s, rate limit 10 per min, research max 20000 chars, report max 5000 chars, token revoked after 3 bad tries for 10 min. All estimated. |
 | G8 | VAULT_CONFLICT missing from the risk_reason list. Added to ARCHITECTURE.md section 8.2. |
 | G11 | Dashboard and bridge ports. 8000 and 8001, estimated. |
-| G13, part | DeepSeek cost cap. A daily cost cap was added: USD 5.0, estimated, in config. Bocha cost cap is still open, see Q13. |
+| G13, part | DeepSeek cost cap. A daily cost cap was added: USD 5.0, estimated, in config. Search cost cap is still open, see Q13. |
 | G15 | External task types narrowed to research and narration only, per INTEGRATION.md section 8.2. Needs ARCHITECTURE.md to confirm the narrowing. |
 | G17 | Voice intent mapping. code/si_console/voice_intents.py was written with a fixed EN and ZH vocabulary, negatives win, no API call. |
 
@@ -845,7 +839,7 @@ Hardware research is done. The Claude Fable verdict is in, see the router row ab
 
 1. Scenario start date and start holdings for 2020 and 2022.
 2. Sector ETF list for the rules engine.
-3. Daily cost cap in dollars for DeepSeek and Bocha.
+3. Daily cost cap in dollars for DeepSeek and web search.
 4. Final LED colour for each agent.
 5. Kill pattern is set, see G3. Confirm the red button has an LED, or the pattern is screens only.
 6. Pursue or park Fallen, given Summit Nov 21, Harvest Dec 4, and the Dec 8 build deadline.

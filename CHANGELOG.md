@@ -2,16 +2,19 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-26, API credits and search provider
+- BOM: API credits are now DeepSeek, Zhipu and Qwen, USD 50.00. BC tax 77.00 (12% of 641.67). Fundable total USD 718.67 including tax (was 694.01).
+- Removed the second web search provider and its settings. `websearch.py` uses Zhipu only and now also holds `fetch_url`.
+
 ## 2026-11-26, BOM in USD
 - `bom/BOM.csv` converted from CAD to USD at 1.4296 (Custom PCB 10.84) to match the Fallen submission.
 - Fundable rows now carry a one-line purpose note; new BC tax row (74.36, 12% of 619.65).
 - Fundable total USD 694.01 including tax. README and BOM notes updated.
 
-## 2026-11-26, Web search on Zhipu (Z.ai) instead of Bocha
-- A Bocha account could not be created, so research search now uses Zhipu's Web Search API on the GLM key (`code/si_console/websearch.py`): `POST {GLM_BASE_URL}/web_search`, engine `search_std` (~0.01 CNY per call, `ZHIPU_SEARCH_ENGINE` to change), queries clipped to 70 characters on the mainland endpoint, `search-prime` on a Z.ai key. Results map to the same shape as before (title, url, snippet, date). One retry on a network error; a failure is an error, never an empty result, and never blocks the task.
-- Bocha stays as an optional fallback, used only if `BOCHA_API_KEY` is set. It is no longer in the required keys.
+## 2026-11-26, Web search on Zhipu (Z.ai)
+- Research search now uses Zhipu's Web Search API on the GLM key (`code/si_console/websearch.py`): `POST {GLM_BASE_URL}/web_search`, engine `search_std` (~0.01 CNY per call, `ZHIPU_SEARCH_ENGINE` to change), queries clipped to 70 characters on the mainland endpoint, `search-prime` on a Z.ai key. Results map to the same shape as before (title, url, snippet, date). One retry on a network error; a failure is an error, never an empty result, and never blocks the task.
 - Smoke check: shows the search setup and, in `--live`, runs one real search (a failure is a warning).
-- Not changed: the BOM line for DeepSeek and Bocha API credits (needs a source), and the ARCHITECTURE.md PROVIDERS text (owners).
+- Not changed: the BOM line for API credits (needs a source), and the ARCHITECTURE.md PROVIDERS text (owners).
 - 207 tests pass (was 195).
 
 ## 2026-11-26, Judge backup on Bailian, GLM 5.3 Flash
@@ -45,7 +48,7 @@ Dated log of decisions and revisions. Newest first.
 - 174 tests pass (was 163).
 
 ## 2026-11-24, BOM: soundbar, spare card, API credits
-- Restored the USB soundbar (25.99) and the spare microSD 32GB (27.99); added DeepSeek and Bocha API credits (40.00).
+- Restored the USB soundbar (25.99) and the spare microSD 32GB (27.99); added model and search API credits (40.00).
 - Fundable total 851.13 CAD before tax (was 757.15; the printed wedge removal had taken it from 767.15 to 757.15), 953.27 with tax. Over the 800 CAD team limit by 51.13.
 - The soundbar is not in the R5 CAD or wiring diagram yet.
 
@@ -78,7 +81,7 @@ Review of `code/`. 45 regression tests in `code/tests/test_regression_bugpass.py
 - `validate_tool_call` claimed to check enums but did not: enums, types, min/max, unknown fields, bool/NaN/inf amounts and `slides/../..` traversal are now rejected.
 - Kill/resume (ARCHITECTURE.md state machine: exit KILLED only by switch reset + one green press): releasing the switch auto-resumed the coordinator, and the in-memory pending approval survived a kill so green could approve a stale pre-kill proposal. Added a `resume_required` latch in the bridge and `state.json`; kill clears pending approvals; `request_approval` refuses while frozen; green ignores a still-latched switch and never revives a blocked or done task.
 - Coordinator re-reads kill state before every round (a kill mid-task used to wait for the next task) and `serve_forever` survives an unexpected task error (blocks that task, ESCALATE) instead of crash-looping under systemd.
-- DeepSeek and Bocha: httpx transport errors other than connect and timeout now become ModelError or an error dict instead of crashing the loop.
+- DeepSeek and web search: httpx transport errors other than connect and timeout now become ModelError or an error dict instead of crashing the loop.
 - `fetch_url` SSRF: the substring blocklist missed 169.254.169.254, 172.16/12, IPv6 loopback, 0.0.0.0, hosts resolving to private IPs and redirects, and wrongly blocked public URLs containing `10.`. Every hop is now resolved and must be a global address.
 - Voice intents: negations were case-sensitive, so STT text "Don't buy XLK" or "Never buy XLE" became a buy proposal. Reject phrases ("do not approve", "不要这个") were unreachable behind the negation check.
 - Rules engine: a sector with no price file got momentum 0 and was proposed in any falling market. No history now means no signal; no SPY history means hold cash.

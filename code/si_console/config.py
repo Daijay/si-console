@@ -73,25 +73,13 @@ DEEPSEEK_DAILY_CAP_USD = float(os.getenv("SI_DEEPSEEK_DAILY_CAP_USD", "5.0"))
 DEEPSEEK_MAX_TOKENS = int(os.getenv("SI_DEEPSEEK_MAX_TOKENS", "2000"))
 DEEPSEEK_TIMEOUT_SECONDS = int(os.getenv("SI_DEEPSEEK_TIMEOUT_SECONDS", "30"))
 
-# --- Bocha web search ----------------------------------------------------
-# Secret. From .env only. Never logged or returned.
-BOCHA_API_KEY = os.getenv("BOCHA_API_KEY", "").strip()
-# Two domains appear in sources: api.bochaai.com and api.bocha.cn.
-# Put the base URL in config, test both from Canada before travel,
-# test again in Shenzhen, use the one that answers. Do not hard code one.
-BOCHA_BASE_URL = os.getenv(
-    "BOCHA_BASE_URL", "https://api.bochaai.com/v1/web-search"
-).strip()
-BOCHA_TIMEOUT_SECONDS = int(os.getenv("SI_BOCHA_TIMEOUT_SECONDS", "15"))
-
 # --- Web search: Zhipu (Z.ai) Web Search API -----------------------------
 # Default research search, on the same key as GLM (GLM_API_KEY), so no
 # extra account. POST {GLM_BASE_URL}/web_search. Engines on the mainland
 # endpoint: search_std (basic, 0.01 CNY per call), search_pro (0.03),
 # search_pro_sogou, search_pro_quark (0.05 each). The international
 # Z.ai endpoint (api.z.ai) only has search-prime and is picked
-# automatically when GLM_BASE_URL points there. Bocha is used only as
-# a fallback, and only if BOCHA_API_KEY is set.
+# automatically when GLM_BASE_URL points there.
 ZHIPU_SEARCH_ENGINE = os.getenv("ZHIPU_SEARCH_ENGINE", "").strip() or "search_std"
 ZHIPU_SEARCH_TIMEOUT_SECONDS = int(os.getenv("SI_ZHIPU_SEARCH_TIMEOUT_SECONDS", "15"))
 

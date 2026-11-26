@@ -6,18 +6,22 @@ Prices in USD, to match the Fallen submission. Shipping is not included, except 
 
 | Item | USD |
 | --- | --- |
-| Fundable parts and API credits, before tax | 619.65 |
-| BC tax, 12% GST+PST (its own row in the CSV) | 74.36 |
-| **Fundable total, with tax** | **694.01** |
+| Fundable parts and API credits, before tax | 641.67 |
+| BC tax, 12% GST+PST (its own row in the CSV) | 77.00 |
+| **Fundable total, with tax** | **718.67** |
 | Self-funded (monitor, power brick, travel adapter), before tax | 89.70 |
 | Self-funded, with tax | 100.46 |
-| All-in with tax, before shipping and laser | 794.47 |
+| All-in with tax, before shipping and laser | 819.13 |
 
-Converted from the earlier CAD prices at 1.4296 CAD per USD, rounding each unit price to 2 decimals; the Custom PCB is the quoted US$10.84. The conversion does not re-check any store price, and the Canadian store pages show CAD. 33 fundable lines (two of them qty 0) plus the tax row. Status mix before tax, from the status column of the CSV: confirmed 356.05, unconfirmed 188.77, estimated 74.83. Notes on the self-funded `REF ONLY` rows still quote CAD.
+Converted from the earlier CAD prices at 1.4296 CAD per USD, rounding each unit price to 2 decimals; the Custom PCB is the quoted US$10.84. The conversion does not re-check any store price, and the Canadian store pages show CAD. 33 fundable lines (two of them qty 0) plus the tax row. Status mix before tax, from the status column of the CSV: confirmed 356.05, unconfirmed 188.77, estimated 96.85. Notes on the self-funded `REF ONLY` rows still quote CAD.
 
-**Limits:** the team limit (about 800) and hard max (900) were set in CAD. At 1.4296 the total is about 885.85 CAD before tax and 992.16 CAD with tax: over the team limit either way, and over the hard max if it counts tax.
+**Limits:** the team limit (about 800) and hard max (900) were set in CAD. At 1.4296 the total is about 917.33 CAD before tax and 1027.41 CAD with tax: over both the team limit and the hard max, even before tax.
 
 Amounts in the sections below are in CAD, as recorded at the time.
+
+## Changes on 2026-11-26
+
+The API credits line is now DeepSeek, Zhipu and Qwen at USD 50.00 (was USD 27.98). Tax is 77.00 and the fundable total is USD 718.67 including tax (was 694.01).
 
 ## Changes on 2026-11-25
 
@@ -29,7 +33,7 @@ Custom PCB and its parts added (34.68 CAD), total 851.13 to 885.81. The perfboar
 | --- | --- | --- |
 | USB soundbar, restored | 25.99 | Confirmed price. Not modelled in the R5 CAD yet |
 | Spare microSD 32GB, restored | 27.99 | Confirmed price and page |
-| API credits, DeepSeek and Bocha, new | 40.00 | Estimated budget amount. Top-up pages are behind sign-in |
+| API credits, new | 40.00 | Estimated budget amount. Top-up pages are behind sign-in |
 | Added | 93.98 | Total went from 757.15 to 851.13 |
 
 The two restored lines were not in the git history of `BOM.csv` (the repo starts after they were cut). Model, price, store and link come from `docs/SI_Console_Detailed.md` section 2.3.

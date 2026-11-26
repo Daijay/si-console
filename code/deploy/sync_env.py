@@ -98,7 +98,7 @@ def render(template: str, values: dict) -> tuple[str, list[str]]:
         else:
             out.append(f"{name}={default.strip()}")
     # Old names that are not in the template are kept only if they hold a
-    # value; an empty leftover line (e.g. BOCHA_API_KEY=) is dropped.
+    # value; an empty leftover line is dropped.
     extra = [n for n in values if n not in used and values[n] != ""]
     if extra:
         out += ["", "# --- Kept from your old .env (not in the template) ---"]

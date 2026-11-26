@@ -106,7 +106,7 @@ def main() -> None:
         title=sys.argv[1],
         bullets=sys.argv[2:],
         slide_count=3,
-        source_line="Task notes and Bocha search. See the task note for links.",
+        source_line="Task notes and web search. See the task note for links.",
     )
     print(json.dumps(result, indent=2))
 

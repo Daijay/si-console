@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import httpx
 import pytest
 
-from si_console import bocha, bridge, config, coordinator, deepseek_client, models
+from si_console import bridge, config, coordinator, deepseek_client, models, websearch
 from si_console import rules_engine, voice_intents
 from si_console.errors import GuardError, ModelError, ToolError
 from si_console.guard import GuardState, check_shell_command
@@ -290,14 +290,14 @@ def _fake_dns(mapping):
 )
 def test_fetch_url_blocks_private_targets(monkeypatch, url, ip):
     host = httpx.URL(url).host
-    monkeypatch.setattr(bocha.socket, "getaddrinfo", _fake_dns({host: ip}))
-    monkeypatch.setattr(bocha.httpx, "get", lambda *a, **k: pytest.fail("fetched"))
-    assert "error" in bocha.fetch_url(url)
+    monkeypatch.setattr(websearch.socket, "getaddrinfo", _fake_dns({host: ip}))
+    monkeypatch.setattr(websearch.httpx, "get", lambda *a, **k: pytest.fail("fetched"))
+    assert "error" in websearch.fetch_url(url)
 
 
 def test_fetch_url_rechecks_redirects(monkeypatch):
     monkeypatch.setattr(
-        bocha.socket,
+        websearch.socket,
         "getaddrinfo",
         _fake_dns({"public.example": "93.184.216.34", "127.0.0.1": "127.0.0.1"}),
     )
@@ -311,20 +311,20 @@ def test_fetch_url_rechecks_redirects(monkeypatch):
             request=httpx.Request("GET", url),
         )
 
-    monkeypatch.setattr(bocha.httpx, "get", fake_get)
-    result = bocha.fetch_url("https://public.example/v10.html")
+    monkeypatch.setattr(websearch.httpx, "get", fake_get)
+    result = websearch.fetch_url("https://public.example/v10.html")
     assert "error" in result
     assert hops == ["https://public.example/v10.html"]
 
 
 def test_fetch_url_allows_public_page_with_10_in_path(monkeypatch):
-    monkeypatch.setattr(bocha.socket, "getaddrinfo", _fake_dns({"public.example": "93.184.216.34"}))
+    monkeypatch.setattr(websearch.socket, "getaddrinfo", _fake_dns({"public.example": "93.184.216.34"}))
     monkeypatch.setattr(
-        bocha.httpx,
+        websearch.httpx,
         "get",
         lambda url, **k: httpx.Response(200, text="<p>ok</p>", request=httpx.Request("GET", url)),
     )
-    assert bocha.fetch_url("https://public.example/v10.html")["text"] == "ok"
+    assert websearch.fetch_url("https://public.example/v10.html")["text"] == "ok"
 
 
 # --- Voice intents ------------------------------------------------------

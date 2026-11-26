@@ -26,7 +26,7 @@ I wanted agents that can't just run wild. Most AI agents live in a window on you
 - Per-part STEP files: blueprints/R5/step/
 - Fusion source: [Fusion archive (R5)](cad/si_console_R5.f3d)
 - Firmware and agent code: code/
-- BOM with links: bom/BOM.csv (about USD 694 including tax, the main monitor was bought by me and is not in the fundable total)
+- BOM with links: bom/BOM.csv (about USD 719 including tax, the main monitor was bought by me and is not in the fundable total)
 
 ## Team
 - Jayden: system, hardware, CAD, integration

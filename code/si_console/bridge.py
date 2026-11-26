@@ -2,7 +2,7 @@
 # hardware. It watches the vault, updates screens and LEDs, routes
 # button events, and serves a local HTTP API. It does not trade. It
 # does not call an LLM for decisions. It does not call DeepSeek or
-# Bocha. Only the bridge touches GPIO, so no agent can touch hardware.
+# web search. Only the bridge touches GPIO, so no agent can touch hardware.
 # It watches the vault continuously, so the screens follow a change
 # without anyone asking. Watch method: watchdog with inotify first,
 # poll every 1 second as fallback, because the booth must keep working
