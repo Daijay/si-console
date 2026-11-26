@@ -1,5 +1,4 @@
-# The rules engine is new code. Autumn had no trading code at all.
-# This file is deterministic code, not an LLM. The LLM writes the
+# The rules engine is deterministic code, not an LLM. The LLM writes the
 # explanation. This file computes the numbers. That split is the
 # whole point: a rules engine is fast, testable, and repeatable. A
 # booth demo needs the same result every time. A local LLM must never
@@ -8,10 +7,9 @@
 # lookahead rule. It is tested by a unit test in tests/. The test
 # checks the max date used. If the engine ever reads a future close,
 # the test must fail. Price only. No news, no earnings, no
-# fundamentals in the ranking. Bocha is for background research
+# fundamentals in the ranking. Web search is for background research
 # notes only, never for the ranking itself.
-# Replay rules, from the previous blueprint, still open in the
-# architecture: weekly rebalance only, max 3 or 4 sectors, equal
+# Replay rules, not yet confirmed by the team: weekly rebalance only, max 3 or 4 sectors, equal
 # weight, cash reserve 5 or 10 percent, cost 0 in the demo and shown
 # on screen. This skeleton uses weekly, max 3, equal weight, 10
 # percent cash, cost 0, and says so in its output. The team must
