@@ -83,7 +83,13 @@ def zhipu_search(query: str, count: int = 5, freshness: str = "noLimit") -> dict
                 return {"error": f"Zhipu search not reachable ({type(exc).__name__}). Search is off."}
             continue
         if response.status_code != 200:
-            return {"error": f"Zhipu search error {response.status_code}{_error_message(response)}"}
+            from si_console.chat_client import _out_of_credit
+
+            message = _error_message(response)
+            if response.status_code == 402 or _out_of_credit(message):
+                return {"error": f"Zhipu account is out of credit ({response.status_code}){message}. "
+                                 "Top up the GLM account; search shares its balance."}
+            return {"error": f"Zhipu search error {response.status_code}{message}"}
         try:
             payload = response.json()
         except ValueError:
