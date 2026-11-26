@@ -1,21 +1,23 @@
-# BOM notes (Rev R5, updated 2026-11-24)
+# BOM notes (Rev R5, updated 2026-11-26)
 
-Prices CAD, before tax and shipping. Source file: `BOM.csv` (the only current BOM).
+Prices in USD, to match the Fallen submission. Shipping is not included, except on the Custom PCB line. Source file: `BOM.csv` (the only current BOM).
 
 ## Current totals
 
-| Item | CAD |
+| Item | USD |
 | --- | --- |
-| **Fundable total, before tax** | **885.81** |
-| Tax at 12 percent, estimated to apply to every line | 106.30 |
-| Fundable total, with tax | 992.11 |
-| Self-funded (monitor, power brick, travel adapter), before tax | 128.24 |
-| Self-funded, with tax | 143.63 |
-| All-in with tax, before shipping and laser | 1135.74 |
+| Fundable parts and API credits, before tax | 619.65 |
+| BC tax, 12% GST+PST (its own row in the CSV) | 74.36 |
+| **Fundable total, with tax** | **694.01** |
+| Self-funded (monitor, power brick, travel adapter), before tax | 89.70 |
+| Self-funded, with tax | 100.46 |
+| All-in with tax, before shipping and laser | 794.47 |
 
-Re-added from the 33 fundable lines of `BOM.csv`. Status mix of the fundable total, from the status column of the CSV: confirmed 508.98, unconfirmed 269.86, estimated 106.97. Do not treat the total as verified. Self-funded figures are copied from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`; those rows are `REF ONLY` (qty 0) in the CSV.
+Converted from the earlier CAD prices at 1.4296 CAD per USD, rounding each unit price to 2 decimals; the Custom PCB is the quoted US$10.84. The conversion does not re-check any store price, and the Canadian store pages show CAD. 33 fundable lines (two of them qty 0) plus the tax row. Status mix before tax, from the status column of the CSV: confirmed 356.05, unconfirmed 188.77, estimated 74.83. Notes on the self-funded `REF ONLY` rows still quote CAD.
 
-**Limits:** team limit about 800 CAD, hard max 900 CAD. 885.81 before tax is **85.81 over the team limit** and 14.19 under the hard max. With tax (992.11) it is 92.11 over the hard max, if the limit counts tax.
+**Limits:** the team limit (about 800) and hard max (900) were set in CAD. At 1.4296 the total is about 885.85 CAD before tax and 992.16 CAD with tax: over the team limit either way, and over the hard max if it counts tax.
+
+Amounts in the sections below are in CAD, as recorded at the time.
 
 ## Changes on 2026-11-25
 

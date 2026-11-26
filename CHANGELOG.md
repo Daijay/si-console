@@ -2,6 +2,11 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-26, BOM in USD
+- `bom/BOM.csv` converted from CAD to USD at 1.4296 (Custom PCB 10.84) to match the Fallen submission.
+- Fundable rows now carry a one-line purpose note; new BC tax row (74.36, 12% of 619.65).
+- Fundable total USD 694.01 including tax. README and BOM notes updated.
+
 ## 2026-11-26, Web search on Zhipu (Z.ai) instead of Bocha
 - A Bocha account could not be created, so research search now uses Zhipu's Web Search API on the GLM key (`code/si_console/websearch.py`): `POST {GLM_BASE_URL}/web_search`, engine `search_std` (~0.01 CNY per call, `ZHIPU_SEARCH_ENGINE` to change), queries clipped to 70 characters on the mainland endpoint, `search-prime` on a Z.ai key. Results map to the same shape as before (title, url, snippet, date). One retry on a network error; a failure is an error, never an empty result, and never blocks the task.
 - Bocha stays as an optional fallback, used only if `BOCHA_API_KEY` is set. It is no longer in the required keys.
