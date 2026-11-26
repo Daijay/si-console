@@ -1,14 +1,10 @@
-# This file is Autumn's autumn/groq_client.py, rewired for DeepSeek.
-# What changed: the provider is DeepSeek, reached through its OpenAI
-# compatible API at the base URL in config. The Groq SDK is gone.
-# This file uses plain httpx, not the OpenAI SDK, so the team can see
-# every request and every error. No new SDK to learn.
-# What stayed: the same error shape as groq_client.py, the same rule
-# that the key comes from .env and is never logged, echoed, or returned,
-# and the same schema constrained JSON path, which the coordinator loop
-# depends on. DeepSeek supports response_format json_object for JSON.
-# If DeepSeek ever drops json_object, this file must fail loudly, not
-# silently return prose where the caller expected an object.
+# DeepSeek calls for the coordinator. This is a thin wrapper over
+# chat_client.py, which does the HTTP, so every provider shares one
+# error shape. The key comes from .env and is never logged, echoed, or
+# returned. The coordinator loop depends on schema constrained JSON
+# (response_format json_object). If DeepSeek ever drops json_object,
+# this must fail loudly, not silently return prose where the caller
+# expected an object.
 # No API keys are in this file. The key comes from config only.
 """DeepSeek API layer. One prompt in, one text answer out."""
 

@@ -1,9 +1,8 @@
-# This file is Autumn's autumn/config.py, rewired for SI Console.
-# What changed: Gmail and OAuth are gone. Groq and Anthropic are gone.
-# DeepSeek is the only cloud model. Bocha is the web search provider.
-# New settings: vault layout, approval timeout, round limit, bridge port.
-# What stayed: settings come from .env with defaults, keys come from
-# .env only and are never logged, and model tiers live in one table.
+# Settings for SI Console. They come from .env with defaults. Keys come
+# from .env only and are never logged. Model tiers live in one table, so
+# a model changes in one place. Covers the cloud model providers, web
+# search, the vault layout, the approval timeout, the round limit and
+# the bridge port.
 # Secrets live in .env in the project folder. Never in git. Never in
 # the vault. Never on screen. The .env.example file shows the names only.
 """Settings for SI Console. Loaded from .env with sane defaults."""
@@ -23,7 +22,7 @@ load_dotenv(os.getenv("SI_ENV_FILE", "").strip() or PROJECT_ROOT / ".env")
 
 # --- Vault ---------------------------------------------------------------
 # The vault is the single source of truth for tasks. It lives on the Pi.
-# Autumn used AUTUMN_VAULT_PATH. SI Console uses SI_VAULT_PATH.
+# Set its location with SI_VAULT_PATH.
 # The .env.example file shows a Linux path, not a Windows path.
 _vault = os.getenv("SI_VAULT_PATH")
 VAULT_PATH = Path(_vault) if _vault else PROJECT_ROOT / "vault" / "si-console"
@@ -66,8 +65,8 @@ DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "").strip()
 # No DeepSeek pro model: it is not in the accepted roster
 # (docs/MODEL_TIERS.md). The heavy tier T1 is Qwen4 Max.
 
-# Cost cap. ARCHITECTURE.md has no daily cap, and INTEGRATION.md flags
-# that as a gap. This is the fix: a daily cap in USD, ASSUMED at 5.
+# Cost cap. The coordinator calls a paid API in a loop, so a daily cap
+# in USD limits what a fault can spend. The value of 5 is an estimate.
 # When the cap is hit, the coordinator stops calling DeepSeek, logs
 # COST_CAP_HIT, and the bridge shows it on screen. No silent loop.
 DEEPSEEK_DAILY_CAP_USD = float(os.getenv("SI_DEEPSEEK_DAILY_CAP_USD", "5.0"))
@@ -323,8 +322,8 @@ TELEMETRY_PATH = Path(
 )
 
 # --- Scheduler -----------------------------------------------------------
-# Copied from Autumn server.py and briefing.py. APScheduler, one job
-# per task, misfire grace 1 hour, coalesce true, max instances 1.
+# APScheduler, one job per task. A job missed by less than 1 hour still
+# runs, missed runs are merged into one, and a job never overlaps itself.
 BRIEFING_HOUR = int(os.getenv("SI_BRIEFING_HOUR", "11"))
 BRIEFING_MINUTE = int(os.getenv("SI_BRIEFING_MINUTE", "0"))
 SCHEDULER_MISFIRE_GRACE_SECONDS = int(
@@ -340,7 +339,7 @@ ALLOWED_TICKERS = {
 }
 
 # Shell commands the shell_run tool may run. Anything else is rejected
-# with SHELL_DENY. Copied from ARCHITECTURE.md section 5.2.
+# with SHELL_DENY, so a model can only run commands on this list.
 ALLOWED_SHELL_COMMANDS = {
     "python3 rules_engine.py",
     "python3 make_slides.py",

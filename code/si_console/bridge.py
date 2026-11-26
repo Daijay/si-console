@@ -1,28 +1,26 @@
-# The bridge is new code. Autumn had no bridge, no watcher, no GPIO,
-# and no external agent API. Autumn read the vault on demand. The
-# bridge watches it continuously. The bridge is a small Python
-# program. It watches the vault, updates screens and LEDs, routes
+# The bridge is a small Python program that connects the vault to the
+# hardware. It watches the vault, updates screens and LEDs, routes
 # button events, and serves a local HTTP API. It does not trade. It
 # does not call an LLM for decisions. It does not call DeepSeek or
-# Bocha. Only the bridge touches GPIO. No agent touches hardware.
-# Watch method, from ARCHITECTURE.md section 7: watchdog with
-# inotify first, poll every 1 second as fallback. Use polling in
-# booth mode if inotify fails. Handle created, modified, deleted,
-# and moved events. Debounce 200 ms after the last event. Keep a
-# hash map of file path to last parsed hash. Skip a file when the
-# hash did not change. Ignore .tmp files. Ignore a file while it is
-# being written. The bridge checks a file is stable for 200 ms
-# before parsing it.
+# Bocha. Only the bridge touches GPIO, so no agent can touch hardware.
+# It watches the vault continuously, so the screens follow a change
+# without anyone asking. Watch method: watchdog with inotify first,
+# poll every 1 second as fallback, because the booth must keep working
+# if inotify fails. Handle created, modified, deleted, and moved
+# events. Debounce 200 ms after the last event. Keep a hash map of file
+# path to last parsed hash and skip a file when the hash did not
+# change. Ignore .tmp files. A file must be stable for 200 ms before it
+# is parsed, so a half written note is never read.
 # Button rule: on a button press the bridge updates the task note,
 # not state.json only. The note is the truth. state.json follows.
-# API rules, from INTEGRATION.md section 8: token protected, Bearer
-# token from .env, home LAN only, off in booth mode, rate limit 10
-# requests per minute per token, max 1 claim at a time per agent.
-# External agents can claim research and narration tasks only. They
-# can never approve, never execute, never propose trades, never edit
-# code, never touch GPIO, never set a task to done for a trade task.
-# Kill cancels all claims at once. A write during kill returns 423.
-# Ports: bridge API 8001, dashboard 8000. Do not expose the API to
+# API rules: token protected, Bearer token from .env, home LAN only,
+# off in booth mode, rate limit 10 requests per minute per token, max
+# 1 claim at a time per agent. External agents can claim research and
+# narration tasks only. They can never approve, never execute, never
+# propose trades, never edit code, never touch GPIO, never set a task
+# to done for a trade task. Those actions belong to the person at the
+# buttons. Kill cancels all claims at once. A write during kill returns
+# 423. Ports: bridge API 8001, dashboard 8000. Do not expose the API to
 # the internet. Do not port forward it.
 """Bridge. Vault watcher, LEDs, buttons, and the external agent API."""
 
@@ -53,9 +51,9 @@ from si_console.vault import (
 # owns task state. state.json is a cache for the screens. If state
 # and the vault disagree, the vault wins on the next scan.
 kill_active = False
-# Set when the kill switch is pressed. KILLED exits only via switch
-# reset plus one green press (ARCHITECTURE.md state machine), so a
-# released switch alone never resumes work.
+# Set when the kill switch is pressed. Leaving the killed state takes a
+# switch reset and then one green press, so releasing the switch alone
+# never restarts work.
 resume_required = False
 approval_pending = False
 approval_task_id = ""
@@ -65,11 +63,13 @@ state_store = StateStore()
 claim_store = ClaimStore()
 
 # External agents may claim only these types. They cannot claim a
-# signal task, a risk_check task, or an order task. The bridge
-# enforces this by type. From INTEGRATION.md section 8.2, ASSUMED.
+# signal task, a risk_check task, or an order task, because those lead
+# to trades. The bridge enforces this by type. The list is a design
+# choice that has not been tried with a real agent yet.
 CLAIMABLE_TYPES = {"research", "narration"}
 
-# Rate limit, ASSUMED from INTEGRATION.md: 10 requests per minute.
+# Rate limit so one agent cannot flood the bridge: 10 requests per
+# minute. The number is an estimate.
 RATE_LIMIT_PER_MINUTE = 10
 
 
@@ -106,8 +106,8 @@ def _check_home_mode() -> None:
 # --- Vault watcher -------------------------------------------------------
 # The watcher keeps a hash map. If the hash did not change, skip the
 # file. If the file is a .tmp file, skip it. If the file changed less
-# than 200 ms ago, wait. This is the debounce and settle rule from
-# ARCHITECTURE.md section 7. The real build runs this with watchdog
+# than 200 ms ago, wait. This debounce and settle step stops a half
+# written note from being parsed. The real build runs this with watchdog
 # inotify. This skeleton shows the poll fallback, which is the same
 # logic, one second at a time, so the team can test it without
 # installing watchdog first.
@@ -179,7 +179,7 @@ def on_green_press() -> dict:
     The start screen rule: green picks 2020 only before any task
     exists, and only when the screen says CHOOSE SCENARIO. Once a
     task exists, green means approve. The screen must label the
-    buttons in both states. See ARCHITECTURE.md section 6.2.
+    buttons in both states, so a visitor knows what a press will do.
     """
     global approval_pending, approval_task_id, resume_required
     if kill_active:

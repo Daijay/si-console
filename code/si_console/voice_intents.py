@@ -1,10 +1,7 @@
-# Voice intents are new code, built from an Autumn idea, not Autumn
-# code. The idea is the deterministic handoff matcher in Autumn's
-# dashboard/src/handoff.js: negatives are checked first and win
-# outright, positives are a small fixed list, and no API call decides
-# the intent. A false positive is worse than a false negative, so the
-# matcher is conservative on purpose. The same shape is used here
-# for voice: a small fixed vocabulary, negatives win, no API call.
+# Maps spoken text to intents with a deterministic matcher: negatives are
+# checked first and win outright, positives are a small fixed list, and
+# no API call decides the intent. A false positive is worse than a false
+# negative, so the matcher is conservative on purpose.
 # Voice proposes only. Voice never executes. Voice never approves.
 # A voice reject only proposes a reject. The red button confirms it.
 # A voice stop only sets a software freeze flag. It does not replace
@@ -14,16 +11,16 @@
 # English and Chinese are both supported, with a fixed vocabulary in
 # each language, not free speech. If STT accuracy is low in a loud
 # booth, the fixed vocabulary is what saves it. The team must test
-# SenseVoice Small first, faster-whisper Base as fallback, per the
-# architecture. This file does not pick the STT model. It only maps
-# text to intents after STT has run.
+# SenseVoice Small first, faster-whisper Base as fallback. This file
+# does not pick the STT model. It only maps text to intents after STT
+# has run.
 """Voice intents. Fixed vocabulary, negatives win, no API call."""
 
 from __future__ import annotations
 
 import re
 
-# Intents, copied from ARCHITECTURE.md section 10.
+# The fixed list of intents.
 INTENTS = {
     "propose_sector_move",
     "ask_status",
@@ -36,7 +33,7 @@ INTENTS = {
 # Negatives, checked first. Any match means "not an intent", whatever
 # else is in the text. A question asks for input, it does not declare
 # an action. A negation cancels the action. A past tense report is
-# not a new proposal. Copied in shape from Autumn handoff.js.
+# not a new proposal.
 NEGATIVES_EN = [
     (re.compile(r"\?$"), "question"),
     # STT often capitalises the first word ("Don't buy XLK") and may

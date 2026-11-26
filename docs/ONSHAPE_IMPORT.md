@@ -84,22 +84,22 @@ Hasan uses Fusion 360. The same STEP files work there.
 6. Teammates open the shared link with their own Autodesk account and edit the same design.
 7. Fusion 360 is the source of truth for the real CAD. Hasan owns it. The Onshape document is the shared view and the backup.
 
-## 3. What is ASSUMED, and what Hasan must check in CAD
+## 3. What is estimated, and what Hasan must check in CAD
 
-Check every ASSUMED number against the real part before cutting or printing.
+Check every estimated number against the real part before cutting or printing.
 
 - Back panel cable cutouts moved in R3. R2 put them at Y 20 from the top of the panel, Z about 112 to 117. That is wrong for a bottom-mounted Pi. The Pi ports sit at Z about 12 to 16. R3 moves the cutouts to port height, Z centred 14. One shared slot for both micro-HDMI ports, X 61 to 90, because the two ports are only 13 mm apart at the centres and two separate 15 mm slots would overlap. USB-C slot X 46 to 56. The 2D R3 drawings match this. Confirm the exact X in CAD from the Pi mount position.
 - Kill switch body is 78.3 mm deep. That is 3.3 mm more than the 75 mm clear zone behind the front panel in R2. Nothing sits in that 3.3 mm in this model. Check the layout in CAD before cutting the case.
-- Mini screen wedge is a flat support block, 121 x 89.48 x 8 mm, ASSUMED. The BOM says 15 degrees. A 15 degree tilt does not fit the R2 flush cutout. Confirm the tilt in CAD. The wedge shape must change if the tilt stays.
+- Mini screen wedge is a flat support block, 121 x 89.48 x 8 mm, estimated. The BOM says 15 degrees. A 15 degree tilt does not fit the R2 flush cutout. Confirm the tilt in CAD. The wedge shape must change if the tilt stays.
 - Finger joints are not modelled. The panels are plain rectangles. See the 2D R3 drawings for the joint layout. Draw the joints in Fusion 360.
-- Case outer size 360 x 240 x 140 mm is ASSUMED, from R2. It is not a CAD result. Confirm before cutting.
-- Front panel hole centres are ASSUMED. Measure the real buttons with calipers and test in cardboard first.
+- Case outer size 360 x 240 x 140 mm is estimated, from R2. It is not a CAD result. Confirm before cutting.
+- Front panel hole centres are estimated. Measure the real buttons with calipers and test in cardboard first.
 - LED colour map: green COORD, white AGENT 1, blue AGENT 2, yellow GUARD.
-- Soundbar size is ASSUMED, 100 x 45 x 45 mm. No datasheet was found. The soundbar is a proposed budget cut. The monitor speakers over HDMI audio replace it. See the Overview doc for the totals with and without the cut.
-- Monitor tilt is 10 degrees, ASSUMED. Kickstand shape is ASSUMED.
-- Case fan position on the rear wall, centre X 320 Z 115, is ASSUMED.
-- Perfboard size and position, 80 x 60 mm, centre of the case, is ASSUMED.
-- Cooler footprint 47 x 44 mm is ASSUMED. GPIO header position is ASSUMED. Standoff heights are ASSUMED.
+- Soundbar size is estimated, 100 x 45 x 45 mm. No datasheet was found. The soundbar is a proposed budget cut. The monitor speakers over HDMI audio replace it. See the Overview doc for the totals with and without the cut.
+- Monitor tilt is 10 degrees, estimated. Kickstand shape is estimated.
+- Case fan position on the rear wall, centre X 320 Z 115, is estimated.
+- Perfboard size and position, 80 x 60 mm, centre of the case, is estimated.
+- Cooler footprint 47 x 44 mm is estimated. GPIO header position is estimated. Standoff heights are estimated.
 
 ## 4. Where the docs live
 

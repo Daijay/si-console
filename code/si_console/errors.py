@@ -1,7 +1,6 @@
-# This file holds the shared error shapes. It is copied from Autumn's
-# autumn/schema.py and autumn/models.py, which both use the same idea:
-# one error type per layer, with a message, a fix the user can act on,
-# and a status code. Callers never have to know which provider failed.
+# Shared error shapes: one error type per layer, each with a message, a
+# fix the user can act on, and a status code, so callers never have to
+# know which provider failed.
 # No secrets are ever put in an error message. Keys are never logged.
 """Shared error types. Every error carries a code, a message, and a remedy."""
 
@@ -24,7 +23,7 @@ class ConsoleError(Exception):
 
 
 class ModelError(ConsoleError):
-    """A DeepSeek call failed. Copied from Autumn models.ModelError."""
+    """A DeepSeek call failed."""
 
     def __init__(self, message: str, remedy: str = "", status: int = 502):
         super().__init__("MODEL_ERROR", message, remedy, status)
@@ -53,8 +52,8 @@ class ZeroPathNeeded(ModelError):
 class VaultError(ConsoleError):
     """A vault read or write could not be done safely.
 
-    Codes are copied from Autumn vault_writer.VaultWriteError, plus new
-    ones for frontmatter work that Autumn never did:
+    The code says what went wrong, so the caller can refuse the write
+    instead of guessing:
       no_vault, outside_vault, missing_file, unreadable, not_found,
       ambiguous, bad_frontmatter, bad_status, bad_dependency,
       duplicate_task, vault_conflict, vault_write_fail
@@ -81,9 +80,9 @@ class ToolError(ConsoleError):
 class SourceError(ConsoleError):
     """A source (vault scan, Bocha search, price file) failed.
 
-    Copied from Autumn autumn/schema.py SourceError. Autumn fails loudly
-    instead of showing an empty result, and SI Console keeps that rule.
-    A failed source must never produce a fake all clear.
+    It fails loudly instead of returning an empty result, because an
+    empty result looks like "nothing found". A failed source must never
+    produce a fake all clear.
     """
 
     def __init__(self, source: str, message: str, remedy: str = ""):

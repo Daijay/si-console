@@ -5,7 +5,7 @@ Date: 2026-11-23. Owners: Jayden (vault, bridge, GPIO, offline fallback, integra
 Christopher (router, policy, injection guard, telemetry, state machine code).
 
 The text in the sections below is the merged v1 spec as agreed by Jayden and
-Christopher. Section "Implementation gaps" at the end is a DRAFT reconciliation
+Christopher. Section "Implementation gaps" at the end is a provisional reconciliation
 with the current `code/` skeleton, added by the code review on 2026-11-23. It
 does not change the spec. It lists what the skeleton does not do yet.
 
@@ -97,7 +97,7 @@ Christopher owns router, policy, injection guard, telemetry, state machine code.
 
 ---
 
-## Implementation gaps (DRAFT, code review 2026-11-23)
+## Implementation gaps (provisional, code review 2026-11-23)
 
 The code in `code/` does not yet implement all of the
 above. This list is for planning. It does not change the authoritative spec.
@@ -120,7 +120,6 @@ above. This list is for planning. It does not change the authoritative spec.
 | External agents off in booth, claim research/narration only | Bridge API has `_check_home_mode()`, 10/min rate limit, `CLAIMABLE_TYPES = {research, narration}` | Already aligned. Claim TTL/heartbeat present in `state_store.py`. Owner: Jayden. |
 | Pin map has one source | Reconciled 2026-11-24: `docs/GPIO_PIN_MAP.md`, `code/si_console/gpio_map.py` and the R5 wiring diagram agree (AGENT 1 white, 100 ohm; grounds on the perfboard bus). | None. Owner decision: Jayden. |
 
-Cross-reference: `AGENTS.md` (repo rules and sources of truth), `docs/decisions.md`
-(open decisions), `llms.txt` (machine index). Missing integrations from older
-comments in `code/` that cite `ARCHITECTURE.md` and `INTEGRATION.md`: this file
-resolves `ARCHITECTURE.md`; `INTEGRATION.md` is still not in the repo.
+Cross-reference: `CONTRIBUTING.md` (repo rules and sources of truth) and
+`docs/decisions.md` (open decisions). `INTEGRATION.md`, which some documents
+mention, is not in the repo.

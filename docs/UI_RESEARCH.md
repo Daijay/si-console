@@ -2,29 +2,27 @@
 
 Feeds [UI_SPEC.md](UI_SPEC.md).
 
-**How to read the sources.** Web references below were read as search result summaries, not as full text. Treat their findings as LIKELY and open the link before quoting a number. Skill files marked installed were read in full. Star counts come from the GitHub API on 2026-11-25.
+**How to read the sources.** Web references below were read as search result summaries, not as full text. Treat their findings as unconfirmed and open the link before quoting a number. The guides in section 1 were read in full. Star counts come from the GitHub API on 2026-11-25.
 
-## 1. Skills installed in `.claude/skills/`
+## 1. Guides used
 
-Only Markdown and license files were copied. No install script or executable was run, and none of these needs credentials.
+Only Markdown and license files were read. No install script or executable was run, and none of these needs credentials. Copies are not kept in this repo; follow the links.
 
-| Skill | Source (pinned commit) | License | Used for | Where it was overruled |
+| Guide | Source (pinned commit) | License | Used for | Where it was overruled |
 |---|---|---|---|---|
 | frontend-design | [anthropics/skills @ e4bb5d9](https://github.com/anthropics/skills/tree/e4bb5d960d87126ff3b3a8af1a104b7db67560ba/skills/frontend-design) (200k stars) | Apache 2.0 | Direction planning, avoiding template looks, plain screen copy | Capital state words and agent names stay because the brief and the panel labels ask for them |
-| web-design-guidelines | [vercel-labs/agent-skills @ 5a37a63](https://github.com/vercel-labs/agent-skills/tree/5a37a6329fbad3666c3207392a6a7c0110e92efb/skills/web-design-guidelines) (35k) | MIT | Review checklist: reduced motion, `color-scheme`, `aria-live`, no `transition: all`, tabular numbers, `Intl` formats | Sentence case instead of Title Case; no pause control on kiosk loops. Bundled rules file matches the SHA-256 stated in the skill |
+| web-design-guidelines | [vercel-labs/agent-skills @ 5a37a63](https://github.com/vercel-labs/agent-skills/tree/5a37a6329fbad3666c3207392a6a7c0110e92efb/skills/web-design-guidelines) (35k) | MIT | Review checklist: reduced motion, `color-scheme`, `aria-live`, no `transition: all`, tabular numbers, `Intl` formats | Sentence case instead of Title Case; no pause control on kiosk loops. Rules file matched the SHA-256 stated in the guide |
 | baseline-ui | [ibelick/ui-skills @ 7ef0076](https://github.com/ibelick/ui-skills/tree/7ef0076fce1dfa39dd2bc43b7dc13add6eda8a41/skills/baseline-ui) (11k) | MIT | Compositor-only motion, clear empty states, no decorative gradients | Tailwind and React rules ignored (plain CSS stack). The hatched fault band is a hard-edged repeating gradient used as a pattern |
 | fixing-accessibility | [same repo](https://github.com/ibelick/ui-skills/tree/7ef0076fce1dfa39dd2bc43b7dc13add6eda8a41/skills/fixing-accessibility) | MIT | Names on icons and meters, native elements, contrast, states not carried by colour alone | None |
 | fixing-motion-performance | [same repo](https://github.com/ibelick/ui-skills/tree/7ef0076fce1dfa39dd2bc43b7dc13add6eda8a41/skills/fixing-motion-performance) | MIT | Pi 5 motion budget | None |
 | animation-performance | [emilkowalski/skills @ 64eb3de](https://github.com/emilkowalski/skills/tree/64eb3deb9a5fbfa041faf783e0bc3fd635872e9c/skills/animation-performance) (59k) | MIT | Choosing CSS over JavaScript loops, `transform` and `opacity` only | None |
-| review-animations | [same repo](https://github.com/emilkowalski/skills/tree/64eb3deb9a5fbfa041faf783e0bc3fd635872e9c/skills/review-animations) | MIT | Review of the motion spec: ease-out entrances, short UI transitions | Its pointer to a `choreograph` skill is unused (not installed) |
+| review-animations | [same repo](https://github.com/emilkowalski/skills/tree/64eb3deb9a5fbfa041faf783e0bc3fd635872e9c/skills/review-animations) | MIT | Review of the motion spec: ease-out entrances, short UI transitions | Its pointer to a `choreograph` guide is unused |
 
-One edit to upstream text: a parenthetical in `frontend-design/SKILL.md` was reworded to drop a vendor's name. See `CHANGES.txt` in that folder.
+Two further guides were also consulted: an anti-template-design checklist and a data-visualisation guide (used for the cost and judge meters: one hue, direct labels).
 
-Two skills already on the design workstation were also consulted and not copied into the repo: a local anti-template-design checklist and a local data-visualisation guide (used for the cost and judge meters: one hue, direct labels).
+## 2. Guides found and not used
 
-## 2. Skills found and not installed
-
-| Skill or list | Why not |
+| Guide or list | Why not |
 |---|---|
 | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (116k) | Ships scripts and a command line tool that would all need reading first |
 | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (154k) | Python search scripts and a generic style database |
@@ -33,7 +31,7 @@ Two skills already on the design workstation were also consulted and not copied 
 | anthropics/skills: [theme-factory](https://github.com/anthropics/skills/tree/main/skills/theme-factory), [webapp-testing](https://github.com/anthropics/skills/tree/main/skills/webapp-testing), [canvas-design](https://github.com/anthropics/skills/tree/main/skills/canvas-design), [web-artifacts-builder](https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder), [brand-guidelines](https://github.com/anthropics/skills/tree/main/skills/brand-guidelines) | Slide themes, Python test helpers, static art, a React bundler and a vendor brand. A small Playwright script covered testing |
 | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) React and deploy skills | No React, no deployment |
 | [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) (3.2k) | Described as a large bundle, more than a two screen kiosk needs; not opened |
-| [kylezantos/design-motion-principles](https://github.com/kylezantos/design-motion-principles) (1.6k) | Overlaps the two installed motion skills |
+| [kylezantos/design-motion-principles](https://github.com/kylezantos/design-motion-principles) (1.6k) | Overlaps the two motion guides used |
 | [chrisvoncsefalvay/claude-d3js-skill](https://github.com/chrisvoncsefalvay/claude-d3js-skill) (256) | No license reported, no D3 here |
 | [abdiraimov-otabek/dashboard-design-skill](https://github.com/abdiraimov-otabek/dashboard-design-skill) (1.2k), [oil-oil/draw-ui](https://github.com/oil-oil/draw-ui) (572), [joepUI/motion-ref-skill](https://github.com/joepUI/motion-ref-skill) (9) | Less established sources; not opened |
 | Indexes: [ComposioHQ](https://github.com/ComposioHQ/awesome-claude-skills), [BehiSecc](https://github.com/BehiSecc/awesome-claude-skills), [travisvn](https://github.com/travisvn/awesome-claude-skills), [VoltAgent](https://github.com/VoltAgent/awesome-agent-skills), [romanticamaj motion list](https://github.com/romanticamaj/awesome-ui-motion-skills), [zhuyansen design list](https://github.com/zhuyansen/awesome-claude-design-skills) | Lists used to find candidates; nothing to install |
@@ -59,7 +57,7 @@ Two skills already on the design workstation were also consulted and not copied 
 
 ## 4. Principles
 
-1. **One second, two metres.** Screen pitch is about 0.135 mm per pixel on the 5 inch panel (108 mm active width, ASSUMED from the 800x480 module) and 0.18 mm on the monitor. B612 Bold capitals are 0.76 of the font size. A 146 px word is therefore about 15 mm tall, 26 arcminutes at 2 m. A 30 px label is about 3 mm, readable only up close. So only the state word, colour fields and position are designed for 2 m.
+1. **One second, two metres.** Screen pitch is about 0.135 mm per pixel on the 5 inch panel (108 mm active width, estimated from the 800x480 module) and 0.18 mm on the monitor. B612 Bold capitals are 0.76 of the font size. A 146 px word is therefore about 15 mm tall, 26 arcminutes at 2 m. A 30 px label is about 3 mm, readable only up close. So only the state word, colour fields and position are designed for 2 m.
 2. **Colour is state, and it matches the hardware.** Agent hue = panel LED. Solid = working, slow blink = queued, dashed with fast blink = blocked, dark = idle, grey = frozen. Red = reject or kill. White hatching = something is broken.
 3. **Motion means change.** A loop runs only where something is alive or waiting. The kill screen appears instantly and does not move.
 4. **Hierarchy.** State word, then the action, then who asked and how risky, then evidence.

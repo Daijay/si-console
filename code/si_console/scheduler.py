@@ -1,19 +1,16 @@
-# The scheduler is Autumn's server.py lifespan and briefing scheduler,
-# rewired for SI Console. What stayed: APScheduler AsyncIOScheduler
-# with CronTrigger, misfire grace 1 hour, coalesce true, max
-# instances 1, and the warning from the audit that FastAPI ignores
-# @app.on_event handlers once a lifespan is supplied, so everything
-# must start from the lifespan handler. One scheduler, started once.
-# What changed: the 11am daily briefing is now a replay clock and a
-# daily agent summary. Gmail refresh is gone. The briefing content
-# changes from mail to agent runs. The rule from Autumn briefing.py
-# stays: a failed source never produces a fabricated all clear. A
-# failed replay must say it failed, never show a fake score.
+# The scheduler runs the replay clock and the daily agent summary. It
+# uses APScheduler AsyncIOScheduler with CronTrigger, misfire grace 1
+# hour, coalesce true and max instances 1, so a late job runs once and
+# never overlaps itself. FastAPI ignores @app.on_event handlers once a
+# lifespan is supplied, so everything must start from the lifespan
+# handler. One scheduler, started once.
+# A failed source never produces a fabricated all clear: a failed
+# replay must say it failed, never show a fake score.
 # The replay clock advances one trading day per tick in demo mode,
 # or one day per button press in interactive mode. The team must pick
 # one and test it. This skeleton defaults to manual, one day per
 # button press, because that is more interactive at a booth.
-"""Scheduler. Replay clock and daily summary, from Autumn's shape."""
+"""Scheduler. Replay clock and daily summary."""
 
 from __future__ import annotations
 
@@ -55,7 +52,7 @@ def advance_replay(current: date) -> date:
 
 def daily_summary_job() -> dict:
     """Build the daily agent summary. One JSON file per run, pruned
-    to 7 days, the same storage shape as Autumn BriefingStore.
+    to 7 days so the folder does not grow without limit.
 
     The summary lists tasks done, tasks blocked, and the portfolio
     value. It never invents a score. If the portfolio file cannot be
@@ -77,7 +74,7 @@ def daily_summary_job() -> dict:
     import json
 
     path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    # Prune to 7 days, same rule as Autumn BriefingStore.
+    # Prune to 7 days so old summaries do not pile up on the card.
     for old in sorted(out_dir.glob("*.json"))[:-7]:
         old.unlink(missing_ok=True)
     return summary

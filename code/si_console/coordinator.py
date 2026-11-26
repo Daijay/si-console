@@ -1,10 +1,7 @@
-# The coordinator loop is new code. Autumn had no coordinator loop.
-# Its chat orchestrator had handoff detection, and the audit says to
-# reuse that idea, not that code. Handoff detection in Autumn was a
-# deterministic matcher in dashboard/src/handoff.js. The same idea
-# lives here as a fixed action menu: the model picks from a menu,
-# code validates the pick, and plain text never executes anything.
-# The loop is copied step by step from ARCHITECTURE.md section 4.1.
+# The coordinator loop. The model picks from a fixed action menu, code
+# validates the pick, and plain text never executes anything. That keeps
+# a confused or prompt injected model from doing something that is not
+# on the menu.
 # A round is one DeepSeek call plus its tool executions. Max 3 rounds
 # per task, then it escalates to the human. No fourth call for that
 # task. The coordinator never retries a blocked task on its own.
@@ -73,9 +70,9 @@ class LoopResult:
 
 
 def validate_action(action: dict, task: TaskNote) -> None:
-    """Validate one coordinator action, in the order ARCHITECTURE.md
-    section 4.4 lists. A rejected reply never runs a tool. A rejected
-    reply never changes a task status, except to log the error."""
+    """Validate one coordinator action before anything happens. A rejected
+    reply never runs a tool. A rejected reply never changes a task
+    status, except to log the error."""
     if not isinstance(action, dict):
         raise ToolError("BAD_JSON", "Action is not a JSON object.")
     name = action.get("action")
@@ -196,7 +193,8 @@ def run_task(task_id: str, guard_state: GuardState, pane: str | None = None) -> 
         # The tool results go back into the next prompt. This is a
         # skeleton, so the results are logged, not re-sent as full
         # DeepSeek message history. The real build must keep the
-        # message list and append tool results to it, per section 4.1.
+        # message list and append tool results to it, so the model can
+        # see what its last call returned.
         messages += "\n" + "\n".join(log_lines[-3:])
         task = read_note(task_id)
         if task.status == "done":
