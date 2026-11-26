@@ -197,7 +197,10 @@ def check_keys() -> list[Check]:
             elif info["model"] in listed:
                 out.append(Check(PASS, f"model {slot}", f"{info['model']} is listed"))
             else:
-                near = [m for m in listed if m.split("-")[0] == info["model"].split("-")[0]][:5]
+                family = info["model"].split("-")[0].lower()
+                near = [m for m in listed if m.lower().startswith(family)][:8]
+                if info["model"].lower() in [m.lower() for m in listed]:
+                    near = [m for m in listed if m.lower() == info["model"].lower()]
                 out.append(Check(WARN, f"model {slot}",
                                  f"{info['model']} is not in {label}'s list"
                                  + (f"; listed: {', '.join(near)}" if near else "")))
