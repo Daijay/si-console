@@ -82,7 +82,7 @@ class FakeHTTP:
 
 HOSTS = {
     "deepseek": "api.deepseek.com",
-    "hunyuan": "api.hunyuan.cloud.tencent.com",
+    "hunyuan": "tokenhub.tencentcloudmaas.com",
     "glm": "open.bigmodel.cn",
     "dashscope": "cn-hongkong.dashscope.aliyuncs.com",
     "mimo": "api.xiaomimimo.com",

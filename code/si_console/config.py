@@ -128,10 +128,17 @@ LANG = os.getenv("SI_LANG", "en").strip()  # en or zh
 # (LIKELY: docs read, no live call yet). Test one live call per
 # provider from Shenzhen before the booth.
 
-# Tencent Hunyuan (Hy4). T0 backup #1, T2 primary.
+# Tencent Hunyuan (Hy4). T0 backup #1, T2 primary. Tencent moved Hunyuan
+# API keys to TokenHub (console.cloud.tencent.com/tokenhub/apikey).
+# TokenHub has two independent sites and a key only works on its own:
+#   Guangzhou (mainland, default here for the Shenzhen booth):
+#     https://tokenhub.tencentcloudmaas.com/v1
+#   Singapore (global): https://tokenhub-intl.tencentcloudmaas.com/v1
+# The old https://api.hunyuan.cloud.tencent.com/v1 rejects TokenHub keys.
+# Model ids are TokenHub's (e.g. hy4-preview); check its model list.
 HUNYUAN_API_KEY = os.getenv("HUNYUAN_API_KEY", "").strip()
 HUNYUAN_BASE_URL = (
-    os.getenv("HUNYUAN_BASE_URL", "").strip() or "https://api.hunyuan.cloud.tencent.com/v1"
+    os.getenv("HUNYUAN_BASE_URL", "").strip() or "https://tokenhub.tencentcloudmaas.com/v1"
 )
 HY4_MODEL = os.getenv("HY4_MODEL", "").strip()
 
