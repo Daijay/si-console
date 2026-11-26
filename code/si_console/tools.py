@@ -1,13 +1,11 @@
-# The tool registry is new code. Autumn had no tool calling at all.
-# Its claude.py says "No tools and no conversation history yet".
 # This file is the single place where tools are defined, tagged, and
 # checked. The coordinator never calls a tool directly. It asks the
 # registry, the registry validates the call, GUARD checks it, then
 # the tool runs. The LLM cannot change a tag. The LLM cannot add a
-# tool. A tool that is not in this file does not exist.
-# Tool names and tags are copied exactly from ARCHITECTURE.md section 5.
-# Tool permission table by role is copied exactly from section 5.8.
-# If ARCHITECTURE.md changes a tag, change it here and nowhere else.
+# tool. A tool that is not in this file does not exist. One list means
+# there is only one place to review what an agent is able to do.
+# Each tool's tag and each role's permission table are defined here and
+# nowhere else.
 """Tool registry. Every tool, its tag, its schema, and its role list."""
 
 from __future__ import annotations
@@ -24,7 +22,7 @@ from si_console.errors import ToolError
 SAFE = "SAFE"
 NEEDS_APPROVAL = "NEEDS APPROVAL"
 
-# Fixed action menu, copied exactly from ARCHITECTURE.md section 4.2.
+# Fixed action menu.
 # The coordinator may pick only these actions. Anything else is
 # rejected by code with BAD_ACTION.
 FIXED_MENU = {
@@ -74,7 +72,7 @@ def _schema(properties: dict, required: list) -> dict:
     }
 
 
-# v1 tool list, copied from ARCHITECTURE.md section 5. Each tool has
+# v1 tool list. Each tool has
 # a schema. Extra fields are dropped, not passed through. Unknown
 # fields cause the reply to be rejected with BAD_SCHEMA.
 TOOLS: dict[str, Tool] = {
@@ -298,7 +296,7 @@ def tag_for_write(path: str) -> str:
 
     Order and portfolio notes need approval. Research and log notes
     do not. The LLM cannot change this. The path decides, not the
-    caller. This is the rule from ARCHITECTURE.md section 5.1.
+    caller, so a model cannot talk its way past approval.
     """
     # Fail closed: only a path that is clearly a research or log note
     # is SAFE. "tasks/x.md" with no leading slash, "./tasks/x.md", or
@@ -315,7 +313,7 @@ def tag_for_status(task_type: str, new_status: str) -> str:
     """The tag for update_task_status depends on what is changing.
 
     Done on an order task needs approval. Working or blocked does
-    not. This is the rule from ARCHITECTURE.md section 5.5.
+    not, because only closing an order has a real effect.
     """
     if task_type == "order" and new_status == "done":
         return NEEDS_APPROVAL

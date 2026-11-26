@@ -1,16 +1,14 @@
-# This file is Autumn's autumn/context.py, repointed at task notes.
-# What stayed: compress before the model sees it. Tasks are the source
-# of truth, so all of them in the chain go in. Snippets are clipped.
-# Totals are stated honestly, so the model never implies it saw
-# everything. Failures are visible to the model, so a failed source
-# never produces a fake all clear. Autumn measured a 12208 token raw
-# feed compressed to 1233 tokens. The same idea matters more here,
-# because the coordinator calls the model in a loop, up to 3 rounds.
-# What changed: Autumn compressed a mail feed. This file compresses
-# a task chain plus the portfolio note. There is no mail here. The
-# chain is the last 5 task notes, plus the portfolio, plus the current
-# task. The coordinator never reads the whole vault. That caps the
-# prompt size and the cost, per ARCHITECTURE.md section 8.4.
+# Builds the context the coordinator sends to the model. Everything is
+# compressed before the model sees it. Tasks are the source of truth,
+# so all of them in the chain go in. Snippets are clipped. Totals are
+# stated honestly, so the model never implies it saw everything.
+# Failures are visible to the model, so a failed source never produces
+# a fake all clear. Compression matters because the coordinator calls
+# the model in a loop, up to 3 rounds, and every extra token is paid
+# for each time.
+# The input is a task chain plus the portfolio note: the last 5 task
+# notes, the portfolio, and the current task. The coordinator never
+# reads the whole vault. That caps the prompt size and the cost.
 """Compress the task chain into a short prompt for the model."""
 
 from __future__ import annotations

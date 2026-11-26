@@ -1,9 +1,9 @@
-# The Bocha client is new code. Autumn had no web search client.
-# The tool is web_search, tag SAFE, per ARCHITECTURE.md section 5.4.
-# Rules from the architecture: search is research only. Results never
-# change a ranking. They never trigger an order. On failure, return
-# an error object, do not retry more than once, and do not block the
-# task. The agent says NO SEARCH RESULTS on screen and continues.
+# Bocha web search client, tool name web_search, tagged SAFE because
+# searching changes nothing. Search is research only: results never
+# change a ranking and never trigger an order, so web text cannot move
+# the portfolio. On failure it returns an error object, retries at most
+# once and does not block the task, because a booth demo must keep
+# going. The agent says NO SEARCH RESULTS on screen and continues.
 # The base URL is in config, not hard coded here. Two domains appear
 # in sources, api.bochaai.com and api.bocha.cn. Test both from Canada
 # before travel, test again in Shenzhen, use the one that answers.

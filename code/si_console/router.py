@@ -1,5 +1,6 @@
-# ROUTER, per ARCHITECTURE.md FLOW and docs/MODEL_TIERS.md. It is the
-# only component that selects a model, and it runs twice:
+# ROUTER, following docs/MODEL_TIERS.md. It is the only component that
+# selects a model, so model choice and cost are decided in one place.
+# It runs twice:
 #   1. at intake: orchestrator_for(pane) -> the pane's T0 plan;
 #   2. per task:  route(prompt, skill) -> worker tier T1, T2 or T3,
 #      then dispatch() calls that tier through models.complete with

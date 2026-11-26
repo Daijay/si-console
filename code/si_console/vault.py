@@ -1,18 +1,13 @@
-# This file is new code built from two Autumn patterns, not a copy.
-# Pattern 1, from autumn/vault_writer.py: the write is atomic, temp
-# file in the same folder then os.replace, so a crash can never leave
-# a half written note. Refuse rather than guess. Error codes included.
-# Pattern 2, from autumn/chats.py: one JSON file per chat, atomic
-# write, path guard on ids. The same guard shape is used here for ids.
-# What is new: Autumn only flipped one checkbox character. SI Console
-# edits YAML frontmatter status, so the whole note is rebuilt and
-# written back. Autumn's scanner only read "- [ ]" lines. This file
-# parses frontmatter, status, depends_on, and wikilinks in the body.
-# Autumn had no watcher. The bridge watches the vault, not this file.
+# Reads and writes the task notes. Writes are atomic: a temp file in the
+# same folder, then os.replace, so a crash can never leave a half written
+# note. When in doubt it refuses rather than guesses, with an error code.
+# Ids pass a path guard. A status change edits the YAML frontmatter, so
+# the whole note is rebuilt and written back. The file also parses
+# status, depends_on, and wikilinks in the body.
 # This file only reads and writes notes. It never watches the folder.
-# Test first: Autumn's vault writes are flagged test first in the
-# audit, because this frontmatter edit is new code and two writers
-# (coordinator and bridge) can race. See tests/test_vault_write.py.
+# The bridge does that.
+# Two writers (coordinator and bridge) can race on the same note, so
+# change the write path test first. See tests/test_vault_write.py.
 """Vault notes. Read, write, and list task notes by frontmatter.
 
 The vault is the single source of truth for tasks. state.json is a
@@ -37,7 +32,7 @@ import yaml
 from si_console import config
 from si_console.errors import VaultError
 
-# Frontmatter values, copied exactly from ARCHITECTURE.md section 8.2.
+# Allowed frontmatter values.
 # A value outside these lists is rejected, not silently accepted.
 AGENTS = {"signal", "risk", "execution", "coordinator"}
 STATUSES = {"queued", "working", "blocked", "done"}
@@ -45,7 +40,7 @@ TYPES = {"signal", "risk_check", "order", "narration", "research"}
 MODES = {"home", "booth"}
 RISK_CHECKS = {"pass", "fail", ""}
 
-# Reason codes, copied exactly from ARCHITECTURE.md section 8.2.
+# Reason codes. A fixed list, so the screens can show each one.
 REASON_CODES = {
     "MAX_SECTOR", "MAX_DRAWDOWN", "TOO_MUCH_TURNOVER", "CASH_LOW",
     "CRASH_STOP", "HUMAN_REJECT", "ROUND_LIMIT", "BAD_OUTPUT", "BAD_JSON",
@@ -95,7 +90,7 @@ def _resolve_target(rel_path: str, root: Path) -> Path:
 
     The path can arrive from an external agent, so it is treated as
     untrusted. A crafted value must not let anyone edit files outside
-    the vault. Same idea as Autumn vault_writer._resolve_target.
+    the vault.
     """
     target = Path(rel_path)
     if target.is_absolute():
@@ -149,7 +144,7 @@ class TaskNote:
     body: str = ""
 
     def to_frontmatter(self) -> dict:
-        """Frontmatter dict, in the order ARCHITECTURE.md lists it."""
+        """Frontmatter dict, in a fixed order so notes stay easy to compare."""
         return {
             "id": self.id,
             "agent": self.agent,
@@ -242,7 +237,7 @@ def parse_note(text: str, task_id: str = "") -> TaskNote:
 
 
 def _write_atomic(target: Path, text: str) -> None:
-    """Replace the note in one step. Copied from Autumn vault_writer.
+    """Replace the note in one step.
 
     Write the full new file to a temp file in the same folder, flush,
     fsync, rename to the live name, fsync the folder if the OS allows
@@ -365,8 +360,8 @@ def list_tasks(status: str = "", agent: str = "") -> list[TaskNote]:
 
     The bridge uses this on start to rebuild state.json. The
     coordinator uses it to find the next queued task. This reads the
-    vault on demand. Autumn had no watcher, and this file has none
-    either. Watching is the bridge's job.
+    vault on demand. This file has no watcher. Watching is the
+    bridge's job.
     """
     root = _vault_root()
     folder = root / TASK_DIR
@@ -429,8 +424,8 @@ def append_log(note: TaskNote, line: str) -> None:
 
 
 def new_task_body(summary: str, numbers: str, next_step: str, deps: list) -> str:
-    """Build the body of a new task note, in the order ARCHITECTURE.md
-    section 8.2 lists: Summary, Numbers, Next, Log. Each dependency
+    """Build the body of a new task note, with sections in this order:
+    Summary, Numbers, Next, Log. Each dependency
     is a [[wikilink]] so Obsidian's graph shows the agent chain."""
     links = "\n".join(f"- [[{dep}]]" for dep in deps)
     parts = [

@@ -1,5 +1,6 @@
-# Web search for research, per ARCHITECTURE.md: research only, never a
-# trading signal, and text from the web is data, never instructions.
+# Web search for research only. It is never a trading signal, and text
+# from the web is data, never instructions, because a web page could try
+# to steer the agent.
 # Provider order:
 #   1. Zhipu (Z.ai) Web Search API on the GLM key (GLM_API_KEY). Works
 #      from mainland China; no extra account.

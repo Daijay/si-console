@@ -6,7 +6,7 @@ Figures come from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`. "Fin
 
 ### 1. Case material
 - Options: clear laser-cut acrylic, or nylon print at JLCPCB.
-- Cost: acrylic about 103 to 153 CAD with laser, files go today, arrives by Dec 2. Nylon about 125 to 145 CAD all in (ASSUMED), 1 to 2 days of redesign, likely misses Dec 1.
+- Cost: acrylic about 103 to 153 CAD with laser, files go today, arrives by Dec 2. Nylon about 125 to 145 CAD all in (estimated), 1 to 2 days of redesign, likely misses Dec 1.
 - Recommendation: acrylic now, nylon as a second case later.
 - Final choice: R4 builds the case as clear 3 mm laser-cut acrylic with finger joints (360 x 240 x 140 mm outer). Not yet signed off by the team.
 
@@ -27,7 +27,7 @@ The 122 x 90.5 mm cutout is the full module size, so the screen would fall throu
 1. Cut to the visible display area and screw the module underneath.
 2. Keep the full cutout and add a printed bezel on top.
 
-R4 decision: option 1 is the default. The top panel window is the visible display area only (109 x 66 mm, ASSUMED) with 4 M2.5 screw holes, and the module hangs under the panel on 3 mm printed spacers. Option 2 is a switch (`SCREEN_MODE = "bezel"` in `cad/params.py`) that gives the full cutout plus a printed bezel STL. Still to do: measure the visible area and the module hole positions on the real Waveshare board.
+R4 decision: option 1 is the default. The top panel window is the visible display area only (109 x 66 mm, estimated) with 4 M2.5 screw holes, and the module hangs under the panel on 3 mm printed spacers. Option 2 is a switch (`SCREEN_MODE = "bezel"` in `cad/params.py`) that gives the full cutout plus a printed bezel STL. Still to do: measure the visible area and the module hole positions on the real Waveshare board.
 
 ### OPEN 2. Soundbar cut (owner: Hasan, drawings) - R4 DECIDED
 If the soundbar cut is applied (use monitor speakers over HDMI), remove the speaker grille holes and the soundbar from the drawings. The BOM already has the cut applied. `blueprints/3d/soundbar.step` and the R3 assembly still include it.
@@ -44,12 +44,12 @@ AGENT 1 changes from red to white. Red stays for reject and kill only. Update dr
 
 R4: the CAD uses COORD green, AGENT 1 white, AGENT 2 blue, GUARD yellow, left to right.
 
-R4.1: AGENT 1 white resistor = 100 ohm (Jayden). `docs/GPIO_PIN_MAP.md` has a dated R4.1 section with the math, and `blueprints/2d/electrical-schematic.svg` shows AGENT 1 white, 100 ohm, Vf 3.2 V ASSUMED. The white Vf is still to be measured on the bench like the other colours.
+R4.1: AGENT 1 white resistor = 100 ohm (Jayden). `docs/GPIO_PIN_MAP.md` has a dated R4.1 section with the math, and `blueprints/2d/electrical-schematic.svg` shows AGENT 1 white, 100 ohm, Vf 3.2 V estimated. The white Vf is still to be measured on the bench like the other colours.
 
 ### OPEN 5. Laser cut file source (owner: Hasan) - R4 supplies a candidate DXF, review pending
 R3 drawings are superseded. The laser cut file must come from Hasan's Fusion model as DXF or SVG cut lines.
 
-R4: `cad/build.py` now generates DXF cut files with kerf applied, plus a nested layout on 4 sheets of 12 x 16 inch stock (`blueprints/R4/dxf/`). They are NOT ready to cut until Hasan reviews them against his Fusion model and the ASSUMED dimensions in `cad/output/ASSUMED.md` are measured with calipers.
+R4: `cad/build.py` now generates DXF cut files with kerf applied, plus a nested layout on 4 sheets of 12 x 16 inch stock (`blueprints/R4/dxf/`). They are NOT ready to cut until Hasan reviews them against his Fusion model and the estimated dimensions in `cad/output/ASSUMED.md` are measured with calipers.
 
 ## C. Rev R4 summary (2026-11-23)
 
@@ -65,11 +65,11 @@ What R4 decided, as defaults that are each a switch in `cad/params.py`:
 
 Not decided by R4: model router (section A.3), BOM changes.
 
-Open after R4: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), have Hasan review the DXF, do a dry fit of the Pi cables.
+Open after R4: measure every estimated dimension (`cad/output/ASSUMED.md`), have Hasan review the DXF, do a dry fit of the Pi cables.
 
 ## D. Rev R4.1 changes (2026-11-23)
 
-- Back panel: the second micro-HDMI cutout is removed (the mini screen HDMI cable stays inside the case). In its place is a small cable hole, 16 x 10 mm (ASSUMED), sized for a USB-A plug, for the mini screen USB power cable that comes from an outside charger.
+- Back panel: the second micro-HDMI cutout is removed (the mini screen HDMI cable stays inside the case). In its place is a small cable hole, 16 x 10 mm (estimated), sized for a USB-A plug, for the mini screen USB power cable that comes from an outside charger.
 - AGENT 1 (white) LED resistor = 100 ohm. Closes OPEN 4. `GPIO_PIN_MAP.md` and the schematic updated.
 - Fan: the single 31 mm opening is replaced by a grid of 3 mm holes (8.5 mm pitch) across the 37 mm fan area, 13 holes. Each hole keeps at least 5 mm from the fan screw holes and from every other hole. The hole check passes.
 - Back view render now hides the monitor so the panel is visible.
@@ -83,7 +83,7 @@ Open after R4: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), have H
 
 Decision: the console is redesigned as an open-frame "cyberdeck" with no enclosure, so it does not look like a mini PC and the electronics and wiring are the visual feature. The boxed R4.2 is kept as the alternative in `research/R4.2-boxed/`.
 
-- Base: one clear 3 mm acrylic plate, 330 x 220 mm (ASSUMED, sized for a 300 mm strip and 15 mm margins), rounded corners, 4 rubber feet. Pi 5 with Active Cooler, perfboard with ULN2003 and the GPIO breakout sit exposed on standoffs, laid out so the wires between them are short and visible, with cable-tie slot pairs along the routes.
+- Base: one clear 3 mm acrylic plate, 330 x 220 mm (estimated, sized for a 300 mm strip and 15 mm margins), rounded corners, 4 rubber feet. Pi 5 with Active Cooler, perfboard with ULN2003 and the GPIO breakout sit exposed on standoffs, laid out so the wires between them are short and visible, with cable-tie slot pairs along the routes.
 - Control strip: separate 300 x 70 mm panel at a 20 degree slope on two laser-cut brackets, with the R4.2 hole sizes and LED colours (AGENT 1 white). Clearances (50 mm behind green and red, 75 mm behind the kill switch) are checked against the base and every other part.
 - Mini screen: on a small angled laser-cut stand behind the strip (a plate plus two props, tab and slot). Facing the user.
 - Main monitor: behind the base on its own kickstand, assembly only.
@@ -93,7 +93,7 @@ Decision: the console is redesigned as an open-frame "cyberdeck" with no enclosu
 
 Effect on the R3 review items: OPEN 1 (screen cutout) no longer applies, the screen is no longer in a panel. OPEN 2 stays decided (no soundbar, no grille). OPEN 3 stays as in R4: the Pi is rotated 180 degrees, power and HDMI face the back, and now the cables leave straight off the back edge of the open base. OPEN 5: R5 supplies candidate DXFs; Hasan reviews them before cutting.
 
-Open after R5: measure every ASSUMED dimension (`cad/output/ASSUMED.md`), review the DXF, dry fit the strip slope and the wire lengths with the real parts. The 20 degree slope is read as 20 degrees from vertical; say if it should be from horizontal. The "Printed wedge" BOM line is probably obsolete. Cable ties are not in the BOM.
+Open after R5: measure every estimated dimension (`cad/output/ASSUMED.md`), review the DXF, dry fit the strip slope and the wire lengths with the real parts. The 20 degree slope is read as 20 degrees from vertical; say if it should be from horizontal. The "Printed wedge" BOM line is probably obsolete. Cable ties are not in the BOM.
 
 ## G. LED resistors, pins and grounds (2026-11-24, Jayden)
 

@@ -7,13 +7,13 @@ Prices CAD, before tax and shipping. Source file: `BOM.csv` (the only current BO
 | Item | CAD |
 | --- | --- |
 | **Fundable total, before tax** | **885.81** |
-| Tax at 12 percent, ASSUMED to apply to every line | 106.30 |
+| Tax at 12 percent, estimated to apply to every line | 106.30 |
 | Fundable total, with tax | 992.11 |
 | Self-funded (monitor, power brick, travel adapter), before tax | 128.24 |
 | Self-funded, with tax | 143.63 |
 | All-in with tax, before shipping and laser | 1135.74 |
 
-Re-added from the 33 fundable lines of `BOM.csv`. Status mix of the fundable total: VERIFIED 508.98, LIKELY 269.86, ASSUMED 106.97. Do not treat the total as verified. Self-funded figures are copied from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`; those rows are `REF ONLY` (qty 0) in the CSV.
+Re-added from the 33 fundable lines of `BOM.csv`. Status mix of the fundable total, from the status column of the CSV: confirmed 508.98, unconfirmed 269.86, estimated 106.97. Do not treat the total as verified. Self-funded figures are copied from `research/overnight-notes/MORNING_SUMMARY_2026-11-23.md`; those rows are `REF ONLY` (qty 0) in the CSV.
 
 **Limits:** team limit about 800 CAD, hard max 900 CAD. 885.81 before tax is **85.81 over the team limit** and 14.19 under the hard max. With tax (992.11) it is 92.11 over the hard max, if the limit counts tax.
 
@@ -25,9 +25,9 @@ Custom PCB and its parts added (34.68 CAD), total 851.13 to 885.81. The perfboar
 
 | Line | CAD | Status |
 | --- | --- | --- |
-| USB soundbar, restored | 25.99 | VERIFIED price. Not modelled in the R5 CAD yet |
-| Spare microSD 32GB, restored | 27.99 | VERIFIED price and page |
-| API credits, DeepSeek and Bocha, new | 40.00 | ASSUMED budget amount. Top-up pages are behind sign-in |
+| USB soundbar, restored | 25.99 | Confirmed price. Not modelled in the R5 CAD yet |
+| Spare microSD 32GB, restored | 27.99 | Confirmed price and page |
+| API credits, DeepSeek and Bocha, new | 40.00 | Estimated budget amount. Top-up pages are behind sign-in |
 | Added | 93.98 | Total went from 757.15 to 851.13 |
 
 The two restored lines were not in the git history of `BOM.csv` (the repo starts after they were cut). Model, price, store and link come from `docs/SI_Console_Detailed.md` section 2.3.
@@ -44,4 +44,4 @@ The two restored lines were not in the git history of `BOM.csv` (the repo starts
 
 R5 acrylic: 2 sheets needed plus 2 spare. The 2-pack at 19.99 would save 13.00 but leaves no spare. Cable ties for the tie slots, and rubber feet, are not in the BOM.
 
-Open items: several rows are LIKELY or ASSUMED prices (see the status column), re-check at checkout. LED resistors are decided: green 150 ohm, white 100 ohm, blue 100 ohm, yellow 220 ohm; button LEDs use their built-in resistors (see `docs/GPIO_PIN_MAP.md`). Measure each LED on the bench.
+Open items: several rows are unconfirmed or estimated prices (see the status column), re-check at checkout. LED resistors are decided: green 150 ohm, white 100 ohm, blue 100 ohm, yellow 220 ohm; button LEDs use their built-in resistors (see `docs/GPIO_PIN_MAP.md`). Measure each LED on the bench.

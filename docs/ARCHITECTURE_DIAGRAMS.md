@@ -255,7 +255,7 @@ flowchart TB
 for DeepSeek, Hunyuan/Hy4, GLM, Bailian/Qwen, MiMo), `models.py` chain walk with
 fallback and T1 `EscalationNeeded`, `router.py` rules with Jev tie-break,
 `judge.py` (Jev direct from TypeSafe, Qwen on Bailian HK as backup) and `telemetry.py` (SQLite). **213 mocked
-tests pass; no live provider call has been made** — wire shapes are LIKELY from
+tests pass; no live provider call has been made** — wire shapes are unconfirmed, taken from
 docs and model ids go in `code/.env`. Still GAP: a worker-dispatch action in the
 coordinator's fixed menu and live verification per provider. No Anthropic
 client, deliberately, because the booth is in Shenzhen. Web search (Zhipu on the GLM key since 2026-11-26, Bocha as fallback) is **DONE** as a
