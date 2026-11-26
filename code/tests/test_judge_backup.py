@@ -160,3 +160,66 @@ def test_old_glm_5_4_pin_still_works(monkeypatch):
     monkeypatch.setenv("SI_ORCH_A_T2", "hy4, glm-5.4")
     assert config._pane_setting("C", "", "auto") == "glm-5.3-flash"
     assert config._pane_setting("A", "_T2", "all") == "hy4,glm-5.3-flash"
+
+
+# --- Bailian decision model (between Jev and the Qwen chat backup) -------
+
+BAILIAN_URL = "https://llm-abc123.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/systemone"
+
+
+def test_bailian_url_from_workspace_id_or_api_host():
+    assert config.bailian_decision_url("llm-abc123", "cn-hongkong") == BAILIAN_URL
+    assert config.bailian_decision_url("llm-abc123.cn-hongkong.maas.aliyuncs.com", "x") == BAILIAN_URL
+    assert config.bailian_decision_url("https://llm-abc123.cn-hongkong.maas.aliyuncs.com/", "x") == BAILIAN_URL
+    assert config.bailian_decision_url("", "cn-hongkong") == ""
+
+
+def _systemone(choice="t3", confidence=0.9):
+    return lambda req: httpx.Response(200, json={"model": "decision-model", "answers": {"pick": {
+        "type": "choice", "choice": choice, "confidence": confidence,
+        "probabilities": {choice: confidence}}}, "usage": {"input_tokens": 80},
+        "latency_ms": 52.9}, request=req)
+
+
+class Fake3(Fake):
+    def __init__(self, jev, bailian):
+        super().__init__(jev)
+        self.bailian = bailian
+
+    def __call__(self, url, headers=None, json=None, timeout=None):
+        if url == BAILIAN_URL:
+            self.calls.append({"url": url, "json": json, "timeout": timeout, "headers": headers})
+            return self.bailian(httpx.Request("POST", url))
+        return super().__call__(url, headers=headers, json=json, timeout=timeout)
+
+
+def test_order_jev_then_bailian_then_qwen(monkeypatch):
+    monkeypatch.setattr(config, "BAILIAN_DECISION_URL", BAILIAN_URL)
+    monkeypatch.setattr(config, "BAILIAN_DECISION_MODEL", "decision-model")
+    assert judge.backends() == ["jev", "bailian", "qwen"]
+    fake = Fake3(jev_timeout, _systemone())
+    monkeypatch.setattr(httpx, "post", fake)
+    decision = judge.decide_choice("Pick.", OPTIONS, {"request": "x"})
+    assert decision.backend == "bailian" and decision.choice == "t3"
+    assert fake.hosts() == ["api.typesafe.ai", "llm-abc123.cn-hongkong.maas.aliyuncs.com"]
+    sent = fake.calls[1]
+    assert sent["json"]["model"] == "decision-model"
+    assert sent["json"]["questions"]["pick"]["criteria"] == OPTIONS
+    assert sent["headers"]["Authorization"] == "Bearer bailian-key"
+
+
+def test_bailian_down_falls_to_qwen(monkeypatch):
+    monkeypatch.setattr(config, "BAILIAN_DECISION_URL", BAILIAN_URL)
+    fake = Fake3(jev_timeout, lambda req: httpx.Response(404, text="", request=req))
+    monkeypatch.setattr(httpx, "post", fake)
+    assert judge.decide_choice("Pick.", OPTIONS, "s").backend == "qwen"
+    assert len(fake.calls) == 3
+
+
+def test_bailian_low_confidence_is_final(monkeypatch):
+    monkeypatch.setattr(config, "BAILIAN_DECISION_URL", BAILIAN_URL)
+    fake = Fake3(jev_timeout, _systemone(confidence=0.2))
+    monkeypatch.setattr(httpx, "post", fake)
+    with pytest.raises(judge.JudgeError):
+        judge.decide_choice("Pick.", OPTIONS, "s", min_confidence=0.5)
+    assert len(fake.calls) == 2  # Qwen not asked

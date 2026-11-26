@@ -2,6 +2,13 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-26, Hy4 on TokenHub, Bailian decision model, live provider test
+- First live run with the team's keys: Qwen4 Max and Jev answer; DeepSeek, GLM (and Zhipu search) and MiMo are out of credit; the Hunyuan key is rejected. Smoke check fixes from that run: UTF-8 output on Windows, out-of-credit reported as billing (Zhipu sends it as 429), partly masked keys redacted from provider errors.
+- Hunyuan: Tencent moved API keys to TokenHub. Default `HUNYUAN_BASE_URL` is now `https://tokenhub.tencentcloudmaas.com/v1` (Guangzhou; Singapore is `tokenhub-intl`). Keys come from console.cloud.tencent.com/tokenhub/apikey.
+- Judge chain is now Jev -> Bailian decision model (`decision-model`, same System One API, Hong Kong, needs `BAILIAN_WORKSPACE_ID`) -> small Qwen chat model (`qwen3.8-flash`, picked by a live probe) -> T2 default.
+- Bailian keys and model ids are checked for free through its native `/api/v1/models` list.
+- 223 tests pass.
+
 ## 2026-11-26, API credits and search provider
 - BOM: API credits are now DeepSeek, Zhipu and Qwen, USD 50.00. BC tax 77.00 (12% of 641.67). Fundable total USD 718.67 including tax (was 694.01).
 - Removed the second web search provider and its settings. `websearch.py` uses Zhipu only and now also holds `fetch_url`.

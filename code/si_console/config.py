@@ -156,6 +156,36 @@ QWEN_MODEL = os.getenv("QWEN_MODEL", "").strip()
 QWEN_JUDGE_MODEL = os.getenv("QWEN_JUDGE_MODEL", "").strip()
 QWEN_JUDGE_TIMEOUT_SECONDS = int(os.getenv("SI_QWEN_JUDGE_TIMEOUT_SECONDS", "5"))
 
+# Bailian decision model: the preferred Jev backup. Same System One API
+# as Jev (POST .../compatible-mode/v1/systemone), but only on the
+# workspace-specific host https://{WorkspaceId}.{region}.maas.aliyuncs.com
+# (the plain dashscope host answers 404 there). The workspace id is the
+# "llm-..." part of the API Host on Model Studio's Workspace Management
+# page; the full API Host is accepted too. Hong Kong lists the stable
+# decision-model (decision-model-preview: Beijing and Singapore only).
+BAILIAN_WORKSPACE_ID = os.getenv("BAILIAN_WORKSPACE_ID", "").strip()
+BAILIAN_REGION = os.getenv("BAILIAN_REGION", "").strip() or "cn-hongkong"
+BAILIAN_DECISION_MODEL = os.getenv("BAILIAN_DECISION_MODEL", "").strip() or "decision-model"
+BAILIAN_DECISION_TIMEOUT_SECONDS = int(os.getenv("SI_BAILIAN_DECISION_TIMEOUT_SECONDS", "5"))
+
+
+def bailian_decision_url(workspace: str, region: str) -> str:
+    """Decision-model URL from a workspace id ("llm-xxx") or a full API
+    Host ("llm-xxx.cn-hongkong.maas.aliyuncs.com"). Empty if not set."""
+    workspace = workspace.strip().rstrip("/")
+    if not workspace:
+        return ""
+    host = workspace.split("://", 1)[-1].split("/", 1)[0]
+    if ".maas.aliyuncs.com" not in host:
+        host = f"{host}.{region}.maas.aliyuncs.com"
+    return f"https://{host}/compatible-mode/v1/systemone"
+
+
+BAILIAN_DECISION_URL = (
+    os.getenv("BAILIAN_DECISION_URL", "").strip()
+    or bailian_decision_url(BAILIAN_WORKSPACE_ID, BAILIAN_REGION)
+)
+
 # Xiaomi MiMo 2.6 Flash. T3, the only small model.
 MIMO_API_KEY = os.getenv("MIMO_API_KEY", "").strip()
 MIMO_BASE_URL = os.getenv("MIMO_BASE_URL", "").strip() or "https://api.xiaomimimo.com/v1"

@@ -136,24 +136,29 @@ Jev is a **decision model**, not a worker — it cannot write code. It is not in
 T0–T3; it sits beside GUARD as a deterministic-adjacent judgment layer. GUARD
 remains final authority for physical actions; Jev never bypasses it.
 
-### Judge backup — Qwen on Bailian HK (added 2026-11-26)
+### Judge backups — Bailian HK (added 2026-11-26)
 
 Jev is reached from TypeSafe's API, which may be slow or blocked from Shenzhen.
 If Jev **does not respond within 5 s** (timeout, network or HTTP error,
-unreadable reply), the same question goes to a small, fast Qwen model on the
-team's Bailian Hong Kong key (`QWEN_JUDGE_MODEL`, also a 5 s timeout). If Jev
-answers, even with low confidence or a refusal, its answer stands and the
-backup is not asked. If neither responds, routing ties use the T2 default.
+unreadable reply), the same question goes to the next backup, each with a 5 s
+timeout. If a backend answers, even with low confidence or a refusal, its answer
+stands and later backups are not asked. If none responds, routing ties use T2.
 
-| | Jev 1.14 | Qwen backup (Bailian HK) |
-|---|---|---|
-| Built for decisions | Yes, typed answers | No, chat model in JSON mode |
-| Confidence | Calibrated probabilities | Self-reported, less reliable |
-| Reachability from Shenzhen | Unknown (US-hosted) | Yes (Hong Kong endpoint) |
-| Key | `TYPESAFE_API_KEY` | Same `DASHSCOPE_API_KEY` as Qwen4 Max |
+| | 1. Jev 1.14 | 2. Bailian decision model | 3. Qwen chat model |
+|---|---|---|---|
+| What | Purpose-built decision model | Purpose-built decision model, same System One API as Jev | Chat model in JSON mode |
+| Confidence | Calibrated | Calibrated | Self-reported, less reliable |
+| From Shenzhen | Unknown (US-hosted) | Yes (Hong Kong) | Yes (Hong Kong) |
+| Setting | `TYPESAFE_API_KEY`, `JEV_MODEL=jev-1.14.0` | `BAILIAN_WORKSPACE_ID` (model `decision-model`) | `QWEN_JUDGE_MODEL=qwen3.8-flash` |
+| Key | TypeSafe | Same `DASHSCOPE_API_KEY` as Qwen4 Max | Same |
 
-Both backends only choose among the options offered; GUARD stays final authority.
-The live smoke check tests each one separately.
+The Bailian decision model is served only on the workspace host
+(`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/systemone`);
+the plain dashscope host answers 404. In Hong Kong the docs list the stable
+`decision-model` (the preview is Beijing and Singapore only). `qwen3.8-flash`
+was picked by a live probe on the team's HK workspace (about 1.9 s from Canada).
+Every backend only chooses among the options offered; GUARD stays final
+authority. The live smoke check tests each one separately.
 
 ## Culled
 

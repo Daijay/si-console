@@ -3,18 +3,19 @@
 # tab promotion) and cannot write code. GUARD stays the final authority
 # for physical actions; the judge never approves, executes or bypasses
 # anything.
-# Two backends, tried in order:
-#   1. Jev 1.14 (TypeSafe). Purpose-built, ~100 ms, calibrated
-#      probabilities. Timeout SI_JEV_TIMEOUT_SECONDS (5 s).
-#   2. Backup: a small Qwen model on the team's Bailian Hong Kong key
-#      (QWEN_JUDGE_MODEL), for when Jev does not respond, e.g. if
-#      TypeSafe is slow or blocked from Shenzhen. A general chat model in
-#      JSON mode; its confidence is self-reported, so less reliable than
-#      Jev's. Timeout SI_QWEN_JUDGE_TIMEOUT_SECONDS (5 s).
-# The backup is used only when Jev does not respond: timeout, network
-# error, HTTP error, or an unreadable reply. If Jev answers (even with
-# low confidence or a refusal), that answer stands. If every backend
-# fails, JudgeError: the router falls back to its T2 default.
+# Backends, tried in order (each only if configured):
+#   1. Jev 1.14 (TypeSafe). Purpose-built, calibrated probabilities.
+#      Timeout SI_JEV_TIMEOUT_SECONDS (5 s).
+#   2. Bailian decision model (decision-model) on the team's Hong Kong
+#      key. Same System One API as Jev, calibrated too, reachable from
+#      Shenzhen. Needs the Bailian workspace id (BAILIAN_WORKSPACE_ID):
+#      the plain dashscope host does not serve /systemone.
+#   3. Last resort: a small Qwen chat model (QWEN_JUDGE_MODEL) in JSON
+#      mode; its confidence is self-reported, so less reliable.
+# The next backend is used only when the previous one does not respond:
+# timeout, network error, HTTP error, or an unreadable reply. If a
+# backend answers (even with low confidence or a refusal), that answer
+# stands. If every backend fails, JudgeError: the router uses T2.
 # Jev wire contract, from docs.typesafe.ai and OpenRouter's Decisions
 # API reference, 2026-11-24 (LIKELY, no live call yet):
 #   POST https://api.typesafe.ai/v1/systemone   (TypeSafe key, model
@@ -68,17 +69,26 @@ def jev_configured() -> bool:
     return bool(config.JEV_API_KEY and config.JEV_MODEL)
 
 
+def bailian_configured() -> bool:
+    return bool(config.DASHSCOPE_API_KEY and config.BAILIAN_DECISION_URL
+                and config.BAILIAN_DECISION_MODEL)
+
+
 def qwen_configured() -> bool:
     return bool(config.DASHSCOPE_API_KEY and config.QWEN_JUDGE_MODEL)
 
 
 def configured() -> bool:
-    return jev_configured() or qwen_configured()
+    return jev_configured() or bailian_configured() or qwen_configured()
 
 
 def backends() -> list[str]:
-    """Configured backends, in the order they are tried."""
-    return [name for name, ok in (("jev", jev_configured()), ("qwen", qwen_configured())) if ok]
+    """Configured backends, in the order they are tried: Jev, then
+    Bailian's decision model (same System One API), then the small Qwen
+    chat model as a last resort."""
+    order = (("jev", jev_configured()), ("bailian", bailian_configured()),
+             ("qwen", qwen_configured()))
+    return [name for name, ok in order if ok]
 
 
 def _check_answer(name: str, choice, confidence, options: dict, min_confidence: float) -> float:
@@ -94,9 +104,13 @@ def _check_answer(name: str, choice, confidence, options: dict, min_confidence: 
     return value
 
 
-def _ask_jev(instructions: str, options: dict, state, min_confidence: float) -> tuple[Decision, dict]:
+def _ask_systemone(label: str, backend: str, url: str, key: str, model: str, timeout: float,
+                   instructions: str, options: dict, state,
+                   min_confidence: float) -> tuple[Decision, dict]:
+    """One choice question on a System One decision API. TypeSafe (Jev)
+    and Bailian's decision model take the same body and answer shape."""
     body = {
-        "model": config.JEV_MODEL,
+        "model": model,
         "state": state,
         "questions": {
             "pick": {
@@ -108,20 +122,18 @@ def _ask_jev(instructions: str, options: dict, state, min_confidence: float) -> 
     }
     try:
         response = httpx.post(
-            config.JEV_URL,
-            headers={"Authorization": f"Bearer {config.JEV_API_KEY}",
-                     "Content-Type": "application/json"},
+            url,
+            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
             json=body,
-            timeout=config.JEV_TIMEOUT_SECONDS,
+            timeout=timeout,
         )
     except httpx.HTTPError as exc:
-        raise JudgeError(f"Jev request failed: {type(exc).__name__}.", no_response=True) from None
+        raise JudgeError(f"{label} request failed: {type(exc).__name__}.", no_response=True) from None
     if response.status_code != 200:
         from si_console.chat_client import error_detail
 
         raise JudgeError(
-            f"Jev returned HTTP {response.status_code}."
-            f"{error_detail(response, config.JEV_API_KEY)}",
+            f"{label} returned HTTP {response.status_code}.{error_detail(response, key)}",
             no_response=True,
         )
     try:
@@ -129,14 +141,26 @@ def _ask_jev(instructions: str, options: dict, state, min_confidence: float) -> 
         usage = payload.get("usage") or {}
         answer = payload["answers"]["pick"]
     except (ValueError, KeyError, TypeError, AttributeError):
-        raise JudgeError("Jev reply has no answer for the question.", no_response=True) from None
+        raise JudgeError(f"{label} reply has no answer for the question.", no_response=True) from None
     if answer.get("type") == "refusal":
-        raise JudgeError("Jev declined the question.")
-    confidence = _check_answer("Jev", answer.get("choice"), answer.get("confidence", 0.0),
+        raise JudgeError(f"{label} declined the question.")
+    confidence = _check_answer(label, answer.get("choice"), answer.get("confidence", 0.0),
                                options, min_confidence)
     decision = Decision(answer["choice"], confidence,
-                        dict(answer.get("probabilities") or {}), backend="jev")
+                        dict(answer.get("probabilities") or {}), backend=backend)
     return decision, usage
+
+
+def _ask_jev(instructions: str, options: dict, state, min_confidence: float) -> tuple[Decision, dict]:
+    return _ask_systemone("Jev", "jev", config.JEV_URL, config.JEV_API_KEY, config.JEV_MODEL,
+                          config.JEV_TIMEOUT_SECONDS, instructions, options, state, min_confidence)
+
+
+def _ask_bailian(instructions: str, options: dict, state, min_confidence: float) -> tuple[Decision, dict]:
+    return _ask_systemone("Bailian decision model", "bailian", config.BAILIAN_DECISION_URL,
+                          config.DASHSCOPE_API_KEY, config.BAILIAN_DECISION_MODEL,
+                          config.BAILIAN_DECISION_TIMEOUT_SECONDS,
+                          instructions, options, state, min_confidence)
 
 
 QWEN_SYSTEM = (
@@ -176,6 +200,8 @@ def _ask_qwen(instructions: str, options: dict, state, min_confidence: float) ->
 
 _BACKENDS = {
     "jev": (_ask_jev, "jev", lambda: config.JEV_PROVIDER, lambda: config.JEV_MODEL),
+    "bailian": (_ask_bailian, "bailian-decision", lambda: "dashscope",
+                lambda: config.BAILIAN_DECISION_MODEL),
     "qwen": (_ask_qwen, "qwen-judge", lambda: "dashscope", lambda: config.QWEN_JUDGE_MODEL),
 }
 

@@ -96,12 +96,18 @@ def check_config() -> list[Check]:
                                           "use jev-1.14.0 or jev-latest"))
     else:
         out.append(Check(SKIP, "jev", "not configured"))
-    if config.DASHSCOPE_API_KEY and config.QWEN_JUDGE_MODEL:
-        out.append(Check(PASS, "judge backup", f"Qwen on Bailian, model {config.QWEN_JUDGE_MODEL}"))
-    elif config.QWEN_JUDGE_MODEL:
-        out.append(Check(SKIP, "judge backup", "QWEN_JUDGE_MODEL set but DASHSCOPE_API_KEY is empty"))
+    if config.DASHSCOPE_API_KEY and config.BAILIAN_DECISION_URL:
+        out.append(Check(PASS, "judge backup 1", f"Bailian decision model {config.BAILIAN_DECISION_MODEL} "
+                                                 f"at {_host(config.BAILIAN_DECISION_URL)}"))
     else:
-        out.append(Check(SKIP, "judge backup", "not configured: set QWEN_JUDGE_MODEL in .env"))
+        out.append(Check(SKIP, "judge backup 1", "Bailian decision model off: set BAILIAN_WORKSPACE_ID "
+                                                 "(Model Studio > Workspace Management > API Host)"))
+    if config.DASHSCOPE_API_KEY and config.QWEN_JUDGE_MODEL:
+        out.append(Check(PASS, "judge backup 2", f"Qwen chat model {config.QWEN_JUDGE_MODEL}"))
+    elif config.QWEN_JUDGE_MODEL:
+        out.append(Check(SKIP, "judge backup 2", "QWEN_JUDGE_MODEL set but DASHSCOPE_API_KEY is empty"))
+    else:
+        out.append(Check(SKIP, "judge backup 2", "not configured: set QWEN_JUDGE_MODEL in .env"))
     from si_console import websearch
 
     if websearch.zhipu_configured():
@@ -135,6 +141,8 @@ def check_network() -> list[Check]:
     hosts = {p: _host(chat_client.base_url(p)) for p in _configured_providers()}
     if config.JEV_API_KEY:
         hosts[config.JEV_PROVIDER] = _host(config.JEV_URL)
+    if config.DASHSCOPE_API_KEY and config.BAILIAN_DECISION_URL:
+        hosts["bailian-decision"] = _host(config.BAILIAN_DECISION_URL)
     for name, host in hosts.items():
         started = time.monotonic()
         try:
@@ -274,7 +282,8 @@ def _live_judge(backend: str) -> Check:
     backup cannot hide a dead Jev (or the other way round)."""
     from si_console import judge
 
-    name = "live jev" if backend == "jev" else "live judge backup (qwen)"
+    name = {"jev": "live jev", "bailian": "live judge backup (bailian decision)",
+            "qwen": "live judge backup (qwen)"}[backend]
     started = time.monotonic()
     try:
         decision = judge.ask(
@@ -289,7 +298,8 @@ def _live_judge(backend: str) -> Check:
     ms = int((time.monotonic() - started) * 1000)
     status = PASS if decision.choice == "apple" else WARN
     slow = ""
-    limit = config.JEV_TIMEOUT_SECONDS if backend == "jev" else config.QWEN_JUDGE_TIMEOUT_SECONDS
+    limit = {"jev": config.JEV_TIMEOUT_SECONDS, "bailian": config.BAILIAN_DECISION_TIMEOUT_SECONDS,
+             "qwen": config.QWEN_JUDGE_TIMEOUT_SECONDS}[backend]
     if ms > limit * 1000 * 0.8:
         status, slow = WARN, f"; close to the {limit}s timeout"
     return Check(status, name, f"chose {decision.choice} ({decision.confidence:.2f}){slow}", ms)
