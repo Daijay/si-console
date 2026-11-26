@@ -254,7 +254,7 @@ flowchart TB
 `config.py` chains + pane pins, `chat_client.py` (one OpenAI-compatible client
 for DeepSeek, Hunyuan/Hy4, GLM, Bailian/Qwen, MiMo), `models.py` chain walk with
 fallback and T1 `EscalationNeeded`, `router.py` rules with Jev tie-break,
-`judge.py` (Jev direct from TypeSafe; OpenRouter as alternate) and `telemetry.py` (SQLite). **179 mocked
+`judge.py` (Jev direct from TypeSafe, Qwen on Bailian HK as backup) and `telemetry.py` (SQLite). **195 mocked
 tests pass; no live provider call has been made** — wire shapes are LIKELY from
 docs and model ids go in `code/.env`. Still GAP: a worker-dispatch action in the
 coordinator's fixed menu and live verification per provider. No Anthropic
@@ -388,7 +388,7 @@ flowchart TB
 **Legend:** this is the accepted 2026-11-25 booth demo design recorded in
 `docs/MODEL_TIERS.md` §"Booth arena". The **route/model layer is implemented**
 (2026-11-24): per-pane pins, T2 allowlists, T1 on/off, Jev tie-break, SQLite
-telemetry, 179 mocked tests. The **arena contest runner, the 3-column UI, the
+telemetry, 195 mocked tests. The **arena contest runner, the 3-column UI, the
 tab-chip promotion flow and the isolated sandbox are GAP** — not built. When
 built, the Pi will render the dashboard and make API calls; generated code will
 run only in the sandbox, never on the GPIO/bridge path. Green/red/kill remain
@@ -407,7 +407,7 @@ GUARD's physical-action scope by design).
 | 3. End-to-end flow | FLOW, SAFETY | PARTIAL |
 | 4. Safety stack | SAFETY | mixed (GUARD DONE, others GAP/PARTIAL) |
 | 5. Memory and state | MEMORY AND STATE, OFFLINE | PARTIAL / GAP |
-| 6. Providers and routing | PROVIDERS | DONE in code (4 tiers + Jev, 179 mocked tests); live calls unverified, check with `python -m si_console.smoke --live` |
+| 6. Providers and routing | PROVIDERS | DONE in code (4 tiers + Jev with Qwen backup, 195 mocked tests); live calls unverified, check with `python -m si_console.smoke --live` |
 | 7. Offline fallback | OFFLINE | GAP (rules engine DONE) |
 | 8. External agents | EXTERNAL AGENTS | DONE / aligned |
 | 9. Ownership map | OWNERSHIP | informational |

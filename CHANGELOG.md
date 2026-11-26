@@ -2,6 +2,11 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-26, Judge backup on Bailian, GLM 5.3 Flash
+- Judge chain: Jev (TypeSafe) first; if Jev does not respond in 5 s (timeout, network or HTTP error, unreadable reply), a small Qwen model on the Bailian HK key answers (`QWEN_JUDGE_MODEL`, `SI_QWEN_JUDGE_TIMEOUT_SECONDS=5`). A Jev answer, even low-confidence or a refusal, is final. Both backends only pick offered options; each attempt is logged to telemetry. The smoke check tests each judge on its own; one working judge is enough.
+- GLM slot runs GLM 5.3 Flash (`glm-5.3-flash`, $0.15/$0.50 per M) because the GLM 5.4 API is not out yet. Router-owner decision, recorded in `docs/MODEL_TIERS.md`; old `glm-5.4` pins and allowlists map to it.
+- 195 tests pass (was 179).
+
 ## 2026-11-25, screen UI design and mockups
 - Research, direction choice and full screen spec: `docs/UI_RESEARCH.md`, `docs/UI_SPEC.md`.
 - Static mockups with fake data for 33 states on both screens in EN and ZH: `code/dashboard/mockups/`; screenshots in `docs/images/ui/`.

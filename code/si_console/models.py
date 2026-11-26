@@ -3,9 +3,9 @@
 # ordered chain of model slots; the router walks it, skips any slot
 # with no key or no pinned model id, and falls back to the next slot
 # on any ModelError. Every attempt is logged to SQLite telemetry.
-#   T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4   (else error)
+#   T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.3 Flash (else error)
 #   T1 heavy        : Qwen4 Max -> escalate_to_human          (EscalationNeeded)
-#   T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4   (else error)
+#   T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.3 Flash (else error)
 #   T3 small        : MiMo 2.6 Flash -> $0 code paths         (ZeroPathNeeded)
 #   narration       : no model call, prewritten sentence id
 # Arena panes (A, B, C) apply the operator's selection rules:
@@ -299,4 +299,6 @@ def roster_status() -> dict:
         }
         for slot in config.MODEL_SLOTS
     } | {"jev": {"provider": config.JEV_PROVIDER, "model_pinned": bool(config.JEV_MODEL),
-                 "key_set": bool(config.JEV_API_KEY)}}
+                 "key_set": bool(config.JEV_API_KEY)},
+         "qwen-judge": {"provider": "dashscope", "model_pinned": bool(config.QWEN_JUDGE_MODEL),
+                        "key_set": bool(config.DASHSCOPE_API_KEY)}}

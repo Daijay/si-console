@@ -21,10 +21,12 @@ from si_console import config
 PRICES_PER_M = {
     "deepseek-v4.1-flash": (0.30, 1.20),
     "hy4": (0.83, 2.50),
-    "glm-5.4": (0.09, 0.33),
+    "glm-5.3-flash": (0.15, 0.50),  # MODEL_TIERS.md culled table
     "qwen4-max": (1.50, 4.50),
     "mimo-2.6-flash": (0.14, 0.28),
     "jev": (0.042, 0.0),
+    # Small Qwen judge backup on Bailian: ceiling estimate, not a quote.
+    "qwen-judge": (0.30, 1.20),
 }
 
 _SCHEMA = """
