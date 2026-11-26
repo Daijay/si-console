@@ -1,4 +1,4 @@
-"""Web search: Zhipu (Z.ai) on the GLM key first, Bocha fallback only if set."""
+"""Web search: Zhipu (Z.ai) on the GLM key."""
 
 import json
 
@@ -16,7 +16,6 @@ def keys(monkeypatch):
     monkeypatch.setattr(config, "GLM_API_KEY", "glm-key")
     monkeypatch.setattr(config, "GLM_BASE_URL", MAINLAND)
     monkeypatch.setattr(config, "ZHIPU_SEARCH_ENGINE", "search_std")
-    monkeypatch.setattr(config, "BOCHA_API_KEY", "")
 
 
 ZHIPU_OK = {
@@ -91,17 +90,11 @@ def test_network_error_retries_once_then_errors(monkeypatch):
     assert len(seen) == 2 and "not reachable" in result["error"]
 
 
-def test_bocha_fallback_only_when_its_key_is_set(monkeypatch):
-    _capture(monkeypatch, status=503, payload={"error": {"code": "1702", "message": "no engine"}})
-    called = []
-    from si_console import bocha
-
-    monkeypatch.setattr(bocha, "web_search", lambda *a, **k: called.append(1) or {"results": []})
-    assert "error" in websearch.web_search("q")
-    assert not called
-    monkeypatch.setattr(config, "BOCHA_API_KEY", "b-key")
-    assert websearch.web_search("q")["provider"] == "bocha"
-    assert called
+def test_provider_failure_is_returned_after_one_call(monkeypatch):
+    seen = _capture(monkeypatch, status=503, payload={"error": {"code": "1702", "message": "no engine"}})
+    result = websearch.web_search("q")
+    assert "503" in result["error"] and "results" not in result
+    assert len(seen) == 1
 
 
 def test_no_search_configured(monkeypatch):

@@ -78,7 +78,7 @@ class ToolError(ConsoleError):
 
 
 class SourceError(ConsoleError):
-    """A source (vault scan, Bocha search, price file) failed.
+    """A source (vault scan, web search, price file) failed.
 
     It fails loudly instead of returning an empty result, because an
     empty result looks like "nothing found". A failed source must never

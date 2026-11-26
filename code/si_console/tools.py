@@ -159,7 +159,7 @@ TOOLS: dict[str, Tool] = {
     "web_search": Tool(
         name="web_search",
         tag=SAFE,
-        description="Web search for research (Zhipu, Bocha fallback). Research only. Never changes a ranking.",
+        description="Web search for research (Zhipu). Research only. Never changes a ranking.",
         roles={"coordinator", "signal"},
         schema=_schema(
             {

@@ -68,7 +68,7 @@ Obsidian-compatible markdown vault is the source of truth for tasks (one note pe
 
 ## PROVIDERS
 
-v1 runtime is DeepSeek only (flash + pro) plus Bocha search. Claude is NOT on
+v1 runtime is DeepSeek only (flash + pro) plus web search. Claude is NOT on
 the critical path and is never called from the booth build. Booth assumes no
 Claude access and possibly no internet. The accepted 2026-11-25 roster adds
 Qwen4 Max, GLM 5.4, Hy4, MiMo 2.6 Flash as planned workers and Jev 1.14 as a
@@ -110,7 +110,7 @@ above. This list is for planning. It does not change the authoritative spec.
 | Ctrl+K text intake | Only `voice_intents.py` (fixed EN/ZH phrase matcher) | Text intake with its own fixed vocabulary not implemented. Owner: Jayden. |
 | Rules-only ROUTER -> tier (v1 FAST/THINK; accepted T0/T1/T2/T3 2026-11-25) | 2026-11-24: `router.py` rules (skill, keywords, length) with Jev tie-break; `models.py` T0-T3 chains across DeepSeek, Hunyuan, GLM, Bailian/Qwen, MiMo with fallback, pane pins, T2 allowlists, T1 off | Coordinator has no worker-dispatch action in the fixed menu yet, so `router.dispatch` is not called from the loop; arena contest runner and UI not built. Owner: Christopher. |
 | Default-deny policy, allowlisted read-only tools auto-run | `tools.py` tags each tool `SAFE` or `NEEDS APPROVAL`; SAFE runs immediately in `coordinator._run_one_tool_call` | Permissive tag list must be replaced with default-deny and a read-only allow list. Owner: Christopher. |
-| Injection guard tainting web/file content | Web search results (Zhipu on the GLM key since 2026-11-26, Bocha fallback; `websearch.py`) clipped in `context.py`; vault search notes require citations | No taint tracking; no rule blocking tainted text from becoming tool arguments. Owner: Christopher. |
+| Injection guard tainting web/file content | Web search results (Zhipu on the GLM key; `websearch.py`) clipped in `context.py`; vault search notes require citations | No taint tracking; no rule blocking tainted text from becoming tool arguments. Owner: Christopher. |
 | Exact command shown on screen at approval time | `request_approval()` sets `approval_pending` and task id; screen shows proposal note | Command/args are not rendered verbatim from the tool call. Owner: Christopher. |
 | EXECUTE in own process group with timeout, VERIFY RESULT | `guard.check_shell_command()` allow list; `shell_run` tool body is a skeleton | No process group, timeout, or empty-output/step-limit verification. Owner: Christopher. |
 | `escalate_to_human` action name | `_escalate()` writes a `*-escalate` note with status `blocked`; reason code `ROUND_LIMIT` | Fixed menu has no `escalate_to_human` action; escalation is internal only. Owner: Christopher. |

@@ -41,14 +41,14 @@ Pi 5 sits in the middle. Each line is labelled with the connection type. GPIO ma
 | Toggle switch, 12 mm | Language toggle, EN and Chinese. | Pi 5 GPIO24, GND | 9.99 | Estimated |
 | GPIO breakout, Cobbler Plus | Breaks out the 40-pin header. | Pi 5 header to breadboard | 11.80 | Confirmed |
 | Case fan, 5V 40 mm | Rear wall exhaust. 140 mA. | Pi 5 5V and GND pins | 4.19 | Confirmed |
-| API credits, DeepSeek and Bocha | Paid model and search APIs for the live demo. | Network, no wiring | 40.00 | Estimated |
+| API credits, DeepSeek, Zhipu and Qwen | Paid model and search APIs for the live demo. | Network, no wiring | USD 50.00 | Estimated |
 | Main monitor, MSI PRO MP165 E6 | Main screen. 15.6 inch, 1920x1080 IPS. | Pi 5 micro HDMI0, own USB-C charger | 89.99 | Unconfirmed, self-funded, bought |
 
-Case size 360 x 240 x 140 mm is estimated, not a CAD result. Confirm before cutting. Front panel holes: LEDs 5.2 mm, buttons 30.2 mm, kill 22.3 mm, PTT and toggle 12.2 mm. See blueprints/2d/case-drawings.svg. Note: the monitor row above is self-funded and not counted in the fundable total. Some rows in this table predate Rev R5; the only current BOM is `bom/BOM.csv`, fundable total 885.81 CAD.
+Case size 360 x 240 x 140 mm is estimated, not a CAD result. Confirm before cutting. Front panel holes: LEDs 5.2 mm, buttons 30.2 mm, kill 22.3 mm, PTT and toggle 12.2 mm. See blueprints/2d/case-drawings.svg. Note: the monitor row above is self-funded and not counted in the fundable total. Some rows in this table predate Rev R5; Prices in this table are in CAD unless marked. The only current BOM is `bom/BOM.csv`, fundable total USD 718.67 including tax.
 
 ## 4. Totals
 
-Fundable (2026-11-24, from `bom/BOM.csv`): 885.81 CAD before tax, 992.11 CAD with 12 percent BC tax. This includes the USB soundbar (25.99), the spare microSD (27.99) and DeepSeek and Bocha API credits (40.00). Self-funded (monitor, brick, travel adapter): 128.24 CAD before tax, 143.63 CAD with tax. Team limit about 800 CAD, hard max 900 CAD. The fundable total is 51.13 CAD over the 800 limit before tax and under the 900 hard max before tax; with tax it is 92.11 CAD over the hard max. Totals exclude shipping, laser time, and tools.
+Fundable (2026-11-26, from `bom/BOM.csv`): **USD 718.67 including tax** (641.67 parts and API credits plus 77.00 BC tax). This includes the USB soundbar, the spare microSD and the API credits. Self-funded (monitor, brick, travel adapter): USD 89.70 before tax, 100.46 with tax. Totals exclude laser time and tools, and shipping except on the custom PCB line.
 
 ## 5. Open decisions
 

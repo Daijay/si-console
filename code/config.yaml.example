@@ -3,7 +3,6 @@
 # The DeepSeek model name is pinned in .env, not here, after checking
 # the official DeepSeek platform page. Never hard code deepseek-chat.
 deepseek_base_url: https://api.deepseek.com/v1
-bocha_base_url: https://api.bochaai.com/v1/web-search
 mode: booth
 replay_scenario: "2020"
 lang: en
@@ -11,6 +10,5 @@ round_limit: 3
 approval_timeout_seconds: 120
 stuck_seconds: 300
 api_timeout_seconds: 30
-bocha_timeout_seconds: 15
 bridge_port: 8001
 dashboard_port: 8000

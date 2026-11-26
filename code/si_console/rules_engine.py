@@ -7,7 +7,7 @@
 # lookahead rule. It is tested by a unit test in tests/. The test
 # checks the max date used. If the engine ever reads a future close,
 # the test must fail. Price only. No news, no earnings, no
-# fundamentals in the ranking. Bocha is for background research
+# fundamentals in the ranking. Web search is for background research
 # notes only, never for the ranking itself.
 # Replay rules, not yet confirmed by the team: weekly rebalance only, max 3 or 4 sectors, equal
 # weight, cash reserve 5 or 10 percent, cost 0 in the demo and shown
