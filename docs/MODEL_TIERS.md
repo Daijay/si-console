@@ -136,6 +136,25 @@ Jev is a **decision model**, not a worker — it cannot write code. It is not in
 T0–T3; it sits beside GUARD as a deterministic-adjacent judgment layer. GUARD
 remains final authority for physical actions; Jev never bypasses it.
 
+### Judge backup — Qwen on Bailian HK (added 2026-11-26)
+
+Jev is reached from TypeSafe's API, which may be slow or blocked from Shenzhen.
+If Jev **does not respond within 5 s** (timeout, network or HTTP error,
+unreadable reply), the same question goes to a small, fast Qwen model on the
+team's Bailian Hong Kong key (`QWEN_JUDGE_MODEL`, also a 5 s timeout). If Jev
+answers, even with low confidence or a refusal, its answer stands and the
+backup is not asked. If neither responds, routing ties use the T2 default.
+
+| | Jev 1.14 | Qwen backup (Bailian HK) |
+|---|---|---|
+| Built for decisions | Yes, typed answers | No, chat model in JSON mode |
+| Confidence | Calibrated probabilities | Self-reported, less reliable |
+| Reachability from Shenzhen | Unknown (US-hosted) | Yes (Hong Kong endpoint) |
+| Key | `TYPESAFE_API_KEY` | Same `DASHSCOPE_API_KEY` as Qwen4 Max |
+
+Both backends only choose among the options offered; GUARD stays final authority.
+The live smoke check tests each one separately.
+
 ## Culled
 
 | Model | In/Out $/M | Reason |
@@ -148,6 +167,12 @@ remains final authority for physical actions; Jev never bypasses it.
 | **Inkling 2 Small** | 0.30 / 1.00 | Unproven tool calling, no scores; Jev now fills the decision slot. |
 
 ## GLM 5.4 / 5.3 Flash — interim note CLOSED
+
+**Update 2026-11-26 (temporary):** the GLM 5.4 API is not available yet, so
+`code/` runs **GLM 5.3 Flash** in the GLM slot (T0 backup #3, T2 #3; slot id
+`glm-5.3-flash`; old `glm-5.4` pins still map to it). Team decision by the router
+owner; it overrides the note below until 5.4 ships. Then: rename the slot back,
+swap the price in `telemetry.py`, and re-pin `GLM_MODEL`.
 
 The earlier note made 5.3 Flash a conditional revert while 5.4 was unbenchmarked.
 That is resolved: 5.4 now has an independent result (KingBench 4: 33.2/60, 7th
@@ -290,6 +315,7 @@ provider yet):
   restricted to the pane's allowed tiers, `dispatch()`.
 - `judge.py`: Jev direct from TypeSafe (`POST https://api.typesafe.ai/v1/systemone`,
   model `jev-1.14.0`; OpenRouter's Decisions API is the alternate route) (`choice` questions);
+  backup: a small Qwen model on Bailian HK when Jev does not respond in 5 s;
   an answer outside the offered options is rejected.
 - `telemetry.py`: SQLite rows for every attempt, judge call and route.
 

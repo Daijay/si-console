@@ -17,6 +17,9 @@ APIs mocked. Nothing here has been run on the Raspberry Pi yet.
   worker dispatch yet.
 - Judge (`si_console/judge.py`): typed choice decisions from Jev, direct from
   TypeSafe (`api.typesafe.ai/v1/systemone`); OpenRouter is the alternate route.
+  If Jev does not respond in 5 s, a small Qwen model on the Bailian HK key
+  (`QWEN_JUDGE_MODEL`) answers instead.
+- GLM runs 5.3 Flash (`glm-5.3-flash`) until the GLM 5.4 API is out.
 - Smoke check (`si_console/smoke.py`): free key and model-id checks, and opt-in
   one-call-per-model live checks. `deploy/sync_env.py` updates an old `.env`.
 - Telemetry (`si_console/telemetry.py`): SQLite log of routes, judge calls and
@@ -64,7 +67,7 @@ python3 -m venv .venv
 On Windows use `.venv\Scripts\python`. `gpiozero` is only needed on the Pi and
 `python-pptx` only for slides.
 
-Last run 2026-11-25 on Windows: 179 passed.
+Last run 2026-11-26 on Windows: 195 passed.
 
 ## Deploy to the Pi
 1. On the Pi: `git clone` the repo (then `git lfs pull` if you need the CAD files).

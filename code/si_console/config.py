@@ -124,7 +124,7 @@ HUNYUAN_BASE_URL = (
 )
 HY4_MODEL = os.getenv("HY4_MODEL", "").strip()
 
-# Zhipu GLM 5.4. T0 backup #3, T2 #3. Effort is capped at "high" in
+# Zhipu GLM 5.3 Flash (temporary: the GLM 5.4 API is not out yet; MODEL_TIERS.md picks 5.4). T0 backup #3, T2 #3. Effort is capped at "high" in
 # code (MODEL_TIERS.md: max effort burns ~1M reasoning tokens).
 # Mainland endpoint by default; the international one is
 # https://api.z.ai/api/paas/v4 with its own key.
@@ -145,6 +145,11 @@ DASHSCOPE_BASE_URL = (
     or "https://cn-hongkong.dashscope.aliyuncs.com/compatible-mode/v1"
 )
 QWEN_MODEL = os.getenv("QWEN_MODEL", "").strip()
+# Judge backup: a small, fast Qwen model on the same Bailian HK key,
+# used when Jev does not respond within SI_JEV_TIMEOUT_SECONDS (see
+# judge.py). Pin the id from Model Studio's Hong Kong model list.
+QWEN_JUDGE_MODEL = os.getenv("QWEN_JUDGE_MODEL", "").strip()
+QWEN_JUDGE_TIMEOUT_SECONDS = int(os.getenv("SI_QWEN_JUDGE_TIMEOUT_SECONDS", "5"))
 
 # Xiaomi MiMo 2.6 Flash. T3, the only small model.
 MIMO_API_KEY = os.getenv("MIMO_API_KEY", "").strip()
@@ -183,9 +188,9 @@ PROVIDER_TIMEOUT_SECONDS = int(os.getenv("SI_PROVIDER_TIMEOUT_SECONDS", "30"))
 # Callers ask for a tier, never a model. The router in models.py walks
 # the tier's chain in order and falls back on any failure. The chains
 # are the accepted roster in docs/MODEL_TIERS.md:
-#   T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.4
+#   T0 orchestrator : DeepSeek V4.1 Flash -> Hy4 -> GLM 5.3 Flash
 #   T1 heavy        : Qwen4 Max -> escalate_to_human
-#   T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.4
+#   T2 medium       : Hy4 -> DeepSeek V4.1 Flash -> GLM 5.3 Flash
 #   T3 small        : MiMo 2.6 Flash -> $0 code paths
 # Claude is not in the roster and there is no Anthropic client. It is
 # never called from the booth build (Anthropic does not support use
@@ -220,15 +225,20 @@ TIER_ALIASES = {
 MODEL_SLOTS = {
     "deepseek-v4.1-flash": {"provider": "deepseek", "model_attr": "DEEPSEEK_MODEL"},
     "hy4": {"provider": "hunyuan", "model_attr": "HY4_MODEL"},
-    "glm-5.4": {"provider": "glm", "model_attr": "GLM_MODEL"},
+    "glm-5.3-flash": {"provider": "glm", "model_attr": "GLM_MODEL"},
     "qwen4-max": {"provider": "dashscope", "model_attr": "QWEN_MODEL"},
     "mimo-2.6-flash": {"provider": "mimo", "model_attr": "MIMO_MODEL"},
 }
+# GLM runs 5.3 Flash until the GLM 5.4 API is out (team decision
+# 2026-11-26; MODEL_TIERS.md picks 5.4). An old pin or allowlist entry
+# that says glm-5.4 still means the GLM slot. When 5.4 ships: rename
+# the slot back, swap the price in telemetry.py, re-pin GLM_MODEL.
+SLOT_ALIASES = {"glm-5.4": "glm-5.3-flash"}
 
 MODEL_TIERS = {
     # Tool calling needs thinking off, so the orchestrator never thinks.
     T0: {
-        "chain": ["deepseek-v4.1-flash", "hy4", "glm-5.4"],
+        "chain": ["deepseek-v4.1-flash", "hy4", "glm-5.3-flash"],
         "max_tokens": DEEPSEEK_MAX_TOKENS,
         "thinking": "disabled",
         "on_exhausted": "error",
@@ -244,7 +254,7 @@ MODEL_TIERS = {
         "on_exhausted": "escalate_to_human",
     },
     T2: {
-        "chain": ["hy4", "deepseek-v4.1-flash", "glm-5.4"],
+        "chain": ["hy4", "deepseek-v4.1-flash", "glm-5.3-flash"],
         "max_tokens": 1500,
         "thinking": "low",
         "on_exhausted": "error",
@@ -270,14 +280,16 @@ MODEL_TIERS = {
 # down the T0 chain from its pinned position only when its FALLBACK
 # setting is yes. Each pane has a T2 allowlist ("all", "none", or a
 # comma list of T2 slot ids) and can be denied T1 (SI_ORCH_A_T1=off).
-# Defaults follow the doc's table: A auto (DeepSeek), B Hy4, C GLM 5.4.
+# Defaults follow the doc's table: A auto (DeepSeek), B Hy4, C GLM 5.3 Flash.
 PANES = ("A", "B", "C")
-_PANE_DEFAULT_PIN = {"A": "auto", "B": "hy4", "C": "glm-5.4"}
+_PANE_DEFAULT_PIN = {"A": "auto", "B": "hy4", "C": "glm-5.3-flash"}
 
 
 def _pane_setting(pane: str, suffix: str, default: str) -> str:
     key = f"SI_ORCH_{pane}{suffix}"
-    return os.getenv(key, "").strip().lower() or default
+    value = os.getenv(key, "").strip().lower() or default
+    # Map aliases inside pins and comma lists (e.g. glm-5.4).
+    return ",".join(SLOT_ALIASES.get(part.strip(), part.strip()) for part in value.split(","))
 
 
 PANE_CONFIG = {

@@ -36,7 +36,7 @@ def configured(monkeypatch):
     monkeypatch.setattr(config, "PANE_CONFIG", {
         "A": {"pin": "auto", "t2": "all", "t1": "on", "fallback": "yes"},
         "B": {"pin": "hy4", "t2": "all", "t1": "on", "fallback": "yes"},
-        "C": {"pin": "glm-5.4", "t2": "all", "t1": "on", "fallback": "yes"},
+        "C": {"pin": "glm-5.3-flash", "t2": "all", "t1": "on", "fallback": "yes"},
     })
     monkeypatch.setattr(socket, "getaddrinfo",
                         lambda host, port, **k: [(2, 1, 6, "", ("93.184.216.34", port))])
@@ -147,3 +147,27 @@ def test_live_mode_asks_first(monkeypatch):
     monkeypatch.setattr(httpx, "post", lambda *a, **k: pytest.fail("sent without consent"))
     code, text = _run(live=True)
     assert "Live calls skipped." in text
+
+
+def test_live_dead_jev_with_working_backup_is_a_warning(monkeypatch):
+    monkeypatch.setattr(httpx, "get", _fake_get())
+    monkeypatch.setattr(config, "QWEN_JUDGE_MODEL", "qwen-small-test")
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        req = httpx.Request("POST", url)
+        if url == config.TYPESAFE_JEV_URL:
+            raise httpx.ConnectTimeout("blocked", request=req)
+        content = '{"choice": "apple", "confidence": 0.9}' if json.get("response_format") else "OK"
+        message = {"content": content}
+        if json.get("tools"):
+            message["tool_calls"] = [{"id": "1", "type": "function",
+                                      "function": {"name": "ping", "arguments": "{}"}}]
+        return httpx.Response(200, json={"model": json["model"], "choices": [
+            {"message": message, "finish_reason": "stop"}],
+            "usage": {"prompt_tokens": 30, "completion_tokens": 2}}, request=req)
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    code, text = _run(live=True, assume_yes=True)
+    assert "WARN  live jev" in text and "other judge covers it" in text
+    assert "PASS  live judge backup (qwen)" in text
+    assert code == 0, text

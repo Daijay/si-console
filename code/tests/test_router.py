@@ -40,7 +40,7 @@ def _all_configured(monkeypatch):
     panes = {
         "A": {"pin": "auto", "t2": "all", "t1": "on", "fallback": "yes"},
         "B": {"pin": "hy4", "t2": "all", "t1": "on", "fallback": "yes"},
-        "C": {"pin": "glm-5.4", "t2": "all", "t1": "on", "fallback": "yes"},
+        "C": {"pin": "glm-5.3-flash", "t2": "all", "t1": "on", "fallback": "yes"},
     }
     monkeypatch.setattr(config, "PANE_CONFIG", panes)
 
@@ -99,9 +99,9 @@ def http(monkeypatch):
 # --- Chains and fallback ------------------------------------------------
 
 def test_tier_chains_match_accepted_roster():
-    assert config.MODEL_TIERS["t0"]["chain"] == ["deepseek-v4.1-flash", "hy4", "glm-5.4"]
+    assert config.MODEL_TIERS["t0"]["chain"] == ["deepseek-v4.1-flash", "hy4", "glm-5.3-flash"]
     assert config.MODEL_TIERS["t1"]["chain"] == ["qwen4-max"]
-    assert config.MODEL_TIERS["t2"]["chain"] == ["hy4", "deepseek-v4.1-flash", "glm-5.4"]
+    assert config.MODEL_TIERS["t2"]["chain"] == ["hy4", "deepseek-v4.1-flash", "glm-5.3-flash"]
     assert config.MODEL_TIERS["t3"]["chain"] == ["mimo-2.6-flash"]
 
 
@@ -127,7 +127,7 @@ def test_t0_falls_back_deepseek_to_hy4_to_glm(monkeypatch):
     fake = FakeHTTP(fail={HOSTS["deepseek"], HOSTS["hunyuan"]})
     monkeypatch.setattr(httpx, "post", fake)
     reply = models.complete("t0", "hi")
-    assert reply.slot == "glm-5.4"
+    assert reply.slot == "glm-5.3-flash"
     assert [fake.host_for(c["url"]) for c in fake.calls] == [
         HOSTS["deepseek"], HOSTS["hunyuan"], HOSTS["glm"]]
 
@@ -143,7 +143,7 @@ def test_whole_t0_down_is_a_model_error(monkeypatch):
     monkeypatch.setattr(httpx, "post", FakeHTTP(fail=set(HOSTS.values())))
     with pytest.raises(ModelError) as exc:
         models.complete("t0", "hi")
-    assert "deepseek-v4.1-flash" in exc.value.message and "glm-5.4" in exc.value.message
+    assert "deepseek-v4.1-flash" in exc.value.message and "glm-5.3-flash" in exc.value.message
 
 
 def test_nothing_configured_is_a_loud_error(monkeypatch):
@@ -192,7 +192,7 @@ def test_deepseek_thinking_shape(http):
 
 
 def test_glm_effort_is_capped_at_high(http, monkeypatch):
-    monkeypatch.setitem(config.PANE_CONFIG, "C", {"pin": "glm-5.4", "t2": "all", "t1": "on", "fallback": "no"})
+    monkeypatch.setitem(config.PANE_CONFIG, "C", {"pin": "glm-5.3-flash", "t2": "all", "t1": "on", "fallback": "no"})
     models.complete("t0", "hi", pane="C", thinking="max")
     body = http.calls[0]["json"]
     assert http.host_for(http.calls[0]["url"]) == HOSTS["glm"]
@@ -241,9 +241,9 @@ def test_transport_error_falls_back(monkeypatch):
 # --- Arena panes --------------------------------------------------------
 
 def test_pane_default_pins():
-    assert router.orchestrator_for("A") == ["deepseek-v4.1-flash", "hy4", "glm-5.4"]
-    assert router.orchestrator_for("B") == ["hy4", "glm-5.4"]
-    assert router.orchestrator_for("C") == ["glm-5.4"]
+    assert router.orchestrator_for("A") == ["deepseek-v4.1-flash", "hy4", "glm-5.3-flash"]
+    assert router.orchestrator_for("B") == ["hy4", "glm-5.3-flash"]
+    assert router.orchestrator_for("C") == ["glm-5.3-flash"]
 
 
 def test_pinned_pane_without_fallback_stops(monkeypatch):
@@ -260,9 +260,9 @@ def test_pin_must_be_a_t0_model(monkeypatch):
 
 
 def test_t2_allowlist_restricts_workers(http, monkeypatch):
-    monkeypatch.setitem(config.PANE_CONFIG, "A", {"pin": "auto", "t2": "glm-5.4", "t1": "on", "fallback": "yes"})
+    monkeypatch.setitem(config.PANE_CONFIG, "A", {"pin": "auto", "t2": "glm-5.3-flash", "t1": "on", "fallback": "yes"})
     reply = models.complete("t2", "hi", pane="A")
-    assert reply.slot == "glm-5.4"
+    assert reply.slot == "glm-5.3-flash"
 
 
 def test_t2_allowlist_rejects_non_t2_model(monkeypatch):
@@ -374,7 +374,7 @@ def test_every_attempt_is_logged(monkeypatch):
 
 def test_roster_status_has_no_keys():
     status = models.roster_status()
-    assert set(status) == set(config.MODEL_SLOTS) | {"jev"}
+    assert set(status) == set(config.MODEL_SLOTS) | {"jev", "qwen-judge"}
     assert "test-key" not in json.dumps(status)
 
 

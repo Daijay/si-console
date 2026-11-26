@@ -95,7 +95,13 @@ def check_config() -> list[Check]:
             out.append(Check(FAIL, "jev", "typesafe/... is an OpenRouter id; on TypeSafe "
                                           "use jev-1.14.0 or jev-latest"))
     else:
-        out.append(Check(SKIP, "jev", "not configured: routing ties default to T2"))
+        out.append(Check(SKIP, "jev", "not configured"))
+    if config.DASHSCOPE_API_KEY and config.QWEN_JUDGE_MODEL:
+        out.append(Check(PASS, "judge backup", f"Qwen on Bailian, model {config.QWEN_JUDGE_MODEL}"))
+    elif config.QWEN_JUDGE_MODEL:
+        out.append(Check(SKIP, "judge backup", "QWEN_JUDGE_MODEL set but DASHSCOPE_API_KEY is empty"))
+    else:
+        out.append(Check(SKIP, "judge backup", "not configured: set QWEN_JUDGE_MODEL in .env"))
     for pane in config.PANES:
         try:
             for tier in (config.T0, config.T1, config.T2, config.T3):
@@ -112,6 +118,8 @@ def _configured_providers() -> list[str]:
         provider = models.slot_info(slot)["provider"]
         if models.slot_configured(slot) and provider not in seen:
             seen.append(provider)
+    if config.DASHSCOPE_API_KEY and config.QWEN_JUDGE_MODEL and "dashscope" not in seen:
+        seen.append("dashscope")
     return seen
 
 
@@ -183,6 +191,16 @@ def check_keys() -> list[Check]:
                 out.append(Check(WARN, f"model {slot}",
                                  f"{info['model']} is not in {label}'s list"
                                  + (f"; listed: {', '.join(near)}" if near else "")))
+        if provider == "dashscope" and config.QWEN_JUDGE_MODEL:
+            if listed is None:
+                out.append(Check(WARN, "model qwen-judge", "provider list unreadable; verify with --live"))
+            elif config.QWEN_JUDGE_MODEL in listed:
+                out.append(Check(PASS, "model qwen-judge", f"{config.QWEN_JUDGE_MODEL} is listed"))
+            else:
+                near = [m for m in listed if m.startswith("qwen")][:8]
+                out.append(Check(WARN, "model qwen-judge",
+                                 f"{config.QWEN_JUDGE_MODEL} is not in {label}'s list"
+                                 + (f"; listed: {', '.join(near)}" if near else "")))
     if config.JEV_API_KEY:
         name = f"key {config.JEV_PROVIDER}"
         try:
@@ -209,6 +227,8 @@ def estimate_live_cost() -> float:
                 total += telemetry.estimate_cost(slot, 300, 400 if thinking != "disabled" else 40)
     if config.JEV_API_KEY and config.JEV_MODEL:
         total += telemetry.estimate_cost("jev", 300, 0)
+    if config.DASHSCOPE_API_KEY and config.QWEN_JUDGE_MODEL:
+        total += telemetry.estimate_cost("qwen-judge", 300, 60)
     return total
 
 
@@ -239,22 +259,30 @@ def _live_chat(slot: str, thinking: str, with_tools: bool) -> Check:
     return Check(PASS, name, f"replied {raw['text'][:20]!r}, {usage}", ms)
 
 
-def _live_jev() -> Check:
+def _live_judge(backend: str) -> Check:
+    """One decision from one judge backend on its own, so a working
+    backup cannot hide a dead Jev (or the other way round)."""
     from si_console import judge
 
+    name = "live jev" if backend == "jev" else "live judge backup (qwen)"
     started = time.monotonic()
     try:
-        decision = judge.decide_choice(
+        decision = judge.ask(
+            backend,
             "Which option is a fruit?",
             {"apple": "A fruit.", "brick": "A building material."},
             {"health_check": True},
             purpose="smoke",
         )
     except judge.JudgeError as exc:
-        return Check(FAIL, "live jev", _clean(exc.message), int((time.monotonic() - started) * 1000))
+        return Check(FAIL, name, _clean(exc.message), int((time.monotonic() - started) * 1000))
     ms = int((time.monotonic() - started) * 1000)
     status = PASS if decision.choice == "apple" else WARN
-    return Check(status, "live jev", f"chose {decision.choice} ({decision.confidence:.2f})", ms)
+    slow = ""
+    limit = config.JEV_TIMEOUT_SECONDS if backend == "jev" else config.QWEN_JUDGE_TIMEOUT_SECONDS
+    if ms > limit * 1000 * 0.8:
+        status, slow = WARN, f"; close to the {limit}s timeout"
+    return Check(status, name, f"chose {decision.choice} ({decision.confidence:.2f}){slow}", ms)
 
 
 def check_live() -> list[Check]:
@@ -264,9 +292,21 @@ def check_live() -> list[Check]:
             continue
         for thinking, with_tools in combos:
             out.append(_live_chat(slot, thinking, with_tools))
-    if config.JEV_API_KEY and config.JEV_MODEL:
-        out.append(_live_jev())
-    return out
+    from si_console import judge
+
+    judged = [_live_judge(backend) for backend in judge.backends()]
+    # One working judge is enough: a dead Jev with a working backup (or
+    # the reverse) is a warning, not a failure. No judge at all only
+    # means routing ties use the T2 default, so that is a warning too.
+    if any(c.status == PASS for c in judged):
+        for c in judged:
+            if c.status == FAIL:
+                c.status, c.detail = WARN, c.detail + " (the other judge covers it)"
+    else:
+        for c in judged:
+            if c.status == FAIL:
+                c.status, c.detail = WARN, c.detail + " (no judge works: routing ties use T2)"
+    return out + judged
 
 
 # --- Summary ------------------------------------------------------------

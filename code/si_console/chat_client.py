@@ -183,6 +183,7 @@ def complete(
     tools: Optional[list] = None,
     schema: Optional[dict] = None,
     thinking: str = "disabled",
+    timeout: Optional[float] = None,
 ) -> dict:
     """Send one prompt to one provider and return a plain dict.
 
@@ -238,7 +239,7 @@ def complete(
 
     headers = auth_headers(provider)
     url = base_url(provider) + "/chat/completions"
-    timeout = getattr(config, spec["timeout_attr"], 30)
+    timeout = timeout or getattr(config, spec["timeout_attr"], 30)
     try:
         response = httpx.post(url, headers=headers, json=body, timeout=timeout)
     except httpx.ConnectError:
