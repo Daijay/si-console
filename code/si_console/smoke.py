@@ -102,6 +102,16 @@ def check_config() -> list[Check]:
         out.append(Check(SKIP, "judge backup", "QWEN_JUDGE_MODEL set but DASHSCOPE_API_KEY is empty"))
     else:
         out.append(Check(SKIP, "judge backup", "not configured: set QWEN_JUDGE_MODEL in .env"))
+    from si_console import websearch
+
+    if websearch.zhipu_configured():
+        engine = "search-prime" if websearch._international() else config.ZHIPU_SEARCH_ENGINE
+        out.append(Check(PASS, "web search", f"Zhipu on the GLM key, engine {engine}"
+                         + (", Bocha fallback" if config.BOCHA_API_KEY else "")))
+    elif config.BOCHA_API_KEY:
+        out.append(Check(PASS, "web search", "Bocha only (no GLM key)"))
+    else:
+        out.append(Check(WARN, "web search", "none: set GLM_API_KEY (Zhipu search uses it)"))
     for pane in config.PANES:
         try:
             for tier in (config.T0, config.T1, config.T2, config.T3):
@@ -306,7 +316,23 @@ def check_live() -> list[Check]:
         for c in judged:
             if c.status == FAIL:
                 c.status, c.detail = WARN, c.detail + " (no judge works: routing ties use T2)"
-    return out + judged
+    return out + judged + [_live_search()]
+
+
+def _live_search() -> Check:
+    """One real search (about 0.01 CNY on search_std). Search is research
+    only, so a failure is a warning: tasks continue without results."""
+    from si_console import websearch
+
+    if not (websearch.zhipu_configured() or config.BOCHA_API_KEY):
+        return Check(SKIP, "live web search", "no search configured")
+    started = time.monotonic()
+    result = websearch.web_search("Shenzhen weather today", count=2, freshness="oneWeek")
+    ms = int((time.monotonic() - started) * 1000)
+    if "results" in result:
+        return Check(PASS, "live web search",
+                     f"{result.get('provider', '?')}: {len(result['results'])} result(s)", ms)
+    return Check(WARN, "live web search", _clean(result["error"]), ms)
 
 
 # --- Summary ------------------------------------------------------------

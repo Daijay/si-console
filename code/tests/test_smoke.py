@@ -119,6 +119,8 @@ def test_live_mode_sends_router_shapes(monkeypatch):
     def fake_post(url, headers=None, json=None, timeout=None):
         sent.append((url, json))
         req = httpx.Request("POST", url)
+        if url.endswith("/web_search"):
+            return httpx.Response(200, json=ZHIPU_SEARCH_OK, request=req)
         if url == config.TYPESAFE_JEV_URL:
             return httpx.Response(200, json={"answers": {"pick": {
                 "type": "choice", "choice": "apple", "confidence": 0.99,
@@ -139,6 +141,11 @@ def test_live_mode_sends_router_shapes(monkeypatch):
     assert {j["model"] for j in t0} == {"deepseek-flash", "hy4-model", "glm-5.4-model"}
     assert any(u == config.TYPESAFE_JEV_URL for u, _ in sent)
     assert "PASS  live jev" in text
+    assert "PASS  live web search" in text and "zhipu: 1 result" in text
+
+
+ZHIPU_SEARCH_OK = {"search_result": [{"title": "t", "content": "c", "link": "https://e.cn",
+                                      "media": "m", "publish_date": ""}]}
 
 
 def test_live_mode_asks_first(monkeypatch):
@@ -155,6 +162,8 @@ def test_live_dead_jev_with_working_backup_is_a_warning(monkeypatch):
 
     def fake_post(url, headers=None, json=None, timeout=None):
         req = httpx.Request("POST", url)
+        if url.endswith("/web_search"):
+            return httpx.Response(200, json=ZHIPU_SEARCH_OK, request=req)
         if url == config.TYPESAFE_JEV_URL:
             raise httpx.ConnectTimeout("blocked", request=req)
         content = '{"choice": "apple", "confidence": 0.9}' if json.get("response_format") else "OK"

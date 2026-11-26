@@ -37,7 +37,7 @@ Supporting files:
 
 - `si_console/`: also has config, errors, task note storage (`vault.py`),
   search, context compression, tool registry, price-only rules engine, slide
-  maker, Bocha web search, scheduler, state store, GPIO pin map and a GPIO test
+  maker, web search (`websearch.py`: Zhipu on the GLM key, Bocha fallback), scheduler, state store, GPIO pin map and a GPIO test
   script for the Pi.
 - `systemd/`: bridge and coordinator service units.
 - `dashboard/`: `strings.json` (prewritten English and Chinese sentences) and
@@ -67,7 +67,7 @@ python3 -m venv .venv
 On Windows use `.venv\Scripts\python`. `gpiozero` is only needed on the Pi and
 `python-pptx` only for slides.
 
-Last run 2026-11-26 on Windows: 195 passed.
+Last run 2026-11-26 on Windows: 207 passed.
 
 ## Deploy to the Pi
 1. On the Pi: `git clone` the repo (then `git lfs pull` if you need the CAD files).

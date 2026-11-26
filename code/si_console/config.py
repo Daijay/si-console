@@ -85,6 +85,17 @@ BOCHA_BASE_URL = os.getenv(
 ).strip()
 BOCHA_TIMEOUT_SECONDS = int(os.getenv("SI_BOCHA_TIMEOUT_SECONDS", "15"))
 
+# --- Web search: Zhipu (Z.ai) Web Search API -----------------------------
+# Default research search, on the same key as GLM (GLM_API_KEY), so no
+# extra account. POST {GLM_BASE_URL}/web_search. Engines on the mainland
+# endpoint: search_std (basic, 0.01 CNY per call), search_pro (0.03),
+# search_pro_sogou, search_pro_quark (0.05 each). The international
+# Z.ai endpoint (api.z.ai) only has search-prime and is picked
+# automatically when GLM_BASE_URL points there. Bocha is used only as
+# a fallback, and only if BOCHA_API_KEY is set.
+ZHIPU_SEARCH_ENGINE = os.getenv("ZHIPU_SEARCH_ENGINE", "").strip() or "search_std"
+ZHIPU_SEARCH_TIMEOUT_SECONDS = int(os.getenv("SI_ZHIPU_SEARCH_TIMEOUT_SECONDS", "15"))
+
 # --- Bridge API ----------------------------------------------------------
 # One token for external agents. A long random string, made at build time.
 # Stored only in .env on the Pi and in Jayden's password manager.
