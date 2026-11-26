@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Optional
 
 import httpx
@@ -88,12 +89,25 @@ def provider_key(provider: str) -> str:
     return getattr(config, provider_spec(provider)["key_attr"], "") or ""
 
 
+_KEY_LIKE = re.compile(r"\b(?:sk|ak|pk|key)[-_][A-Za-z0-9*._\-]{6,}", re.I)
+_MASKED = re.compile(r"[A-Za-z0-9_\-]*\*{3,}[A-Za-z0-9_\-*]*")
+
+
 def redact(text: str, *secrets: str) -> str:
-    """Remove every secret from a string before it is shown or logged."""
+    """Remove every secret from a string before it is shown or logged.
+
+    Besides each full key, this removes partly masked echoes such as
+    "sk-zSJXp*****TbLdgcA" (providers often print the key's first and
+    last characters in a 401 message), anything containing the first or
+    last 6 characters of a known key, and key-shaped tokens like sk-...."""
     for secret in secrets:
         if secret:
             text = text.replace(secret, "[REDACTED]")
-    return text
+            for part in {secret[:6], secret[-6:]}:
+                if len(part) == 6:
+                    text = re.sub(r"\S*" + re.escape(part) + r"\S*", "[REDACTED]", text)
+    text = _MASKED.sub("[REDACTED]", text)
+    return _KEY_LIKE.sub("[REDACTED]", text)
 
 
 def error_detail(response, *secrets: str, limit: int = 240) -> str:
