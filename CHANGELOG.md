@@ -2,6 +2,13 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-26, Web search on Zhipu (Z.ai) instead of Bocha
+- A Bocha account could not be created, so research search now uses Zhipu's Web Search API on the GLM key (`code/si_console/websearch.py`): `POST {GLM_BASE_URL}/web_search`, engine `search_std` (~0.01 CNY per call, `ZHIPU_SEARCH_ENGINE` to change), queries clipped to 70 characters on the mainland endpoint, `search-prime` on a Z.ai key. Results map to the same shape as before (title, url, snippet, date). One retry on a network error; a failure is an error, never an empty result, and never blocks the task.
+- Bocha stays as an optional fallback, used only if `BOCHA_API_KEY` is set. It is no longer in the required keys.
+- Smoke check: shows the search setup and, in `--live`, runs one real search (a failure is a warning).
+- Not changed: the BOM line for DeepSeek and Bocha API credits (needs a source), and the ARCHITECTURE.md PROVIDERS text (owners).
+- 207 tests pass (was 195).
+
 ## 2026-11-26, Judge backup on Bailian, GLM 5.3 Flash
 - Judge chain: Jev (TypeSafe) first; if Jev does not respond in 5 s (timeout, network or HTTP error, unreadable reply), a small Qwen model on the Bailian HK key answers (`QWEN_JUDGE_MODEL`, `SI_QWEN_JUDGE_TIMEOUT_SECONDS=5`). A Jev answer, even low-confidence or a refusal, is final. Both backends only pick offered options; each attempt is logged to telemetry. The smoke check tests each judge on its own; one working judge is enough.
 - GLM slot runs GLM 5.3 Flash (`glm-5.3-flash`, $0.15/$0.50 per M) because the GLM 5.4 API is not out yet. Router-owner decision, recorded in `docs/MODEL_TIERS.md`; old `glm-5.4` pins and allowlists map to it.

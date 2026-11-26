@@ -15,7 +15,7 @@
 # Do not install them blindly. See TEST_PLAN.md.
 fastapi==0.165.0  # VERIFIED, Autumn audit 2026-11-20
 uvicorn==0.54.0  # VERIFIED, Autumn audit 2026-11-20
-httpx==0.28.1  # ASSUMED, DeepSeek and Bocha HTTP client
+httpx==0.28.1  # ASSUMED, HTTP client for every provider and web search
 pydantic==2.12.0  # ASSUMED, FastAPI dependency, check at install
 PyYAML==6.0.3  # VERIFIED, transitive in Autumn audit, now listed directly
 python-dotenv==1.2.4  # VERIFIED, Autumn audit 2026-11-20

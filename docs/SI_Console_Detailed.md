@@ -3,6 +3,7 @@
 Date: 2026-11-23.
 Rev: R2.1 for BOM and power. Wiring and GPIO map follow GPIO_PIN_MAP.md (updated 2026-11-24). Rev R3 for the case drawings, power diagram, and 3D model, in blueprints-R3/. The R3 drawings supersede the R2 drawings. In the repo, the R3 drawings live in blueprints/ and the 3D files in cad/.
 Model note: the model-router sections below describe the 2026-11-23 two-option decision (DeepSeek plus Claude vs DeepSeek only). The ACCEPTED four-tier roster with Jev judge is in `docs/MODEL_TIERS.md` (2026-11-25) and supersedes those options for model selection.
+Search note (2026-11-26): web search now runs on Zhipu's Web Search API with the GLM key (`code/si_console/websearch.py`); Bocha is only an optional fallback, because a Bocha account could not be created. The Bocha sections below are historical.
 Source folder: ~/workspace/si-console-research-2/
 Rule: plain words, short sentences, no em dashes.
 Status words: VERIFIED means a worker opened the page or source and saw it. LIKELY means a search result or secondhand claim only. ASSUMED means an estimate. Never treat ASSUMED as fact.

@@ -50,7 +50,7 @@ flowchart TB
 
     subgraph P["PROVIDERS + OFFLINE (accepted tiers, implemented in code)"]
         DS["T0: DeepSeek / Hy4 / GLM 5.4<br/>T1: Qwen4 Max<br/>T2: Hy4 / DeepSeek / GLM 5.4<br/>T3: MiMo 2.6 Flash + $0 paths<br/>Judge: Jev 1.14 (ACCEPTED 2026-11-25)"]
-        BOCHA["Bocha search"]
+        BOCHA["Web search<br/>Zhipu on GLM key, Bocha fallback"]
         REC[("Recorded runs<br/>in the vault")]
     end
 
@@ -89,7 +89,7 @@ API exist; the 100 ms poll and explicit FSM do not). Intake/router/policy/
 injection guard/execute/verify are **GAP**. Coordinator is **PARTIAL** (menu,
 3-round limit, GUARD exist; no `escalate_to_human` action). Vault is **DONE** as
 truth with `state.json` rebuilt from it; SQLite telemetry is **GAP**. DeepSeek +
-Bocha are **DONE**; offline recording/replay is **GAP**. External-agent API is
+web search (Zhipu on the GLM key, Bocha fallback) are **DONE**; offline recording/replay is **GAP**. External-agent API is
 **DONE / aligned** (home-mode, rate limit, claim types).
 
 The four-tier worker roster is **ACCEPTED 2026-11-25** (see
@@ -242,7 +242,7 @@ flowchart TB
     R -->|T1 heavy| T1["Qwen4 Max → escalate_to_human"]
 
     T1 & T2 & T3 -->|result| T0
-    T0 --> B["Bocha search<br/>best-effort, never blocks"]
+    T0 --> B["Web search: Zhipu (GLM key)<br/>Bocha fallback · best-effort, never blocks"]
     J{{"JEV 1.14 — JUDGE<br/>$0.042/M in, output free, ~100ms<br/>winner pick · tab promotion · ambiguous routing<br/>GUARD keeps final authority"}}
     T0 -.-> J
     T1 & T2 & T3 -.-> J
@@ -254,11 +254,11 @@ flowchart TB
 `config.py` chains + pane pins, `chat_client.py` (one OpenAI-compatible client
 for DeepSeek, Hunyuan/Hy4, GLM, Bailian/Qwen, MiMo), `models.py` chain walk with
 fallback and T1 `EscalationNeeded`, `router.py` rules with Jev tie-break,
-`judge.py` (Jev direct from TypeSafe, Qwen on Bailian HK as backup) and `telemetry.py` (SQLite). **195 mocked
+`judge.py` (Jev direct from TypeSafe, Qwen on Bailian HK as backup) and `telemetry.py` (SQLite). **207 mocked
 tests pass; no live provider call has been made** — wire shapes are LIKELY from
 docs and model ids go in `code/.env`. Still GAP: a worker-dispatch action in the
 coordinator's fixed menu and live verification per provider. No Anthropic
-client, deliberately, because the booth is in Shenzhen. Bocha is **DONE** as a
+client, deliberately, because the booth is in Shenzhen. Web search (Zhipu on the GLM key since 2026-11-26, Bocha as fallback) is **DONE** as a
 best-effort search that never blocks and never changes a ranking. Jev 1.14 is
 the accepted **judge** — typed decisions in ~100ms, output free — not the old
 optional home-only shadow advisor (Inkling was culled). GLM 5.4 is benchmarked
@@ -388,7 +388,7 @@ flowchart TB
 **Legend:** this is the accepted 2026-11-25 booth demo design recorded in
 `docs/MODEL_TIERS.md` §"Booth arena". The **route/model layer is implemented**
 (2026-11-24): per-pane pins, T2 allowlists, T1 on/off, Jev tie-break, SQLite
-telemetry, 195 mocked tests. The **arena contest runner, the 3-column UI, the
+telemetry, 207 mocked tests. The **arena contest runner, the 3-column UI, the
 tab-chip promotion flow and the isolated sandbox are GAP** — not built. When
 built, the Pi will render the dashboard and make API calls; generated code will
 run only in the sandbox, never on the GPIO/bridge path. Green/red/kill remain
@@ -407,7 +407,7 @@ GUARD's physical-action scope by design).
 | 3. End-to-end flow | FLOW, SAFETY | PARTIAL |
 | 4. Safety stack | SAFETY | mixed (GUARD DONE, others GAP/PARTIAL) |
 | 5. Memory and state | MEMORY AND STATE, OFFLINE | PARTIAL / GAP |
-| 6. Providers and routing | PROVIDERS | DONE in code (4 tiers + Jev with Qwen backup, 195 mocked tests); live calls unverified, check with `python -m si_console.smoke --live` |
+| 6. Providers and routing | PROVIDERS | DONE in code (4 tiers + Jev with Qwen backup, 207 mocked tests); live calls unverified, check with `python -m si_console.smoke --live` |
 | 7. Offline fallback | OFFLINE | GAP (rules engine DONE) |
 | 8. External agents | EXTERNAL AGENTS | DONE / aligned |
 | 9. Ownership map | OWNERSHIP | informational |
