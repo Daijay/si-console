@@ -41,3 +41,11 @@ def test_out_of_credit_is_not_called_a_rate_limit(monkeypatch, status, body):
         chat_client.complete("glm", "hi", model="m", max_tokens=5)
     assert "out of credit" in exc.value.message and "Rate limited" not in exc.value.message
     assert exc.value.status == 402
+
+
+def test_key_fragment_inside_a_url_is_not_redacted():
+    # A key whose first 6 characters happen to occur inside a provider's link.
+    key = "apikey_" + "Z" * 40 + "q9x8w7"
+    url = "See: https://console.cloud.tencent.com/tokenhub/apikey"
+    assert redact(url, key) == url
+    assert "Z" * 10 not in redact(f"bad key {key[:10]}*****{key[-6:]}", key)

@@ -40,7 +40,7 @@ PROVIDERS = {
         "thinking": "deepseek",
     },
     "hunyuan": {
-        "label": "Hunyuan",
+        "label": "Hunyuan (TokenHub)",
         "key_attr": "HUNYUAN_API_KEY",
         "url_attr": "HUNYUAN_BASE_URL",
         "timeout_attr": "PROVIDER_TIMEOUT_SECONDS",
@@ -98,14 +98,17 @@ def redact(text: str, *secrets: str) -> str:
 
     Besides each full key, this removes partly masked echoes such as
     "sk-zSJXp*****TbLdgcA" (providers often print the key's first and
-    last characters in a 401 message), anything containing the first or
-    last 6 characters of a known key, and key-shaped tokens like sk-...."""
+    last characters in a 401 message): any word that starts with a known
+    key's first 6 characters or ends with its last 6, plus key-shaped
+    tokens like sk-.... A fragment in the middle of a word (for example
+    inside a URL) is left alone."""
     for secret in secrets:
         if secret:
             text = text.replace(secret, "[REDACTED]")
-            for part in {secret[:6], secret[-6:]}:
-                if len(part) == 6:
-                    text = re.sub(r"\S*" + re.escape(part) + r"\S*", "[REDACTED]", text)
+            if len(secret) >= 12:
+                head, tail = re.escape(secret[:6]), re.escape(secret[-6:])
+                text = re.sub(r"(?<!\S)" + head + r"\S*", "[REDACTED]", text)
+                text = re.sub(r"(?<!\S)\S*" + tail + r"(?=[.,;:)\]]*(?:\s|$))", "[REDACTED]", text)
     text = _MASKED.sub("[REDACTED]", text)
     return _KEY_LIKE.sub("[REDACTED]", text)
 
@@ -163,6 +166,13 @@ def list_models(provider: str, timeout: float = 10) -> dict:
     Returns {"status": int, "models": [ids] or None, "detail": str}.
     Never raises for HTTP errors; raises ModelError for transport."""
     url = base_url(provider) + "/models"
+    if provider == "dashscope":
+        # Bailian's OpenAI-compatible /models answers 400; its native
+        # list (/api/v1/models) works and is free. Being listed does not
+        # prove the workspace site serves the model (some listed models
+        # answer "not supported in current workspace service site"), so
+        # --live is still the final check.
+        url = base_url(provider).replace("/compatible-mode/v1", "/api/v1") + "/models?page_size=200"
     try:
         response = httpx.get(url, headers=auth_headers(provider), timeout=timeout)
     except httpx.HTTPError as exc:
@@ -173,9 +183,13 @@ def list_models(provider: str, timeout: float = 10) -> dict:
     models = None
     if response.status_code == 200:
         try:
-            data = response.json().get("data")
+            payload = response.json()
+            data = payload.get("data")
+            if data is None and isinstance(payload.get("output"), dict):
+                data = payload["output"].get("models")  # Bailian native shape
             if isinstance(data, list):
-                models = [str(m.get("id")) for m in data if isinstance(m, dict) and m.get("id")]
+                models = [str(m.get("id") or m.get("model")) for m in data
+                          if isinstance(m, dict) and (m.get("id") or m.get("model"))]
         except (ValueError, AttributeError):
             models = None
     detail = "" if response.status_code == 200 else error_detail(response, provider_key(provider))

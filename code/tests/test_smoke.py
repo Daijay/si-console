@@ -75,7 +75,7 @@ def test_free_mode_all_good(monkeypatch):
 
 
 def test_bad_key_fails_and_is_redacted(monkeypatch):
-    monkeypatch.setattr(httpx, "get", _fake_get({"api.hunyuan.cloud.tencent.com": 401}))
+    monkeypatch.setattr(httpx, "get", _fake_get({"tokenhub.tencentcloudmaas.com": 401}))
     code, text = _run()
     assert "FAIL  key hunyuan" in text
     assert SECRET not in text
