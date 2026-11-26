@@ -106,10 +106,7 @@ def check_config() -> list[Check]:
 
     if websearch.zhipu_configured():
         engine = "search-prime" if websearch._international() else config.ZHIPU_SEARCH_ENGINE
-        out.append(Check(PASS, "web search", f"Zhipu on the GLM key, engine {engine}"
-                         + (", Bocha fallback" if config.BOCHA_API_KEY else "")))
-    elif config.BOCHA_API_KEY:
-        out.append(Check(PASS, "web search", "Bocha only (no GLM key)"))
+        out.append(Check(PASS, "web search", f"Zhipu on the GLM key, engine {engine}"))
     else:
         out.append(Check(WARN, "web search", "none: set GLM_API_KEY (Zhipu search uses it)"))
     for pane in config.PANES:
@@ -327,7 +324,7 @@ def _live_search() -> Check:
     only, so a failure is a warning: tasks continue without results."""
     from si_console import websearch
 
-    if not (websearch.zhipu_configured() or config.BOCHA_API_KEY):
+    if not websearch.zhipu_configured():
         return Check(SKIP, "live web search", "no search configured")
     started = time.monotonic()
     result = websearch.web_search("Shenzhen weather today", count=2, freshness="oneWeek")

@@ -1,20 +1,18 @@
-# This file is Autumn's autumn/chats.py, rewired for SI Console state.
-# What stayed: one JSON file per record, atomic write with temp file
-# then os.replace, path guard on ids, and the rule that a corrupt
-# file can never take out the rest. ChatStore._write is the pattern.
-# What changed: chats are gone. This store holds state.json for the
-# screens and claims.json for external agent claims. The vault is
-# still the truth for tasks. state.json is a cache. If they disagree,
-# the vault wins. The bridge rebuilds state.json by scanning the
-# vault on every start. Claims live outside the vault, in claims.json,
-# because frontmatter has no claim field in ARCHITECTURE.md. Do not
-# add a claim field to frontmatter without updating ARCHITECTURE.md.
-# Claim rules, from INTEGRATION.md: one task, one claim, one agent.
-# Claim TTL 300 seconds. Heartbeat every 60 seconds to renew. No
-# heartbeat for 300 seconds, the claim expires and the task returns
-# to queued. A heartbeat after expiry returns 410. A wrong claim
-# token returns 403. Claims are lost on reboot. No claim survives
-# a power loss. The bridge must check /api/health before every write.
+# Stores state.json for the screens and claims.json for external agent
+# claims. Each is written atomically (temp file, then os.replace) behind
+# a path guard on ids, and a corrupt file can never take out the rest.
+# The vault is still the truth for tasks. state.json is a cache. If they
+# disagree, the vault wins. The bridge rebuilds state.json by scanning
+# the vault on every start. Claims live outside the vault, in
+# claims.json, because task notes have no claim field: a claim is short
+# lived and must not rewrite the note. Adding one would change the note
+# format that the vault reader checks.
+# Claim rules: one task, one claim, one agent. Claim TTL 300 seconds.
+# Heartbeat every 60 seconds to renew. No heartbeat for 300 seconds, the
+# claim expires and the task returns to queued. A heartbeat after expiry
+# returns 410. A wrong claim token returns 403. Claims are lost on
+# reboot. No claim survives a power loss. The bridge must check
+# /api/health before every write.
 """State store. Atomic JSON for state.json and for claims."""
 
 from __future__ import annotations
@@ -31,7 +29,8 @@ from typing import Optional
 from si_console import config
 from si_console.errors import ConsoleError
 
-# Claim rules, copied from INTEGRATION.md section 8.2. ASSUMED numbers.
+# Claim timing, so a dead agent cannot hold a task forever. The numbers
+# are estimates.
 CLAIM_TTL_SECONDS = 300
 HEARTBEAT_INTERVAL_SECONDS = 60
 
@@ -39,7 +38,7 @@ ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9\-_]{0,63}$")
 
 
 def _write_atomic_json(path: Path, data: dict) -> None:
-    """Atomic JSON write. Copied from Autumn ChatStore._write."""
+    """Atomic JSON write, so a crash never leaves half a file."""
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=str(path.parent), suffix=".tmp")
     try:
@@ -62,7 +61,7 @@ def _read_json(path: Path) -> dict:
 class StateStore:
     """state.json. The dashboard reads it, never the vault directly.
 
-    Fields, from ARCHITECTURE.md section 7: current_task_id,
+    Fields the screens need: current_task_id,
     current_agent, current_status, kill_active, mode, replay_date,
     last_voice_text, last_error, approval_pending, lang, updated.
     """

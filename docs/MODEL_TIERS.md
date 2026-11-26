@@ -323,7 +323,7 @@ Check before the booth: `python -m si_console.smoke` (free: config, DNS, clock,
 keys and model ids) and `--live` (one tiny call per model). Pi setup:
 `code/deploy/install_pi.sh`.
 
-Still open: live calls per provider (wire shapes are LIKELY from docs), Qwen
+Still open: live calls per provider (wire shapes are unconfirmed, taken from docs), Qwen
 thinking (T1 runs with thinking off until tested), a worker-dispatch action in
 the coordinator's fixed menu, the arena contest runner and UI, and model ids
 for each provider in `.env`. Owner: Christopher (router/config), Jayden

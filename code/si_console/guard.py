@@ -1,8 +1,7 @@
-# GUARD is new code. Nothing in Autumn does this. Autumn had no tool
-# calling, no approval gate, and no kill switch, so there was nothing
-# to guard. GUARD is a role, not a separate agent process. GUARD is
-# code, not an LLM call. GUARD runs before every NEEDS APPROVAL tool
-# call and before every state change that touches the portfolio.
+# GUARD is the safety check between a proposal and an action. It is a
+# role, not a separate agent process. GUARD is code, not an LLM call.
+# GUARD runs before every NEEDS APPROVAL tool call and before every
+# state change that touches the portfolio.
 # GUARD checks the fixed action menu, the tool tag, the kill state,
 # the approval state, and the risk check. If any check fails, GUARD
 # blocks the call and writes a log line. GUARD has no LLM. GUARD
@@ -49,7 +48,7 @@ def check_tool(
     1. Kill active. Nothing runs while kill is active, except the
        resume path, which is a button press, not a tool call.
     2. Role permission. The tool must be in the role's allowed list
-       from ARCHITECTURE.md section 5.8.
+       so an agent can only do its own job.
     3. Approval. A NEEDS APPROVAL tool needs a pending approval that
        the green button already granted. A proposal that is only
        queued is not approved. approved_by must be human.

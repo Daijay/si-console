@@ -1,18 +1,15 @@
-# This file is Autumn's autumn/search.py, repointed at SI Console task
-# notes. What stayed: keyword scoring with stemming, accent folding,
-# and IDF reweighting, section excerpts, citations with labels, the
-# budgets (6 files, 12000 chars), and the inventory rule. No
-# embeddings, no vector store, no rebuild step. That fits a Pi.
-# What changed: the Gmail half is dropped. The corpus is task notes
-# plus research notes, not mail plus notes. The search answers "what
-# did we already do on this task", not "what did my mail say".
-# The inventory rule is kept on purpose: "list every task" is not a
-# search. It is a directory listing. Running a search for it returns
-# the notes that happen to contain the words list, file, or vault,
-# which is an arbitrary few. list_tasks in vault.py does that job.
+# Keyword search over task notes and research notes: scoring with
+# stemming, accent folding and IDF reweighting, section excerpts,
+# citations with labels, fixed budgets (6 files, 12000 chars), and the
+# inventory rule. No embeddings, no vector store, no rebuild step, so it
+# fits a Pi. The search answers "what did we already do on this task".
+# The inventory rule: "list every task" is not a search. It is a
+# directory listing. Running a search for it returns the notes that
+# happen to contain the words list, file, or vault, which is an
+# arbitrary few. list_tasks in vault.py does that job.
 # Citations: every answer must say which note it came from, with a
-# label like V1 or V2, the same way Autumn did. An answer with no
-# citation is a guess, and the coordinator must not act on it.
+# label like V1 or V2. An answer with no citation is a guess, and the
+# coordinator must not act on it.
 """Vault search. Keyword ranking over task notes, with citations."""
 
 from __future__ import annotations
@@ -26,7 +23,7 @@ from typing import Iterable, Optional
 from si_console import config
 from si_console.errors import SourceError
 
-# Budgets, copied from Autumn search.py. Small on purpose, so six long
+# Budgets. Small on purpose, so six long
 # notes cannot blow the context that six short ones fit inside.
 MAX_VAULT_FILES = 6
 MAX_VAULT_CHARS = 12000
@@ -41,14 +38,14 @@ STOP_WORDS = {
 
 
 def _fold(text: str) -> str:
-    """Lowercase and strip accents, so cafe matches cafe. From Autumn."""
+    """Lowercase and strip accents, so cafe matches cafe."""
     folded = unicodedata.normalize("NFKD", text or "")
     folded = "".join(c for c in folded if not unicodedata.combining(c))
     return folded.lower()
 
 
 def _stem(word: str) -> str:
-    """Tiny stemmer. From Autumn. Strips common endings only."""
+    """Tiny stemmer. Strips common endings only."""
     for ending in ("ing", "ed", "es", "s"):
         if len(word) > len(ending) + 2 and word.endswith(ending):
             return word[: -len(ending)]
@@ -64,7 +61,7 @@ class Term:
 
 
 def extract_terms(question: str) -> list[Term]:
-    """Split a question into weighted terms. From Autumn search.py."""
+    """Split a question into weighted terms."""
     words = re.findall(r"[a-z0-9]+", _fold(question))
     terms: list[Term] = []
     seen: dict[str, Term] = {}
@@ -106,7 +103,7 @@ class VaultHit:
 
 
 def _excerpt(text: str, terms: list[Term]) -> tuple[str, bool]:
-    """One short excerpt around the first matching term. From Autumn."""
+    """One short excerpt around the first matching term."""
     folded = _fold(text)
     best = -1
     for term in terms:
@@ -166,7 +163,7 @@ def _reweight(terms: list[Term], corpus: list[str]) -> list[Term]:
     for term in terms:
         docs = sum(1 for text in corpus if term.stem in text)
         # A term in all notes adds almost nothing. A term in one note
-        # is a strong signal. This is the same shape as Autumn's.
+        # is a strong signal.
         import math
 
         idf = math.log((total + 1) / (docs + 1)) + 1
@@ -184,7 +181,7 @@ def search_vault(
     Returns nothing when the question names something specific and
     the vault does not contain that name. Returning nothing is the
     honest answer. The notes that matched on filler words only would
-    be a lie. Same rule as Autumn search.py.
+    be a lie.
     """
     terms = terms if terms is not None else extract_terms(question)
     if not terms:
@@ -231,7 +228,7 @@ def search_vault(
 def wants_inventory(question: str) -> bool:
     """True when the question asks for a listing, not a search.
 
-    From Autumn search.py. "List every note" is enumeration, not
+    "List every note" is enumeration, not
     retrieval. The caller must use list_tasks in vault.py instead.
     """
     folded = _fold(question)
@@ -245,8 +242,8 @@ def build_prompt(question: str, hits: list[VaultHit]) -> str:
     """Build the prompt for a search answer, with citation labels.
 
     The model must cite by label, like [V1]. A claim with no label
-    is a guess. Autumn's ask_vault.py flagged fabricated citations
-    the same way. Keep that check in the caller.
+    is a guess. The caller must check for labels that match no note,
+    because a model can invent a citation.
     """
     lines = [f"Question: {question}", "", "Sources:"]
     for hit in hits:

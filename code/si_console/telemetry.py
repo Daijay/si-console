@@ -1,6 +1,6 @@
-# Telemetry to SQLite, per ARCHITECTURE.md "Memory and state" and
-# MODEL_TIERS.md selection rule 5: every model selection is logged with
-# route, pane, tier, slot, model, tokens, latency, cost and error code.
+# Telemetry to SQLite, per MODEL_TIERS.md selection rule 5: every model
+# selection is logged with route, pane, tier, slot, model, tokens,
+# latency, cost and error code, so cost and failures can be traced.
 # The vault records what happened; this records how it ran.
 # Never stored: prompt text, replies, keys, personal data.
 # A telemetry failure never breaks a model call. It is swallowed.

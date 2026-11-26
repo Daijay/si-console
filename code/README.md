@@ -37,7 +37,7 @@ Supporting files:
 
 - `si_console/`: also has config, errors, task note storage (`vault.py`),
   search, context compression, tool registry, price-only rules engine, slide
-  maker, web search (`websearch.py`: Zhipu on the GLM key, Bocha fallback), scheduler, state store, GPIO pin map and a GPIO test
+  maker, web search (`websearch.py`: Zhipu on the GLM key), scheduler, state store, GPIO pin map and a GPIO test
   script for the Pi.
 - `systemd/`: bridge and coordinator service units.
 - `dashboard/`: `strings.json` (prewritten English and Chinese sentences) and

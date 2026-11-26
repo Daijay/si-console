@@ -1,13 +1,13 @@
-# The slide maker is new code. Autumn had no slide maker.
-# The tool is make_slides, tag NEEDS APPROVAL, per ARCHITECTURE.md
-# section 5.6. Making slides never executes a trade. The slide
-# content must come from task notes and search results, with a source
-# line on each slide. The file is written to the vault slides folder,
-# then shown on the main screen. Only python-pptx is used. No other
-# slide library. Max 5 slides, max 5 bullets per slide. The output
-# path must be under vault/si-console/slides/. The registry enforces
-# that in tools.py. This file enforces it again, so a bug in one
-# place is caught by the other.
+# Slide maker, tool name make_slides, tagged NEEDS APPROVAL because it
+# writes a file that visitors will see. Making slides never executes a
+# trade. The slide content must come from task notes and search results,
+# with a source line on each slide, so every claim can be traced. The
+# file is written to the vault slides folder, then shown on the main
+# screen. Only python-pptx is used. No other slide library. Max 5
+# slides, max 5 bullets per slide. The output path must be under
+# vault/si-console/slides/. The registry enforces that in tools.py.
+# This file enforces it again, so a bug in one place is caught by the
+# other.
 """Make slides with python-pptx. Content from notes, with sources."""
 
 from __future__ import annotations
@@ -106,7 +106,7 @@ def main() -> None:
         title=sys.argv[1],
         bullets=sys.argv[2:],
         slide_count=3,
-        source_line="Task notes and Bocha search. See the task note for links.",
+        source_line="Task notes and web search. See the task note for links.",
     )
     print(json.dumps(result, indent=2))
 
