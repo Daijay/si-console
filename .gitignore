@@ -23,6 +23,10 @@ Thumbs.db
 telemetry.sqlite
 code/state.json
 code/claims.json
+code/approval_request.json
+approval_request.json
+code/outbox.json
+outbox.json
 # local scratch
 *.log
 *.tmp

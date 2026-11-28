@@ -56,6 +56,7 @@ for screen in SCREENS:
 <script src="{up}js/fixtures.js"></script>
 <script src="{up}js/common.js"></script>
 <script src="{up}js/{screen}.js"></script>
+{"" if state else '<script src="js/live.js"></script>'}
 </body>
 </html>
 """

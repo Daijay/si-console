@@ -153,7 +153,8 @@ def test_done_on_order_task_needs_approval(vault):
 
 def test_coordinator_blocks_unapproved_order_done(vault, state, monkeypatch):
     """The coordinator used the static SAFE tag, so an agent could mark
-    an order done without a green press. Now GUARD blocks it."""
+    an order done without a green press. Now the call waits for the
+    green button and expires without ever setting done."""
     _task("order-001", agent="execution", type_="order")
     call = {
         "function": {
@@ -162,8 +163,17 @@ def test_coordinator_blocks_unapproved_order_done(vault, state, monkeypatch):
         }
     }
     task = read_note("order-001")
-    with pytest.raises(GuardError):
-        coordinator._run_one_tool_call(call, task, GuardState(), [])
+    clock = [0.0]
+    monkeypatch.setattr(coordinator, "_monotonic", lambda: clock[0])
+    monkeypatch.setattr(
+        coordinator, "_sleep", lambda seconds: clock.__setitem__(0, clock[0] + 60)
+    )
+    log: list = []
+    coordinator._run_one_tool_call(call, task, GuardState(), log)
+    assert not any(line.startswith("ran ") for line in log)
+    note = read_note("order-001")
+    assert note.status == "blocked"
+    assert note.status != "done"
 
 
 def test_tag_for_write_fails_closed():

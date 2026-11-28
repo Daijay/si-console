@@ -48,7 +48,7 @@ REASON_CODES = {
     "BAD_DEPENDENCY", "DUPLICATE_TASK", "GUARD_BLOCK", "API_TIMEOUT",
     "API_ERROR", "TOOL_TIMEOUT", "VAULT_WRITE_FAIL", "STUCK",
     "POWER_LOSS", "ESCALATE", "KILL_SWITCH", "CLAIM_EXPIRED",
-    "CLAIM_RELEASED",
+    "CLAIM_RELEASED", "HUMAN_TIMEOUT", "VAULT_ERROR",
 }
 
 TASK_DIR = "tasks"
@@ -109,6 +109,23 @@ def _resolve_target(rel_path: str, root: Path) -> Path:
             f"Refusing to write to a non-markdown file: {target.name}",
         )
     return target
+
+
+def resolve_note(rel_path: str) -> Path:
+    """Resolve a note path for reading or writing, staying in the vault.
+
+    Two spellings are accepted, because both appear in task notes and
+    in the tool schema: 'tasks/x.md' (relative to the vault root) and
+    'vault/si-console/tasks/x.md' (the documented form). Both land on
+    the same file. Anything that tries to escape is refused by the
+    same guard, and the suffix must still be .md.
+    """
+    root = _vault_root()
+    text = str(rel_path).replace("\\", "/")
+    prefix = "vault/si-console/"
+    if text.startswith(prefix):
+        text = text[len(prefix) :]
+    return _resolve_target(text, root)
 
 
 @dataclass

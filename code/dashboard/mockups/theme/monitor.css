@@ -76,6 +76,8 @@ html.still .edge .packet.late { display: none; }
 .risk i { width: 13px; height: 28px; border: 2px solid var(--ink); }
 .risk i.on { background: var(--ink); }
 .ask .action { font-size: 42px; line-height: 1.15; font-weight: 700; margin: 8px 0 2px; text-wrap: balance; }
+.ask .command-line { margin: 0 0 8px; min-width: 0; }
+.ask .command-line code { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 20px; opacity: 0.8; }
 .ask .riskwhy { display: flex; justify-content: space-between; font-size: 24px; color: var(--ink-2); }
 .card h3 { font-size: 22px; color: var(--ink-2); margin: 8px 0 0; }
 .why { font-size: 26px; line-height: 1.35; }

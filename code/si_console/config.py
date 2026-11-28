@@ -39,6 +39,15 @@ STATE_PATH = Path(os.getenv("SI_STATE_PATH", "").strip() or PROJECT_ROOT / "stat
 # Claims file for external agents. Outside the vault. See bridge.py.
 CLAIMS_PATH = Path(os.getenv("SI_CLAIMS_PATH", "").strip() or PROJECT_ROOT / "claims.json")
 
+# One small file the coordinator writes and the bridge polls. The two
+# services are separate processes, so this file is the handoff for an
+# approval request. It is deleted as soon as either side resolves it,
+# so a stale request can never be approved. The task note is still the
+# truth for the outcome. See si_console/approval.py.
+APPROVAL_PATH = Path(
+    os.getenv("SI_APPROVAL_PATH", "").strip() or PROJECT_ROOT / "approval_request.json"
+)
+
 # Price data lives outside the vault, so the bridge never parses big files.
 DATA_DIR = Path(os.getenv("SI_DATA_DIR", "").strip() or PROJECT_ROOT / "data" / "market")
 
@@ -102,6 +111,31 @@ WATCHDOG_INTERVAL_SECONDS = int(os.getenv("SI_WATCHDOG_INTERVAL_SECONDS", "30"))
 MODE = os.getenv("SI_MODE", "booth").strip()  # home or booth
 REPLAY_SCENARIO = os.getenv("SI_REPLAY_SCENARIO", "2020").strip()  # 2020 or 2022
 LANG = os.getenv("SI_LANG", "en").strip()  # en or zh
+
+# Replay rules. The engine computes with these and the screens print
+# them, so both read this one block. A number typed twice drifts; a
+# number typed once cannot. Confirmed 2026-11-28: weekly rebalance,
+# max 3 sectors, 10 percent cash, 0 cost. The env overrides exist for
+# a bench run, not for the booth.
+REPLAY_REBALANCE = os.getenv("SI_REPLAY_REBALANCE", "weekly").strip()
+REPLAY_MAX_SECTORS = int(os.getenv("SI_REPLAY_MAX_SECTORS", "3"))
+REPLAY_CASH_RESERVE = float(os.getenv("SI_REPLAY_CASH_RESERVE", "0.10"))
+REPLAY_COST_PER_TRADE = float(os.getenv("SI_REPLAY_COST_PER_TRADE", "0"))
+REPLAY_LOOKBACK_DAYS = int(os.getenv("SI_REPLAY_LOOKBACK_DAYS", "60"))
+
+# Prewritten bilingual sentences for the screens and for speech. A
+# tool picks an id from this file. Free text is never spoken.
+STRINGS_PATH = Path(
+    os.getenv("SI_STRINGS_PATH", "").strip() or PROJECT_ROOT / "dashboard" / "strings.json"
+)
+
+# One small file for screen and speech events. The coordinator writes
+# it; the bridge polls it and folds the event into state.json. The
+# bridge stays the only writer of state.json, so the two services
+# never race on the same file. See si_console/outbox.py.
+OUTBOX_PATH = Path(
+    os.getenv("SI_OUTBOX_PATH", "").strip() or PROJECT_ROOT / "outbox.json"
+)
 
 # --- Providers (accepted roster, docs/MODEL_TIERS.md 2026-11-25) -------
 # Every provider below is reached with an OpenAI-compatible

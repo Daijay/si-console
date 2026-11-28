@@ -28,13 +28,17 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import threading
 import time
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
-from si_console import config
+from si_console import approval, config, outbox, ui_snapshot
 from si_console.errors import ConsoleError, VaultError
 from si_console.state_store import ClaimStore, StateStore
 from si_console.vault import (
@@ -148,12 +152,25 @@ class VaultWatcher:
     def rebuild_state(self) -> dict:
         """Rebuild state.json by scanning the vault. Called on start
         and after a crash. If the vault is unreadable, show VAULT
-        ERROR and set all LEDs off, except the kill pattern."""
+        ERROR and set all LEDs off, except the kill pattern.
+
+        A bridge restart mid-wait must not drop a live proposal. If the
+        coordinator left a request file for the current task, restore
+        the pending approval so the green button still works.
+        """
+        global approval_pending, approval_task_id
         try:
             tasks = list_tasks()
         except VaultError:
             return state_store.update(last_error="VAULT ERROR")
         current = tasks[0] if tasks else None
+        request = approval.read_request()
+        if request and current and request.get("task_id") == current.id:
+            if current.status == "working" and not current.approved_by:
+                approval_pending = True
+                approval_task_id = current.id
+            else:
+                approval.clear_request(current.id)
         return state_store.update(
             current_task_id=current.id if current else "",
             current_agent=current.agent if current else "",
@@ -164,6 +181,82 @@ class VaultWatcher:
             approval_pending=approval_pending,
             lang=config.LANG,
         )
+
+
+# --- Approval state ------------------------------------------------------
+def _clear_approval_state() -> None:
+    """Drop the pending approval in memory and in state.json, and
+    delete the coordinator's request file. Used when a press, a kill,
+    an expiry or a stale request resolves the proposal."""
+    global approval_pending, approval_task_id
+    approval_pending = False
+    approval_task_id = ""
+    approval.clear_request()
+    state_store.update(approval_pending=False)
+
+
+def poll_approval(now: float | None = None) -> dict:
+    """Check the coordinator's request file once. Called every 100 ms
+    by the bridge loop, and directly by tests.
+
+    The bridge owns the 120 s clock, the green LED and the screen, so
+    one place decides expiry. The coordinator keeps a later safety
+    deadline in case this process is dead. Outcomes:
+      none      no request
+      pending   request is live; the green button is armed
+      approved  green already wrote approved_by human; request cleared
+      expired   older than the timeout; task blocked HUMAN_TIMEOUT
+      ignored   killed, or the task is gone/blocked/done
+    """
+    global approval_pending, approval_task_id
+    request = approval.read_request()
+    if not request:
+        if approval_pending:
+            _clear_approval_state()
+        return {"status": "none"}
+    task_id = str(request.get("task_id", ""))
+    if kill_active or resume_required:
+        approval.clear_request(task_id)
+        _clear_approval_state()
+        return {"status": "ignored", "note": "KILL ACTIVE"}
+    try:
+        task = read_note(task_id)
+    except VaultError:
+        approval.clear_request(task_id)
+        _clear_approval_state()
+        return {"status": "ignored", "note": "Task is gone."}
+    if task.status in ("blocked", "done"):
+        # A task blocked by kill, timeout or watchdog, or already done,
+        # is no longer a live proposal. Never revive it with green.
+        approval.clear_request(task_id)
+        _clear_approval_state()
+        return {"status": "ignored", "note": f"TASK {task.status.upper()}"}
+    if task.approved_by == "human":
+        approval.clear_request(task_id)
+        _clear_approval_state()
+        return {"status": "approved", "task_id": task_id}
+    if approval.is_expired(request, now=now):
+        approval.clear_request(task_id)
+        _clear_approval_state()
+        try:
+            update_status(task_id, "blocked", "HUMAN_TIMEOUT")
+        except VaultError:
+            pass
+        return {"status": "expired", "task_id": task_id}
+    if not approval_pending or approval_task_id != task_id:
+        approval_pending = True
+        approval_task_id = task_id
+        state_store.update(
+            approval_pending=True,
+            current_task_id=task_id,
+            current_agent=task.agent,
+            current_status=task.status,
+        )
+    return {
+        "status": "pending",
+        "task_id": task_id,
+        "command": request.get("command", ""),
+    }
 
 
 # --- Button handling -----------------------------------------------------
@@ -203,6 +296,7 @@ def on_green_press() -> dict:
         task = read_note(approval_task_id)
     except VaultError:
         approval_pending = False
+        approval.clear_request()
         return {"status": "ignored", "note": "Task is gone."}
     if task.risk_check == "fail":
         return {"status": "ignored", "note": f"RISK BLOCKED {task.risk_reason}"}
@@ -211,10 +305,15 @@ def on_green_press() -> dict:
         # is no longer a live proposal. Never revive it with green.
         approval_pending = False
         approval_task_id = ""
+        approval.clear_request(task.id)
         state_store.update(approval_pending=False)
         return {"status": "ignored", "note": f"TASK {task.status.upper()}"}
     update_status(task.id, "working", approved_by="human")
     approval_pending = False
+    approval_task_id = ""
+    # Delete the request last: the coordinator must see approved_by
+    # human in the note before it stops waiting.
+    approval.clear_request(task.id)
     state_store.update(approval_pending=False)
     return {"status": "approved", "task_id": task.id}
 
@@ -234,7 +333,9 @@ def on_red_press() -> dict:
     try:
         update_status(task_id, "blocked", "HUMAN_REJECT")
     except VaultError:
+        approval.clear_request(task_id)
         return {"status": "ignored", "note": "Task is gone."}
+    approval.clear_request(task_id)
     return {"status": "rejected", "task_id": task_id}
 
 
@@ -247,9 +348,12 @@ def on_kill(active: bool) -> dict:
     kill_active = active
     if active:
         # Drop the pending proposal in memory too, not only in
-        # state.json, or green could approve it after a resume.
+        # state.json, or green could approve it after a resume. Also
+        # delete the coordinator's request file, so a restart cannot
+        # resurrect a pre-kill proposal.
         approval_pending = False
         approval_task_id = ""
+        approval.clear_request()
         resume_required = True
         claim_store.release_all()
         for task in list_tasks(status="working"):
@@ -280,8 +384,65 @@ def request_approval(task_id: str) -> dict:
     return {"status": "approval_pending", "task_id": task.id}
 
 
+# --- Approval poll loop --------------------------------------------------
+_approval_thread_started = False
+
+
+def _approval_loop() -> None:
+    """Poll the coordinator's request file every 150 ms. One bad read
+    must never stop the loop, or the green button goes dead."""
+    while True:
+        try:
+            poll_approval()
+            drain_outbox()
+        except Exception:  # noqa: BLE001 - the loop must survive a bad file
+            pass
+        time.sleep(approval.POLL_SECONDS)
+
+
+def drain_outbox() -> list[dict]:
+    """Fold coordinator screen and speech events into state.json.
+
+    Only the bridge writes state.json, so there is no race. Speech
+    rendering waits for the voice model: for now the text is stored
+    and the screens can show it. No free text is invented here; the
+    coordinator only publishes ids resolved from strings.json.
+    """
+    events = outbox.drain()
+    if not events:
+        return events
+    latest = events[-1]
+    fields = {}
+    if latest["kind"] == "message":
+        fields["last_message_id"] = latest["id"]
+        fields["last_message_lang"] = latest["lang"]
+    else:
+        fields["last_speech_id"] = latest["id"]
+        fields["last_speech_lang"] = latest["lang"]
+    state_store.update(**fields)
+    return events
+
+
+def _start_approval_loop() -> None:
+    """Start the poll once per process. Step 2 (GPIO) will light the
+    green LED from the same pending state."""
+    global _approval_thread_started
+    if _approval_thread_started:
+        return
+    _approval_thread_started = True
+    threading.Thread(
+        target=_approval_loop, name="approval-poll", daemon=True
+    ).start()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    _start_approval_loop()
+    yield
+
+
 # --- FastAPI app ---------------------------------------------------------
-app = FastAPI(title="SI Console Bridge", version="0.1.0")
+app = FastAPI(title="SI Console Bridge", version="0.1.0", lifespan=lifespan)
 
 
 @app.get("/api/health")
@@ -466,6 +627,36 @@ def state_api(authorization: Optional[str] = Header(None)) -> dict:
     _check_token(authorization)
     _check_rate_limit()
     return state_store.read()
+
+
+@app.get("/api/ui/state")
+def ui_state_api(request: Request) -> dict:
+    """The kiosk snapshot. Loopback only, no token, no rate limit: the
+    screens poll once a second and must not be blocked by an external
+    agent's requests. Read only. No approve, reject or kill route."""
+    client = request.client.host if request.client else ""
+    if client not in ("127.0.0.1", "::1", "testclient"):
+        raise HTTPException(status_code=403, detail="LOOPBACK_ONLY")
+    return ui_snapshot.build(state_store)
+
+
+@app.get("/api/ui/health")
+def ui_health_api() -> dict:
+    return {"status": "ok", "mode": config.MODE}
+
+
+# Static kiosk pages. One server, port 8001, loopback only. The pages
+# are the existing mockups; js/live.js swaps the fixtures for the
+# live snapshot when /api/ui/state answers. No build step.
+_DASHBOARD = Path(config.PROJECT_ROOT) / "dashboard" / "mockups"
+if _DASHBOARD.is_dir():
+    app.mount("/ui", StaticFiles(directory=str(_DASHBOARD), html=True), name="ui")
+
+
+@app.get("/")
+def ui_root() -> FileResponse:
+    """The mini screen is the default kiosk page."""
+    return FileResponse(str(_DASHBOARD / "mini.html"))
 
 
 def main() -> None:

@@ -9,12 +9,12 @@
 # the test must fail. Price only. No news, no earnings, no
 # fundamentals in the ranking. Web search is for background research
 # notes only, never for the ranking itself.
-# Replay rules, not yet confirmed by the team: weekly rebalance only, max 3 or 4 sectors, equal
-# weight, cash reserve 5 or 10 percent, cost 0 in the demo and shown
-# on screen. This skeleton uses weekly, max 3, equal weight, 10
-# percent cash, cost 0, and says so in its output. The team must
-# confirm those numbers before the booth build. Do not change them
-# silently. Change them in config and in the output text together.
+# Replay rules: weekly rebalance, max 3 sectors, equal weight, 10
+# percent cash, cost 0. Confirmed 2026-11-28. The numbers live in
+# config.py and this file reads them at call time, so the engine and
+# the screen text cannot drift. A change is one edit in config, and
+# the output below changes with it. Do not copy a number into this
+# file.
 """Rules engine. Price only sector ranking, deterministic, no LLM."""
 
 from __future__ import annotations
@@ -25,13 +25,6 @@ from datetime import date
 from pathlib import Path
 
 from si_console import config
-
-# Replay rules, stated in the output so the booth screen can show them.
-REBALANCE = "weekly"
-MAX_SECTORS = 3
-CASH_RESERVE = 0.10
-COST_PER_TRADE = 0.0
-LOOKBACK_DAYS = 60
 
 SECTOR_TICKERS = [
     "XLK", "XLE", "XLF", "XLV", "XLI", "XLP", "XLY", "XLB", "XLU",
@@ -77,19 +70,21 @@ def _read_prices(ticker: str, replay_date: date) -> list[tuple[date, float]]:
 
 def _has_history(rows: list[tuple[date, float]]) -> bool:
     """Enough rows for a momentum number, with a usable start price."""
-    return len(rows) >= LOOKBACK_DAYS + 1 and rows[-LOOKBACK_DAYS - 1][1] != 0
+    lookback = config.REPLAY_LOOKBACK_DAYS
+    return len(rows) >= lookback + 1 and rows[-lookback - 1][1] != 0
 
 
 def _momentum(rows: list[tuple[date, float]]) -> float:
-    """Simple momentum: close now divided by close LOOKBACK_DAYS ago.
+    """Simple momentum: close now divided by close N trading days ago.
 
     Returns 0 when there is not enough history. No history, no signal.
     The engine never invents a price. It says it has no data.
     """
-    if len(rows) < LOOKBACK_DAYS + 1:
+    lookback = config.REPLAY_LOOKBACK_DAYS
+    if len(rows) < lookback + 1:
         return 0.0
     now = rows[-1][1]
-    then = rows[-LOOKBACK_DAYS - 1][1]
+    then = rows[-lookback - 1][1]
     if then == 0:
         return 0.0
     return now / then - 1.0
@@ -125,10 +120,10 @@ def rank_sectors(replay_date: date) -> dict:
     scored.sort(key=lambda s: (s.has_data, s.relative_strength_vs_spy), reverse=True)
     top = [
         s
-        for s in scored[:MAX_SECTORS]
+        for s in scored[: config.REPLAY_MAX_SECTORS]
         if spy_has_data and s.has_data and s.relative_strength_vs_spy > 0
     ]
-    investable = 1.0 - CASH_RESERVE
+    investable = 1.0 - config.REPLAY_CASH_RESERVE
     weight = investable / len(top) if top else 0.0
     for sector in top:
         sector.weight = weight
@@ -150,11 +145,11 @@ def rank_sectors(replay_date: date) -> dict:
             {"ticker": s.ticker, "weight": round(s.weight, 4)} for s in top
         ],
         "rules": {
-            "rebalance": REBALANCE,
-            "max_sectors": MAX_SECTORS,
-            "cash_reserve": CASH_RESERVE,
-            "cost_per_trade": COST_PER_TRADE,
-            "lookback_days": LOOKBACK_DAYS,
+            "rebalance": config.REPLAY_REBALANCE,
+            "max_sectors": config.REPLAY_MAX_SECTORS,
+            "cash_reserve": config.REPLAY_CASH_RESERVE,
+            "cost_per_trade": config.REPLAY_COST_PER_TRADE,
+            "lookback_days": config.REPLAY_LOOKBACK_DAYS,
             "price_only": True,
             "dividends_ignored": True,
         },

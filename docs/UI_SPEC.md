@@ -187,8 +187,9 @@ There is deliberately **no** approve, reject or kill endpoint. Screens are read 
 ### Behaviour the screens depend on
 
 - No GPIO layer calls `on_green_press`, `on_red_press` or `on_kill`, and nothing drives the LEDs, push to talk or the language toggle.
-- The coordinator logs an approval pause but never calls `request_approval`.
-- There is no 120 s timeout. `ARCHITECTURE.md` says expiry counts as reject; `SI_Console_Detailed.md` says the task stays queued. The screen says "Nothing changed", which fits both until the owners decide.
+- 2026-11-28: the coordinator writes `approval_request.json` and waits; the bridge polls it and arms the green button. Screens still need to render `approval.command`.
+- 2026-11-28: the 120 s expiry is decided. The bridge blocks the task with `HUMAN_TIMEOUT`, runs nothing and never revives it.
+- 2026-11-28: `GET /api/ui/state` and the static `/ui/` mount are live, loopback only, no token. `js/live.js` maps the snapshot into the existing fixture shape; a bad snapshot shows api-down. The exact approval command is rendered verbatim (escaped) on both screens. No approve/reject/kill endpoint exists.
 - Risk tiers do not exist. Proposed: high = changes the portfolio, medium = writes a file or runs a command.
 - The mapping of code roles to LEDs is not written in code. Assumed: coordinator = COORD, signal = AGENT 1, execution = AGENT 2, risk = GUARD.
 - The daily cost cap is configured but not enforced.

@@ -18,9 +18,9 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
-from si_console import config, models
+from si_console import approval, config, models, tool_runtime
 from si_console.context import build_context
-from si_console.errors import GuardError, ModelError, ToolError
+from si_console.errors import GuardError, ModelError, ToolError, VaultError
 from si_console.guard import GuardState, check_tool
 from si_console.state_store import StateStore
 from si_console.tools import (
@@ -56,6 +56,17 @@ SYSTEM_PROMPT = (
 # The coordinator reads kill state from state.json, which the bridge
 # writes. Module level so tests can swap it, same pattern as bridge.
 state_store = StateStore()
+
+
+# Injectable clock and sleep. The approval wait needs a real 120 s
+# deadline in production and a fake clock in tests, so it never sleeps
+# two minutes in CI.
+def _monotonic() -> float:
+    return time.monotonic()
+
+
+def _sleep(seconds: float) -> None:
+    time.sleep(seconds)
 
 
 @dataclass
@@ -204,12 +215,72 @@ def run_task(task_id: str, guard_state: GuardState, pane: str | None = None) -> 
     return _escalate(task, rounds, "ROUND_LIMIT", log_lines)
 
 
+def _await_approval(
+    task: TaskNote, name: str, args: dict, state: GuardState, log: list
+) -> str:
+    """Ask the bridge for a green press and wait for the note to change.
+
+    Returns "approved", "rejected", "timeout", "killed", "gone" or
+    "error". Only "approved" may run the tool. Every other outcome
+    leaves the tool unrun and the task is not revived later.
+
+    The bridge owns the 120 s expiry and the green LED, because it owns
+    the button. This loop keeps a hard safety deadline five seconds
+    later, so a dead bridge can never hang the coordinator forever.
+    The task note is the truth: green sets approved_by to human, red
+    sets blocked with HUMAN_REJECT, expiry sets blocked with
+    HUMAN_TIMEOUT. The request file is cleared on every exit path.
+    """
+    command = approval.command_for(name, args)
+    try:
+        # Log first, then publish the request. If the file were written
+        # first, a very fast green press could land between the two
+        # writes and be overwritten by the stale note below.
+        append_log(task, f"approval requested for {name}: {command}")
+        write_note(task)
+        approval.write_request(task.id, name, args, command)
+    except Exception:
+        approval.clear_request(task.id)
+        return "error"
+    deadline = _monotonic() + config.APPROVAL_TIMEOUT_SECONDS + 5
+    while True:
+        if state.kill_active or _killed_in_store():
+            approval.clear_request(task.id)
+            return "killed"
+        try:
+            current = read_note(task.id)
+        except VaultError:
+            approval.clear_request(task.id)
+            return "gone"
+        if current.status in ("blocked", "done"):
+            approval.clear_request(task.id)
+            # The bridge normally blocks at 120 s before this safety
+            # deadline. Keep the reason accurate in the log.
+            if current.risk_reason == "HUMAN_TIMEOUT":
+                return "timeout"
+            return "rejected"
+        if current.approved_by == "human" and current.status == "working":
+            approval.clear_request(task.id)
+            state.approval_pending = True
+            state.approved_by = "human"
+            return "approved"
+        if _monotonic() >= deadline:
+            approval.clear_request(task.id)
+            try:
+                update_status(task.id, "blocked", "HUMAN_TIMEOUT")
+            except VaultError:
+                pass
+            return "timeout"
+        _sleep(approval.POLL_SECONDS)
+
+
 def _run_one_tool_call(call: dict, task: TaskNote, state: GuardState, log: list) -> None:
     """Validate one tool call, check it with GUARD, then run it.
 
     This is a skeleton dispatcher. Each branch is short on purpose.
-    The real build fills in the tool bodies. The validation and the
-    GUARD check are the parts that must not change shape.
+    The real build fills in the tool bodies. The validation, the
+    approval wait and the GUARD check are the parts that must not
+    change shape.
     """
     func = call.get("function", {})
     name = func.get("name", "")
@@ -225,17 +296,71 @@ def _run_one_tool_call(call: dict, task: TaskNote, state: GuardState, log: list)
     # call. tool_names_for_role returns tool names. Do not pass
     # tool.roles here: that set holds role names, and a tool name
     # is never in it, so every call would be blocked.
-    check_tool(name, tag, task.agent, tool_names_for_role(task.agent), state, task)
-    # SAFE tools run at once. NEEDS APPROVAL tools pause here in the
-    # real build and wait for the bridge. This skeleton logs the pause
-    # instead of wiring the full wait, so the team can see the gate.
     if tag == "NEEDS APPROVAL":
-        log.append(f"approval needed for {name}, waiting for green or red")
-        append_log(task, f"approval requested for {name}")
-        write_note(task)
-        return
+        try:
+            current = read_note(task.id)
+        except VaultError:
+            # Fail closed: no note, no approval, no run. Do not raise a
+            # ToolError here, because its code is not a reason code and
+            # the round limit would try to write it to the vault.
+            log.append(f"not run {name}: task unreadable")
+            return
+        if current.status in ("blocked", "done"):
+            log.append(f"not run {name}: task {current.status}")
+            return
+        if current.approved_by == "human" and current.status == "working":
+            # One green press approves one task. A later risky call on
+            # the same approved task runs without a second press.
+            state.approved_by = "human"
+            state.approval_pending = True
+        else:
+            # Preflight kill, role and risk checks before asking for a
+            # press, so a tool the role may not call never reaches the
+            # green button. Approval is faked only for this preflight;
+            # the real state is set after the note says human.
+            preflight = GuardState(
+                kill_active=state.kill_active,
+                approval_pending=True,
+                approved_by="human",
+                risk_check=state.risk_check,
+            )
+            check_tool(
+                name, tag, task.agent, tool_names_for_role(task.agent), preflight, task
+            )
+            outcome = _await_approval(task, name, args, state, log)
+            if outcome != "approved":
+                log.append(f"approval {outcome} for {name}, not run")
+                try:
+                    latest = read_note(task.id)
+                except VaultError:
+                    return
+                append_log(latest, f"approval {outcome} for {name}, not run")
+                write_note(latest)
+                return
+    check_tool(name, tag, task.agent, tool_names_for_role(task.agent), state, task)
+    # Now the tool actually runs. Validation, GUARD and approval are
+    # already done, so the body does no policy of its own. A body
+    # failure is a rejected round, not a crash: the loop can retry or
+    # escalate. The result goes into the note log so the next round
+    # and the screens can see what happened.
+    try:
+        result = tool_runtime.run(name, args, task)
+    except ToolError as exc:
+        log.append(f"tool {name} failed: {exc.code}")
+        raise
+    except Exception as exc:  # noqa: BLE001 - a broken body must not kill the service
+        log.append(f"tool {name} failed: TOOL_ERROR")
+        raise ToolError("TOOL_ERROR", f"Tool {name} failed: {exc}") from None
     log.append(f"ran {name}")
-    append_log(task, f"ran {name}")
+    # Re-read before writing: the bridge may have changed approved_by
+    # or status while the approval was pending. A stale write here
+    # would clobber the green press.
+    try:
+        latest = read_note(task.id)
+    except VaultError:
+        latest = task
+    append_log(latest, f"ran {name}: {json.dumps(result, ensure_ascii=False)[:500]}")
+    write_note(latest)
 
 
 def _escalate(task: TaskNote, rounds: int, reason: str, log_lines: list) -> LoopResult:

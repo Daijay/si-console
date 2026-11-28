@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pytest
 
-from si_console import config, models
+from si_console import config, coordinator, models
 from si_console.coordinator import run_task
 from si_console.errors import ModelError
 from si_console.guard import GuardState
@@ -127,7 +127,10 @@ def test_no_tool_call_escalates_bad_output(vault, monkeypatch):
     assert task.status == "blocked"
 
 
-def test_needs_approval_tool_pauses_for_green(vault, monkeypatch):
+def test_needs_approval_tool_waits_then_times_out(vault, monkeypatch):
+    """A NEEDS APPROVAL tool no longer logs a pause and moves on. It
+    waits for the note, and with no green press it blocks the task
+    with HUMAN_TIMEOUT and never runs the tool."""
     _make_task()
     calls = [0]
 
@@ -148,10 +151,19 @@ def test_needs_approval_tool_pauses_for_green(vault, monkeypatch):
         return _reply()
 
     monkeypatch.setattr(models, "complete", fake_complete)
-    state = GuardState(approved_by="human")
-    result = run_task("2026-12-01-signal-001", state)
-    assert any("approval needed for vault_write" in line for line in result.log_lines)
-    assert result.reason_code == "BAD_OUTPUT"
+    # Fake clock: each poll advances a minute, so 120 s expires fast.
+    clock = [0.0]
+    monkeypatch.setattr(coordinator, "_monotonic", lambda: clock[0])
+    monkeypatch.setattr(
+        coordinator, "_sleep", lambda seconds: clock.__setitem__(0, clock[0] + 60)
+    )
+    result = run_task("2026-12-01-signal-001", GuardState())
+    assert any("approval timeout for vault_write" in line for line in result.log_lines)
+    assert not any("ran vault_write" in line for line in result.log_lines)
+    assert result.reason_code == "HUMAN_TIMEOUT"
+    task = read_note("2026-12-01-signal-001")
+    assert task.status == "blocked"
+    assert task.risk_reason == "HUMAN_TIMEOUT"
 
 
 def test_model_error_retries_once_then_escalates(vault, monkeypatch):
@@ -192,10 +204,11 @@ def test_bad_tool_call_is_rejected_and_round_continues(vault, monkeypatch):
 
 
 def test_guard_block_is_a_rejected_round_not_a_crash(vault, monkeypatch):
-    # A NEEDS APPROVAL tool with no approval. GUARD blocks it. The
-    # loop must treat the block as a rejected round and continue,
-    # not crash. This caught a real bug: the coordinator passed
-    # tool.roles to GUARD, which blocked every tool call.
+    # The signal role may not call shell_run, which belongs to
+    # execution. GUARD blocks it before any approval request. The loop
+    # must treat the block as a rejected round and continue, not crash.
+    # This caught a real bug: the coordinator passed tool.roles to
+    # GUARD, which blocked every tool call.
     _make_task()
     calls = [0]
 
@@ -205,11 +218,8 @@ def test_guard_block_is_a_rejected_round_not_a_crash(vault, monkeypatch):
             return _reply(
                 tool_calls=[
                     _tool_call(
-                        "vault_write",
-                        {
-                            "path": "vault/si-console/tasks/x.md",
-                            "content": "draft",
-                        },
+                        "shell_run",
+                        {"command": "vcgencmd get_throttled", "timeout_seconds": 10},
                     )
                 ]
             )

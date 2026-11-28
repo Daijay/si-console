@@ -2,6 +2,29 @@
 
 Dated log of decisions and revisions. Newest first.
 
+## 2026-11-28, live UI bridge (Step 3, software only)
+- `GET /api/ui/state` serves the documented snapshot from real `state.json`, the vault, `approval_request.json` and telemetry. Loopback only, no token, no rate limit, read only. No approve, reject or kill endpoint was added.
+- Static mount `/ui/` serves the existing mockup pages; `/` opens the mini screen. `js/live.js` maps the live snapshot into the fixture shape and polls once a second. Three missed polls show api-down; a malformed snapshot shows offline, never a stale screen.
+- The approval screen now renders `approval.command` verbatim (HTML escaped) on both mini and monitor. Two real bugs found while wiring this: `ui_w_working` was missing from strings.json, and the adapter passed a nested `{id, params}` object where the renderer expects a string id. Both fixed; `tools/check_ui_ids.py` guards the first.
+- Added `ui_w_working` to EN/ZH strings, regenerated `strings.js` and the state pages via `build.py`; live.js is included only in the two live pages, never the frozen review pages.
+- New tests: `test_ui_bridge.py` (8) plus a Node render test (`js/test-live.js`) that feeds a live snapshot through the adapter and the real `mini.js` renderer. 261 tests pass (was 253).
+
+## 2026-11-28, real tool bodies and replay data (Step 2, software only)
+- All 13 tools in the fixed menu now have bodies, called by the coordinator only after validation + GUARD + green. Bodies never re-check policy: vault paths go through the vault guard, shell uses config.ALLOWED_SHELL_COMMANDS via GUARD (no shell process, no second allow list), run_python calls functions in process instead of exec'ing model text, and screen/speech tools only accept ids from strings.json.
+- Replay numbers live once in `config.py` (weekly, max 3 sectors, 10% cash, 0 cost, 60 day lookback, env overrides). `rules_engine.py` reads them at call time, so the ranking and the `rules` block it returns cannot drift.
+- Committed 12 price CSVs in `code/data/market/` (SPY + 11 sector ETFs, 2019-01-02 to 2023-12-29, 1258 rows each, adjusted close). One-time fetcher at `code/tools/fetch_market_data.py`; no network at booth time. Sample: 2022-06-15 proposes XLE/XLU/XLP at 30% each, 2020-03-16 proposes XLP/XLV/XLK.
+- Coordinator writes screen/speech events as ids to `outbox.json`; bridge drains it into `state.json`. The bridge remains the only writer of state.json, so the two services no longer race.
+- Failures stay honest: a missing note returns `missing`, not a crash; an unreadable task note logs and runs nothing; an unknown message id is an error, not a raw id on screen.
+- New `code/tests/test_tool_runtime.py` (15 tests). 253 tests pass (was 238).
+
+## 2026-11-28, approval gate wired end to end (Step 1)
+- The coordinator no longer logs a pause and moves on. On a NEEDS APPROVAL call it writes `approval_request.json` (atomic, coordinator-owned) and polls the task note every 150 ms. Green sets `approved_by: human`; red sets `blocked`/`HUMAN_REJECT`; 120 s sets `blocked`/`HUMAN_TIMEOUT`. Only green runs the tool. Every other exit clears the request and runs nothing.
+- The bridge polls the request every 150 ms, owns the 120 s expiry, restores a pending approval after a restart, and clears the request on green, red and kill. `HUMAN_TIMEOUT` added to the reason codes.
+- Fail closed: a dead bridge hits the coordinator's 125 s safety deadline; kill mid-wait aborts; a stale pre-kill request can't be approved; a corrupt request reads as no request; a request for a blocked/done task is discarded.
+- Decisions: timeout = block, never execute, no revive; one green press approves one task (a later risky call on the same approved task runs without a second press); the bridge owns the clock, the coordinator keeps a later safety deadline.
+- New `code/tests/test_approval_gate.py` (15 tests). 238 tests pass (was 223). Two existing tests updated: the pause is now a real wait, and the unapproved order-done case expires instead of raising GUARD.
+- Not done yet: GPIO layer (Step 2), demo tool bodies, screen endpoints and UI.
+
 ## 2026-11-26, Hy4 on TokenHub, Bailian decision model, live provider test
 - First live run with the team's keys: Qwen4 Max and Jev answer; DeepSeek, GLM (and Zhipu search) and MiMo are out of credit; the Hunyuan key is rejected. Smoke check fixes from that run: UTF-8 output on Windows, out-of-credit reported as billing (Zhipu sends it as 429), partly masked keys redacted from provider errors.
 - Hunyuan: Tencent moved API keys to TokenHub. Default `HUNYUAN_BASE_URL` is now `https://tokenhub.tencentcloudmaas.com/v1` (Guangzhou; Singapore is `tokenhub-intl`). Keys come from console.cloud.tencent.com/tokenhub/apikey.

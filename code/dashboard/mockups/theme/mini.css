@@ -64,6 +64,10 @@ html[lang="zh"] .ap-word { font-size: 60px; line-height: 1.2; }
 .risk i.on { background: var(--ink); }
 .ap-action { flex: 1; min-height: 0; display: flex; align-items: center; padding: 0 28px; font-weight: 700; line-height: 1.1; }
 .ap-action span { display: block; width: 100%; white-space: nowrap; font-size: 62px; line-height: 1.25; }
+/* The exact command, verbatim. It stays small because the big line is
+   the human action; the operator must still be able to read what runs. */
+.ap-command { flex: none; margin: 0; padding: 0 28px 6px; min-width: 0; }
+.ap-command code { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 22px; font-family: inherit; opacity: 0.85; }
 .pads { flex: none; display: grid; grid-template-columns: 1fr 1fr; height: 226px; }
 .pad { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; padding-bottom: 8px; }
 .pad .btn { width: 46px; height: 46px; border-radius: 50%; border: 6px solid currentColor; box-shadow: inset 0 0 0 7px var(--pad); background: currentColor; margin-bottom: 4px; }

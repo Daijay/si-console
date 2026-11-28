@@ -43,6 +43,7 @@
         <div class="ap-clock"><i style="--from:${a.secondsLeft / a.timeout};--secs:${a.secondsLeft}s"></i></div>
         <div class="ap-meta"><span><span class="chip who-${a.agent}">${h("ui_ap_asks", { agent: "@" + a.agent })}</span> &nbsp;${h("ui_round", { n: s.round, max: s.max })}</span>${risk(a.risk)}</div>
         <p class="ap-action"><span data-fit="36">${s.confirmRed ? h("ui_ap_confirm_red") : h(a.action, a.params)}</span></p>
+        ${a.command ? `<p class="ap-command" title="${UI.esc(a.command)}"><code>${UI.esc(a.command)}</code></p>` : ""}
         <div class="pads">
           <div class="pad yes"><i class="btn"></i><span>${h("ui_ap_green_top")}</span><strong>${h("ui_ap_green_main")}</strong></div>
           <div class="pad no"><i class="btn"></i><span>${h("ui_ap_red_top")}</span><strong>${h("ui_ap_red_main")}</strong></div>

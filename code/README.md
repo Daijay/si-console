@@ -7,8 +7,13 @@ APIs mocked. Nothing here has been run on the Raspberry Pi yet.
 
 - Coordinator (`si_console/coordinator.py`): picks up queued task notes, calls
   the model, validates tool calls against a fixed menu, runs GUARD, stops at
-  3 rounds and writes an escalation note. It logs tool calls but does not run
-  the tool bodies yet, and it does not yet wait for a button approval.
+  3 rounds and writes an escalation note. A NEEDS APPROVAL call writes
+  `approval_request.json` and waits for the note: green runs it, red or 120 s
+  (HUMAN_TIMEOUT) never does. It then runs the tool body in
+  `tool_runtime.py`: after validation, GUARD and green, vault reads and
+  writes use the path guard, shell runs one allow-listed command, scripts
+  are called in process, and the rules engine ranks sectors from the
+  committed price CSVs in `data/market/`.
 - Guard (`si_console/guard.py`): kill switch, role, approval and risk checks,
   plus the shell command allow list.
 - Router (`si_console/router.py`, `models.py`, `chat_client.py`,
@@ -26,6 +31,7 @@ APIs mocked. Nothing here has been run on the Raspberry Pi yet.
   model calls.
 - Bridge (`si_console/bridge.py`): token-protected HTTP API for external
   agents, plus the logic for green, red, kill switch and approval requests.
+  It polls `approval_request.json` every 150 ms and owns the 120 s expiry.
   The GPIO buttons and LEDs are not connected to it yet, and its vault watcher
   is not started by the service.
 - Voice intent matcher (`si_console/voice_intents.py`): maps text to a fixed
@@ -67,7 +73,15 @@ python3 -m venv .venv
 On Windows use `.venv\Scripts\python`. `gpiozero` is only needed on the Pi and
 `python-pptx` only for slides.
 
-Last run 2026-11-26 on Windows: 223 passed.
+Last run 2026-11-28 on Windows: 261 passed.
+
+## Refresh the replay prices
+
+The CSVs are committed so the booth needs no network. To refresh them on a
+machine that has internet: `python -m tools.fetch_market_data` (from `code/`).
+It fetches adjusted closes for SPY and the 11 sector ETFs, 2019 to 2023, into
+`data/market/`. Re-run the tests after a refresh: the lookahead test reads
+those files.
 
 ## Deploy to the Pi
 1. On the Pi: `git clone` the repo (then `git lfs pull` if you need the CAD files).
@@ -84,3 +98,4 @@ Last run 2026-11-26 on Windows: 223 passed.
 5. `bash ~/si-console/code/deploy/install_pi.sh --enable` starts the services
    (refuses if the smoke check fails).
 Run the smoke check again in Shenzhen before the booth opens.
+

@@ -81,6 +81,7 @@
         <div class="ask" role="alertdialog">
           <div class="meta"><span class="chip who-${a.agent}">${h("ui_ap_asks", { agent: "@" + a.agent })}</span>${risk(a.risk)}</div>
           <p class="action">${h(a.action, a.params)}</p>
+          ${a.command ? `<p class="command-line"><code>${UI.esc(a.command)}</code></p>` : ""}
           <p class="riskwhy"><span>${h("ui_risk_" + a.risk + "_why")}</span><span>${h("ui_ap_seconds", { s: a.secondsLeft })}</span></p>
         </div>
         <h3>${h("ui_p_why")}</h3><p class="why">${h(a.why, a.params)}</p>
